@@ -1,0 +1,11 @@
+/src/Server/.idea/.idea.Server/.idea/.gitignore
+/src/Server/.idea/.idea.Server/.idea/indexLayout.xml
+/src/Server/.idea/.idea.Server/.idea/vcs.xml
+/src/Server/Application/obj/
+/src/Server/Application/bin/
+/src/Server/Presentation/obj/
+/src/Server/Presentation/bin/
+/src/Server/Domain/obj/
+/src/Server/Domain/bin/
+/src/Server/Infrastructure/obj/
+/src/Server/Infrastructure/bin/
