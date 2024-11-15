@@ -1,4 +1,4 @@
-namespace DefaultNamespace;
+namespace Domain.Entities;
 
 public class OrderTransaction
 {
