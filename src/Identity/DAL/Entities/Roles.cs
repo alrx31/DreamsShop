@@ -1,4 +1,4 @@
-namespace Domain.Entities;
+namespace DAL.Entities;
 
 public enum Roles
 {

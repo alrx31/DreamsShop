@@ -1,4 +1,4 @@
-namespace DefaultNamespace;
+namespace Domain.Entities;
 
 public class Dream
 {
@@ -7,7 +7,7 @@ public class Dream
     public string Description { get; set; }
     public Media Image { get; set; }
     public Media Preview { get; set; }
-    public ProducerUser Producer { get; set; }
+    public ProduserUser Producer { get; set; }
     public float? Raiting { get; set; }
     
     

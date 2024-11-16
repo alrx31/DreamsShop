@@ -1,12 +1,12 @@
-namespace Domain.Entities;
+namespace DAL.Entities;
 
-public class Produser
+public class Producer
 {
     public Guid Id { get; set; }
     
     public string Name { get; set; }
     
-    public List<ProduserUser> Staff { get; set; }
+    public List<User> Staff { get; set; }
     
     public float? Raiting { get; set; }
     

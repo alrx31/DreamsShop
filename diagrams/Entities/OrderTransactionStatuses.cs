@@ -1,9 +1,9 @@
-namespace DefaultNamespace;
+namespace Domain.Entities;
 
 public enum OrderTransactionStatuses
 {
-    "Pending",
-    "Processing",
-    "Completed",
-    "Provided"
+    Pending,
+    Processing,
+    Completed,
+    Provided
 }
