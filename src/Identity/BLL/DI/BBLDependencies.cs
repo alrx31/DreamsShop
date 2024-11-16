@@ -1,4 +1,5 @@
 using BLL.IService;
+using BLL.MappingProfiles;
 using BLL.Services;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,6 +11,9 @@ public static class BBLDependencies
     {
         services.AddScoped<IPasswordHasher, PasswordHasher>();
         services.AddScoped<IUserService, UserService>();
+
+        services.AddAutoMapper(typeof(UserMapperProfile));
+        
         
         return services;
     }

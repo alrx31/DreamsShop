@@ -12,6 +12,8 @@ public class UserMapperProfile:Profile
             .ForMember(u => u.Email, opt => opt.MapFrom(src => src.Email))
             .ForMember(u => u.Name, opt => opt.MapFrom(src => src.Name))
             .ForMember(u => u.Password, opt => opt.MapFrom(src => src.Password));
+
+        CreateMap<User, ResponseUser>();
     }
     
 }

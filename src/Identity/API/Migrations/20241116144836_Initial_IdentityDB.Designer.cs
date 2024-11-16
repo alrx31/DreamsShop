@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241115150803_InitialCreate_IdentityDb")]
-    partial class InitialCreate_IdentityDb
+    [Migration("20241116144836_Initial_IdentityDB")]
+    partial class Initial_IdentityDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace API.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("DAL.Entities.Produser", b =>
+            modelBuilder.Entity("DAL.Entities.Producer", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -40,7 +40,7 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Produsers");
+                    b.ToTable("Producers");
                 });
 
             modelBuilder.Entity("DAL.Entities.User", b =>
@@ -61,7 +61,7 @@ namespace API.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("ProduserId")
+                    b.Property<Guid?>("ProducerId")
                         .HasColumnType("uuid");
 
                     b.Property<int>("Role")
@@ -69,19 +69,19 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProduserId");
+                    b.HasIndex("ProducerId");
 
                     b.ToTable("Users");
                 });
 
             modelBuilder.Entity("DAL.Entities.User", b =>
                 {
-                    b.HasOne("DAL.Entities.Produser", null)
+                    b.HasOne("DAL.Entities.Producer", null)
                         .WithMany("Staff")
-                        .HasForeignKey("ProduserId");
+                        .HasForeignKey("ProducerId");
                 });
 
-            modelBuilder.Entity("DAL.Entities.Produser", b =>
+            modelBuilder.Entity("DAL.Entities.Producer", b =>
                 {
                     b.Navigation("Staff");
                 });

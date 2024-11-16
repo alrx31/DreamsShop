@@ -6,6 +6,7 @@ using BLL.Services;
 using Bogus;
 using DAL.Entities;
 using DAL.IRepositories;
+using DAL.IService;
 using FluentAssertions;
 using Moq;
 
@@ -17,6 +18,7 @@ public class UserServiceTests
     private readonly Mock<IUserRepository> _userRepositoryMock;
     private readonly Mock<IUnitOfWork> _unitOfWorkMock;
     private readonly Mock<IMapper> _mapperMock;
+    private readonly Mock<IJwtProvider> _jwtServiceMock;
     
     private readonly IUserService _userService;
 
@@ -25,6 +27,8 @@ public class UserServiceTests
         _passwordHasherMock = new Mock<IPasswordHasher>();
         _userRepositoryMock = new Mock<IUserRepository>();
         _unitOfWorkMock = new Mock<IUnitOfWork>();
+        _jwtServiceMock = new Mock<IJwtProvider>();
+        
         _unitOfWorkMock.SetupGet(x => x.UserRepository).Returns(_userRepositoryMock.Object);
         
         _mapperMock = new Mock<IMapper>();
@@ -32,7 +36,8 @@ public class UserServiceTests
         _userService = new UserService(
             _passwordHasherMock.Object, 
             _mapperMock.Object,
-            _unitOfWorkMock.Object
+            _unitOfWorkMock.Object,
+            _jwtServiceMock.Object
             );
     }
 
@@ -86,5 +91,7 @@ public class UserServiceTests
         _userRepositoryMock.Verify(x => x.AddUser(It.IsAny<User>()), Times.Once);
         _unitOfWorkMock.Verify(x => x.CompleteAsync(), Times.Once);
     }
+    
+    
 
 }

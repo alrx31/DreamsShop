@@ -6,13 +6,13 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace API.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate_IdentityDb : Migration
+    public partial class Initial_IdentityDB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Produsers",
+                name: "Producers",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -21,7 +21,7 @@ namespace API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Produsers", x => x.Id);
+                    table.PrimaryKey("PK_Producers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -33,22 +33,22 @@ namespace API.Migrations
                     Password = table.Column<string>(type: "text", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Role = table.Column<int>(type: "integer", nullable: false),
-                    ProduserId = table.Column<Guid>(type: "uuid", nullable: true)
+                    ProducerId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Users_Produsers_ProduserId",
-                        column: x => x.ProduserId,
-                        principalTable: "Produsers",
+                        name: "FK_Users_Producers_ProducerId",
+                        column: x => x.ProducerId,
+                        principalTable: "Producers",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_ProduserId",
+                name: "IX_Users_ProducerId",
                 table: "Users",
-                column: "ProduserId");
+                column: "ProducerId");
         }
 
         /// <inheritdoc />
@@ -58,7 +58,7 @@ namespace API.Migrations
                 name: "Users");
 
             migrationBuilder.DropTable(
-                name: "Produsers");
+                name: "Producers");
         }
     }
 }
