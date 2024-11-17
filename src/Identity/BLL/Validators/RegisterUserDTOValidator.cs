@@ -22,5 +22,4 @@ public class RegisterUserDTOValidator: AbstractValidator<RegisterUserDTO>
             .MinimumLength(6).WithMessage("Password is too short")
             .MaximumLength(1000).WithMessage("Password is too long");
     }
-    
 }

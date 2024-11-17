@@ -12,7 +12,7 @@ builder.Services.AddDALDependencies(builder.Configuration);
 builder.Services.AddBBLDependencies();
 
 builder.Services.AddAuthorization();
-
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
