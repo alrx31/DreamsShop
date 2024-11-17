@@ -8,12 +8,14 @@ using DAL.Entities;
 using DAL.IRepositories;
 using DAL.IService;
 using FluentAssertions;
+using Microsoft.AspNetCore.Http;
 using Moq;
 
 namespace Tests.UnitTests.Service;
 
 public class UserServiceTests
 {
+    private readonly Mock<IHttpContextAccessor> _httpContextAccessorMock;
     private readonly Mock<IPasswordHasher> _passwordHasherMock;
     private readonly Mock<IUserRepository> _userRepositoryMock;
     private readonly Mock<IUnitOfWork> _unitOfWorkMock;
@@ -24,6 +26,7 @@ public class UserServiceTests
 
     public UserServiceTests(){
         
+        _httpContextAccessorMock = new Mock<IHttpContextAccessor>();
         _passwordHasherMock = new Mock<IPasswordHasher>();
         _userRepositoryMock = new Mock<IUserRepository>();
         _unitOfWorkMock = new Mock<IUnitOfWork>();
@@ -37,7 +40,8 @@ public class UserServiceTests
             _passwordHasherMock.Object, 
             _mapperMock.Object,
             _unitOfWorkMock.Object,
-            _jwtServiceMock.Object
+            _jwtServiceMock.Object,
+            _httpContextAccessorMock.Object
             );
     }
 
