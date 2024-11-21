@@ -9,6 +9,6 @@ public interface IAuthService
     Task<(string,LoginResponseDTO)> LoginUser(LoginUserDTO model);
     
     Task <(string,LoginResponseDTO)> RefreshToken(RefreshTokenDTO model);
-    
-    // TODO: Add Logout
+
+    Task LogoutUser(Guid userId);
 }

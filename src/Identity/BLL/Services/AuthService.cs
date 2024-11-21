@@ -154,4 +154,15 @@ public class AuthService(
         
         return (refreshToken, response);
     }
+
+    public async Task LogoutUser(Guid userId)
+    {
+        var token = await unitOfWork.RefreshTokenRepository.GetRefreshToken(userId);
+
+        token!.ExpiryTime = DateTime.UtcNow;
+
+        await unitOfWork.RefreshTokenRepository.UpdateRefreshToken(token);
+
+        await unitOfWork.CompleteAsync();
+    }
 }

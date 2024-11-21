@@ -45,6 +45,17 @@ public class AuthController:ControllerBase
         
         return Ok(response);
     }
+
+    [HttpDelete("{userId}")]
+    public async Task<IActionResult> LogoutUser(Guid userId)
+    {
+        await _authService.LogoutUser(userId);
+        
+        ClearRefreshTokenCookie();
+        
+        return Ok();
+    }
+    
     
     private void SetRefreshTokenCookie(string refreshToken)
     {
@@ -55,11 +66,13 @@ public class AuthController:ControllerBase
             Expires = DateTime.UtcNow.AddDays(7)
         };
 
-        _httpContextAccessor.HttpContext.Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
+        _httpContextAccessor.HttpContext?.Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
     }
+    
+    
 
     private void ClearRefreshTokenCookie()
     {
-        _httpContextAccessor.HttpContext.Response.Cookies.Delete("refreshToken");
+        _httpContextAccessor.HttpContext?.Response.Cookies.Delete("refreshToken");
     }
 }
