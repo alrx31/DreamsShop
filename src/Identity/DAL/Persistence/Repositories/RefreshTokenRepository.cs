@@ -2,7 +2,7 @@ using DAL.Entities;
 using DAL.IRepositories;
 using Microsoft.EntityFrameworkCore;
 
-namespace DAL.Persistance.Repositories;
+namespace DAL.Persistence.Repositories;
 
 public class RefreshTokenRepository(ApplicationDbContext context) : IRefreshTokenRepository
 {

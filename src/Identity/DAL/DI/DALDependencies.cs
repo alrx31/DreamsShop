@@ -1,9 +1,8 @@
 using System.Text;
 using DAL.IRepositories;
 using DAL.IService;
-using DAL.Persistance;
-using DAL.Persistance.Repositories;
-using DAL.Services;
+using DAL.Persistence;
+using DAL.Persistence.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

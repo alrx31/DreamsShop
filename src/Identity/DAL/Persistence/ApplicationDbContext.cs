@@ -1,7 +1,7 @@
 using DAL.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace DAL.Persistance;
+namespace DAL.Persistence;
 
 public class ApplicationDbContext : DbContext
 {

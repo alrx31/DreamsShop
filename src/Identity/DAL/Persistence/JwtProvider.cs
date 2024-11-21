@@ -7,7 +7,7 @@ using DAL.IService;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
-namespace DAL.Services;
+namespace DAL.Persistence;
 
 public class JwtProvider(IConfiguration config) : IJwtProvider
 {

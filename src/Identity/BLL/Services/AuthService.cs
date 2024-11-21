@@ -9,79 +9,149 @@ using Microsoft.AspNetCore.Http;
 
 namespace BLL.Services;
 
-public class AuthService : IAuthService
+public class AuthService(
+    IPasswordHasher passwordHasher,
+    IMapper mapper,
+    IUnitOfWork unitOfWork,
+    IJwtProvider jwtService,
+    IHttpContextAccessor httpContextAccessor)
+    : IAuthService
 {
-    private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly IPasswordHasher _passwordHasher;
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IMapper _mapper;
-    private readonly IJwtProvider _jwtService;
-    
-    public AuthService(
-        IPasswordHasher passwordHasher, 
-        IMapper mapper,
-        IUnitOfWork unitOfWork, IJwtProvider jwtService, IHttpContextAccessor httpContextAccessor)
-    {
-        _passwordHasher = passwordHasher;
-        _mapper = mapper;
-        _unitOfWork = unitOfWork;
-        _jwtService = jwtService;
-        _httpContextAccessor = httpContextAccessor;
-    }
-    
     public async Task RegisterUser(RegisterUserDTO model)
     {
-        var ExistUser = await _unitOfWork.UserRepository.GetUser(model.Email);
+        var existUser = await unitOfWork.UserRepository.GetUser(model.Email);
 
-        if (ExistUser is not null)
+        if (existUser is not null)
         {
-            throw new AlreadyExistsException("This Email is not avaible");
+            throw new AlreadyExistsException("This Email is not available");
         }
         
-        var hashedPassword = _passwordHasher.Generate(model.Password);
+        var hashedPassword = passwordHasher.Generate(model.Password);
         
-        var user = _mapper.Map<User>(model);
+        var user = mapper.Map<User>(model);
         
         user.Password = hashedPassword;
         
-        await _unitOfWork.UserRepository.AddUser(user);
+        await unitOfWork.UserRepository.AddUser(user);
         
-        var RefreshTokenModel = new RefreshTokenModel
+        var refreshTokenModel = new RefreshTokenModel
         {
             UserId = user.Id,
-            Token = _jwtService.GenerateRefreshToken(),
+            Token = jwtService.GenerateRefreshToken(),
             ExpiryTime = DateTime.UtcNow.AddDays(7)
         };
-        // TODO: Add RefreshTokenModel to database
-        await _unitOfWork.CompleteAsync();
+
+        await unitOfWork.RefreshTokenRepository.AddRefreshToken(refreshTokenModel);
+        
+        await unitOfWork.CompleteAsync();
     }
 
     public async Task<(string,LoginResponseDTO)> LoginUser(LoginUserDTO model)
     {
         var response = new LoginResponseDTO();
-        var user = await _unitOfWork.UserRepository.GetUser(model.Email);
+        var user = await unitOfWork.UserRepository.GetUser(model.Email);
 
         if (
             user is null ||
-            !_passwordHasher.Verify(model.Password, user.Password)
+            !passwordHasher.Verify(model.Password, user.Password)
             )
         {
             throw new ValidationDataException("Invalid login or password.");
         }
         
         response.isLoggedIn = true;
-        response.User = _mapper.Map<ResponseUser>(user);
-        response.JwtToken = _jwtService.GenerateJwtToken(user);
-        var RefreshToken = _jwtService.GenerateRefreshToken();
+        response.User = mapper.Map<ResponseUser>(user);
+        response.JwtToken = jwtService.GenerateJwtToken(user);
+        var refreshToken = jwtService.GenerateRefreshToken();
         
-        // TODO: Add RefreshToken to database
+        var identityUserTokenModel = await unitOfWork.RefreshTokenRepository.GetRefreshToken(user.Id);
         
-        return (RefreshToken,response);
+        if (identityUserTokenModel is null)
+        {
+            await unitOfWork.RefreshTokenRepository.AddRefreshToken(new RefreshTokenModel
+            {
+                UserId = user.Id,
+                Token = refreshToken,
+                ExpiryTime = DateTime.UtcNow.AddDays(7)
+            });
+            
+            await unitOfWork.CompleteAsync();
+        }
+        else
+        {
+            identityUserTokenModel.Token = refreshToken;
+            identityUserTokenModel.ExpiryTime = DateTime.UtcNow.AddDays(7);
+        }
+        
+        await unitOfWork.RefreshTokenRepository.UpdateRefreshToken(identityUserTokenModel!);
+        
+        await unitOfWork.CompleteAsync();
+        
+        return (refreshToken,response);
     }
 
     public async Task<(string, LoginResponseDTO)> RefreshToken(RefreshTokenDTO model)
     {
-        // TODO: Implement RefreshToken method
-        throw new NotImplementedException();
+        var refreshToken = httpContextAccessor.HttpContext?.Request.Cookies["refreshToken"];
+        
+        var principal = jwtService.GetTokenPrincipal(model.JwtToken);
+        var response = new LoginResponseDTO();
+        
+        if (principal?.Identity?.Name is null)
+        {
+            throw new BadRequestException("Invalid token");
+        }
+        
+        var identityUser = await unitOfWork.RefreshTokenRepository.GetRefreshToken(principal.Identity.Name);
+        
+        if (
+            identityUser is null ||
+            string.IsNullOrEmpty(identityUser.Token) ||
+            identityUser.ExpiryTime < DateTime.UtcNow ||
+            identityUser.Token != refreshToken
+            )
+        {
+            throw new BadRequestException("Invalid token");
+        }
+
+        var user = await unitOfWork.UserRepository.GetUser(identityUser.UserId);
+        
+        if (user is null)
+        {
+            throw new NotFoundException("User not found");
+        }
+        
+        response.isLoggedIn = true;
+        
+        response.User = mapper.Map<ResponseUser>(user);
+        
+        response.JwtToken = jwtService.GenerateJwtToken(user);
+        
+        refreshToken = jwtService.GenerateRefreshToken();
+
+        var identityUserTokenModel = await unitOfWork.RefreshTokenRepository.GetRefreshToken(identityUser.UserId);
+
+        if (identityUserTokenModel is null)
+        {
+            await unitOfWork.RefreshTokenRepository.AddRefreshToken(new RefreshTokenModel
+            {
+                UserId = identityUser.UserId,
+                Token = refreshToken,
+                ExpiryTime = DateTime.UtcNow.AddDays(7)
+            });
+            
+            await unitOfWork.CompleteAsync();
+        }
+        else
+        {
+            identityUserTokenModel.Token = refreshToken;
+            identityUserTokenModel.ExpiryTime = DateTime.UtcNow.AddDays(7);
+        }
+
+        await unitOfWork.RefreshTokenRepository.UpdateRefreshToken(identityUserTokenModel!);
+        
+        await unitOfWork.CompleteAsync();
+        
+        return (refreshToken, response);
     }
 }

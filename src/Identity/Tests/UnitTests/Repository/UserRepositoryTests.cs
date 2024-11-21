@@ -1,8 +1,8 @@
 using DAL.IRepositories;
 using Bogus;
 using DAL.Entities;
-using DAL.Persistance;
-using DAL.Persistance.Repositories;
+using DAL.Persistence;
+using DAL.Persistence.Repositories;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 

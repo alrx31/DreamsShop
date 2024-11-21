@@ -45,15 +45,6 @@ public class AuthController:ControllerBase
         
         return Ok(response);
     }
-
-    [HttpDelete]
-    public async Task<IActionResult> RefreshToken()
-    {
-        // TODO: Implement Refresh Token Logic
-        throw new NotImplementedException();
-    }
-    
-    
     
     private void SetRefreshTokenCookie(string refreshToken)
     {
