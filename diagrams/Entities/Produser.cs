@@ -6,6 +6,8 @@ public class Produser
     
     public string Name { get; set; }
     
+    public string Description { get; set; }
+    
     public List<ProduserUser> Staff { get; set; }
     
     public float? Raiting { get; set; }

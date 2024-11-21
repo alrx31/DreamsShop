@@ -13,7 +13,7 @@ public static class BBLDependencies
     public static IServiceCollection AddBBLDependencies(this IServiceCollection services)
     {
         services.AddScoped<IPasswordHasher, PasswordHasher>();
-        services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IAuthService, AuthService>();
         
         services.AddFluentValidationAutoValidation();
         services.AddValidatorsFromAssemblyContaining<RegisterUserDTOValidator>(); // Register all validators in the assembly

@@ -34,6 +34,7 @@ public class ProducerRepositoryTests
         var producer = new Producer
         {
             Name = faker.Company.CompanyName(),
+            Description = faker.Company.CompanyName(),
             Staff = [],
             Raiting = faker.Random.Float(1,5)
         };
@@ -61,6 +62,7 @@ public class ProducerRepositoryTests
         var producer = new Producer
         {
             Name = faker.Company.CompanyName(),
+            Description = faker.Company.CompanyName(),
             Staff = [],
             Raiting = faker.Random.Float(1,5)
         };
@@ -88,6 +90,7 @@ public class ProducerRepositoryTests
         var producer = new Producer
         {
             Name = faker.Company.CompanyName(),
+            Description = faker.Company.CompanyName(),
             Staff = [],
             Raiting = faker.Random.Float(1,5)
         };
@@ -115,6 +118,7 @@ public class ProducerRepositoryTests
         var producer = new Producer
         {
             Name = faker.Company.CompanyName(),
+            Description = faker.Company.CompanyName(),
             Staff = [],
             Raiting = faker.Random.Float(1,5)
         };
@@ -143,6 +147,7 @@ public class ProducerRepositoryTests
         var producer = new Producer
         {
             Name = faker.Company.CompanyName(),
+            Description = faker.Company.CompanyName(),
             Staff = [],
             Raiting = faker.Random.Float(1,5)
         };

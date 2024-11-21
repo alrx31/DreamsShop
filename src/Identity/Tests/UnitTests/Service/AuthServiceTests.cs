@@ -13,7 +13,7 @@ using Moq;
 
 namespace Tests.UnitTests.Service;
 
-public class UserServiceTests
+public class AuthServiceTests
 {
     private readonly Mock<IHttpContextAccessor> _httpContextAccessorMock;
     private readonly Mock<IPasswordHasher> _passwordHasherMock;
@@ -22,9 +22,9 @@ public class UserServiceTests
     private readonly Mock<IMapper> _mapperMock;
     private readonly Mock<IJwtProvider> _jwtServiceMock;
     
-    private readonly IUserService _userService;
+    private readonly IAuthService _authService;
 
-    public UserServiceTests(){
+    public AuthServiceTests(){
         
         _httpContextAccessorMock = new Mock<IHttpContextAccessor>();
         _passwordHasherMock = new Mock<IPasswordHasher>();
@@ -36,7 +36,7 @@ public class UserServiceTests
         
         _mapperMock = new Mock<IMapper>();
         
-        _userService = new UserService(
+        _authService = new AuthService(
             _passwordHasherMock.Object, 
             _mapperMock.Object,
             _unitOfWorkMock.Object,
@@ -61,7 +61,7 @@ public class UserServiceTests
         
         // Act
         
-        Func<Task> act = async () => await _userService.RegisterUser(RegisterDTO);
+        Func<Task> act = async () => await _authService.RegisterUser(RegisterDTO);
         
         // Assert
 
@@ -88,7 +88,7 @@ public class UserServiceTests
         
         // Act
         
-        await _userService.RegisterUser(RegisterDTO);
+        await _authService.RegisterUser(RegisterDTO);
         
         // Assert
 
@@ -96,6 +96,8 @@ public class UserServiceTests
         _unitOfWorkMock.Verify(x => x.CompleteAsync(), Times.Once);
     }
     
-    
+    // TODO: Add Tests for LoginUser
+    // TODO: Add Tests for RefreshToken methods    
+    // TODO: Add Tests for Logout methods    
 
 }

@@ -2,9 +2,13 @@ using BLL.DTO;
 
 namespace BLL.IService;
 
-public interface IUserService
+public interface IAuthService
 {
     Task RegisterUser(RegisterUserDTO model);
     
     Task<(string,LoginResponseDTO)> LoginUser(LoginUserDTO model);
+    
+    Task <(string,LoginResponseDTO)> RefreshToken(RefreshTokenDTO model);
+    
+    // TODO: Add Logout
 }
