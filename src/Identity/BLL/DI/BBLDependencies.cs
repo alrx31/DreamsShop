@@ -14,6 +14,8 @@ public static class BBLDependencies
     {
         services.AddScoped<IPasswordHasher, PasswordHasher>();
         services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IProviderService, ProviderService>();
         
         services.AddFluentValidationAutoValidation();
         services.AddValidatorsFromAssemblyContaining<RegisterUserDTOValidator>(); // Register all validators in the assembly

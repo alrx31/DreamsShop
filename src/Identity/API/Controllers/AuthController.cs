@@ -6,30 +6,24 @@ namespace API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AuthController:ControllerBase
+public class AuthController(
+    IAuthService authService,
+    IHttpContextAccessor httpContextAccessor
+    )
+    : ControllerBase
 {
-    private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly IAuthService _authService;
-    
-    public AuthController(IAuthService authService, IHttpContextAccessor httpContextAccessor)
-    {
-        _authService = authService;
-        _httpContextAccessor = httpContextAccessor;
-    }
-
     [HttpPut]
     public async Task<IActionResult> RegisterUser([FromBody] RegisterUserDTO model)
     {
-        await _authService.RegisterUser(model);
+        await authService.RegisterUser(model);
         
         return Ok();
     }
     
-    
     [HttpPost]
     public async Task<IActionResult> LoginUser([FromBody] LoginUserDTO model)
     {
-        var (token, response) = await _authService.LoginUser(model);
+        var (token, response) = await authService.LoginUser(model);
 
         SetRefreshTokenCookie(token);
         
@@ -39,7 +33,7 @@ public class AuthController:ControllerBase
     [HttpPatch]
     public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenDTO model)
     {
-        var (token, response) = await _authService.RefreshToken(model);
+        var (token, response) = await authService.RefreshToken(model);
 
         SetRefreshTokenCookie(token);
         
@@ -49,7 +43,7 @@ public class AuthController:ControllerBase
     [HttpDelete("{userId}")]
     public async Task<IActionResult> LogoutUser(Guid userId)
     {
-        await _authService.LogoutUser(userId);
+        await authService.LogoutUser(userId);
         
         ClearRefreshTokenCookie();
         
@@ -66,13 +60,13 @@ public class AuthController:ControllerBase
             Expires = DateTime.UtcNow.AddDays(7)
         };
 
-        _httpContextAccessor.HttpContext?.Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
+        httpContextAccessor.HttpContext?.Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
     }
     
     
 
     private void ClearRefreshTokenCookie()
     {
-        _httpContextAccessor.HttpContext?.Response.Cookies.Delete("refreshToken");
+        httpContextAccessor.HttpContext?.Response.Cookies.Delete("refreshToken");
     }
 }
