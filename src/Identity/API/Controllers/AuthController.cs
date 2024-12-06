@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using BLL.DTO;
 using BLL.IService;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,7 @@ public class AuthController(
     : ControllerBase
 {
     [HttpPut]
+    [EndpointDescription("Register User")]
     public async Task<IActionResult> RegisterUser([FromBody] RegisterUserDTO model)
     {
         await authService.RegisterUser(model);
@@ -21,6 +23,8 @@ public class AuthController(
     }
     
     [HttpPost]
+    [EndpointDescription("Login User")]
+
     public async Task<IActionResult> LoginUser([FromBody] LoginUserDTO model)
     {
         var (token, response) = await authService.LoginUser(model);
@@ -31,6 +35,7 @@ public class AuthController(
     }
     
     [HttpPatch]
+    [EndpointDescription("Refresh Token")]
     public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenDTO model)
     {
         var (token, response) = await authService.RefreshToken(model);
@@ -41,6 +46,7 @@ public class AuthController(
     }
 
     [HttpDelete("{userId}")]
+    [EndpointDescription("Logout")]
     public async Task<IActionResult> LogoutUser(Guid userId)
     {
         await authService.LogoutUser(userId);

@@ -44,6 +44,7 @@ public static class DALDependencies
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IProducerRepository, ProducerRepository>();
+        services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
         services.AddScoped<IJwtProvider, JwtProvider>();
         
         return services;

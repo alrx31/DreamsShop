@@ -18,7 +18,8 @@ public static class BBLDependencies
         services.AddScoped<IProviderService, ProviderService>();
         
         services.AddFluentValidationAutoValidation();
-        services.AddValidatorsFromAssemblyContaining<RegisterUserDTOValidator>(); // Register all validators in the assembly
+        services.AddValidatorsFromAssemblyContaining<RegisterUserDTOValidator>();
+        services.AddValidatorsFromAssemblyContaining<UpdateUserDTOValidator>();
 
         services.AddAutoMapper(typeof(UserMapperProfile));
         

@@ -38,6 +38,13 @@ public class UserController
         
         return Ok();
     }
-    
-    
+
+    [Authorize]
+    [HttpPatch("role")]
+    public async Task<IActionResult> ChangeUserRole([FromBody] ChangeUserRoleDTO updateModel)
+    {
+        await userService.ChangeUserRole(updateModel);
+
+        return Ok();
+    }
 }

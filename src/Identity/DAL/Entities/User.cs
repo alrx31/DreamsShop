@@ -7,8 +7,8 @@ public class User
     public string Password { get; set; }
     public string Name { get; set; }
     
-    public Guid? ProducerId { get; set; }
-    public Producer Producer { get; set; }
+    public Guid? ProducerId { get; init; }
+    public Producer Producer { get; init; }
     
     public Roles Role { get; set; }
 }

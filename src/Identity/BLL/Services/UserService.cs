@@ -33,17 +33,17 @@ public class UserService
             throw new NotFoundException("User not found");
         }
         
-        var requestor = await unitOfWork.UserRepository.GetUser(deleteUserDto.requestorId);
+        var requester = await unitOfWork.UserRepository.GetUser(deleteUserDto.requestorId);
 
-        var producer = await unitOfWork.ProducerRepository.GetProducerByAdmin(requestor!.Id);
+        var producer = await unitOfWork.ProducerRepository.GetProducerByAdmin(requester!.Id);
 
         if (
-            requestor.Role == Roles.ADMIN ||
-            requestor.Id == deleteUserDto.userId ||
-            (requestor.Role == Roles.PROVIDER_ADMIN && producer!.Staff.Contains(user) && producer.Staff.Contains(requestor))
+            requester.Role == Roles.ADMIN ||
+            requester.Id == deleteUserDto.userId ||
+            (requester.Role == Roles.PROVIDER_ADMIN && producer!.Staff.Contains(user) && producer.Staff.Contains(requester))
             )
         {
-            if (!passwordHasher.Verify(deleteUserDto.password,requestor.Password))
+            if (!passwordHasher.Verify(deleteUserDto.password,requester.Password))
             {
                 throw new ForbiddenException("Password is incorrect");
             }
@@ -60,6 +60,48 @@ public class UserService
 
     public async Task UpdateUser(UpdateUserDTO updateUserDto)
     {
-        throw new NotImplementedException();
+        var requester = await unitOfWork.UserRepository.GetUser(updateUserDto.RequestorId);
+
+        if (requester is null)
+        {
+            throw new ForbiddenException("Invalid Requester.");
+        }
+
+        if (!passwordHasher.Verify(updateUserDto.Password, requester.Password))
+        {
+            throw new ForbiddenException("Invalid password.");
+        }
+        
+        var userToUpdate = await unitOfWork.UserRepository.GetUser(updateUserDto.UserDTO.Email);
+
+        if (userToUpdate is null)
+        {
+            throw new NotFoundException("Update user not found.");
+        }
+
+        if (
+            userToUpdate.Id != requester.Id &&
+            requester.Role != Roles.ADMIN &&
+            (userToUpdate.Role != Roles.PROVIDER ||
+             userToUpdate.ProducerId != requester.ProducerId ||
+             requester.Role != Roles.PROVIDER_ADMIN
+             )
+            )
+        {
+            throw new ForbiddenException("You do not have enough rights.");
+        }
+
+        userToUpdate.Email = updateUserDto.UserDTO.Email;
+        userToUpdate.Name = updateUserDto.UserDTO.Name;
+        userToUpdate.Password = passwordHasher.Generate(updateUserDto.UserDTO.Password);
+
+        await unitOfWork.UserRepository.UpdateUser(userToUpdate);
+
+        await unitOfWork.CompleteAsync();
+    }
+
+    public Task ChangeUserRole(ChangeUserRoleDTO updateModel)
+    {
+        throw new NotImplementedException("change user role");
     }
 }
