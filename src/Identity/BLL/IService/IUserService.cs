@@ -7,6 +7,6 @@ public interface IUserService
 {
     Task<User?> GetUserById(Guid userId);
     Task DeleteUser(DeleteUserDTO deleteUserDto);
-    Task UpdateUser(UpdateUserDTO updateUserDto);
-    Task ChangeUserRole(ChangeUserRoleDTO updateModel);
+    Task UpdateUser(UpdateUserDTO updateUserDto, Guid id);
+    Task ChangeUserRole(ChangeUserRoleDTO updateModel, Guid id);
 }

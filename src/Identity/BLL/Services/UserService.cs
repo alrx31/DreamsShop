@@ -58,7 +58,7 @@ public class UserService
         }
     }
 
-    public async Task UpdateUser(UpdateUserDTO updateUserDto)
+    public async Task UpdateUser(UpdateUserDTO updateUserDto, Guid id)
     {
         var requester = await unitOfWork.UserRepository.GetUser(updateUserDto.RequestorId);
 
@@ -72,7 +72,7 @@ public class UserService
             throw new ForbiddenException("Invalid password.");
         }
         
-        var userToUpdate = await unitOfWork.UserRepository.GetUser(updateUserDto.UserDTO.Email);
+        var userToUpdate = await unitOfWork.UserRepository.GetUser(id);
 
         if (userToUpdate is null)
         {
@@ -100,7 +100,7 @@ public class UserService
         await unitOfWork.CompleteAsync();
     }
 
-    public Task ChangeUserRole(ChangeUserRoleDTO updateModel)
+    public Task ChangeUserRole(ChangeUserRoleDTO updateModel, Guid id)
     {
         throw new NotImplementedException("change user role");
     }

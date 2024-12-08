@@ -31,19 +31,19 @@ public class UserController
     }
     
     [Authorize]
-    [HttpPatch]
-    public async Task<IActionResult> UpdateUser([FromBody] UpdateUserDTO updateUserDTO)
+    [HttpPatch("{id}")]
+    public async Task<IActionResult> UpdateUser([FromBody] UpdateUserDTO updateUserDTO, Guid id)
     {
-        await userService.UpdateUser(updateUserDTO);
+        await userService.UpdateUser(updateUserDTO, id);
         
         return Ok();
     }
 
     [Authorize]
-    [HttpPatch("role")]
-    public async Task<IActionResult> ChangeUserRole([FromBody] ChangeUserRoleDTO updateModel)
+    [HttpPatch("{id}/role")]
+    public async Task<IActionResult> ChangeUserRole([FromBody] ChangeUserRoleDTO updateModel, Guid id)
     {
-        await userService.ChangeUserRole(updateModel);
+        await userService.ChangeUserRole(updateModel, id);
 
         return Ok();
     }
