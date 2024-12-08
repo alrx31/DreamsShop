@@ -1,16 +1,15 @@
 using BLL.DTO;
 using BLL.Exceptions;
 using BLL.IService;
-using BLL.Services;
 using Bogus;
 using DAL.Entities;
 using DAL.IRepositories;
 using FluentAssertions;
 using Moq;
 
-namespace Tests.UnitTests.Service;
+namespace Tests.UnitTests.Service.UserService;
 
-public class UserServiceTests
+public class DeleteUserTests
 {
     private readonly Mock<IUnitOfWork> _unitOfWorkMock;
     private readonly Mock<IUserRepository> _userRepositoryMock;
@@ -19,7 +18,7 @@ public class UserServiceTests
     
     private readonly IUserService _userService;
     
-    public UserServiceTests()
+    public DeleteUserTests()
     {
         _unitOfWorkMock = new Mock<IUnitOfWork>();
         _userRepositoryMock = new Mock<IUserRepository>();
@@ -30,46 +29,14 @@ public class UserServiceTests
         _unitOfWorkMock.Setup(u => u.UserRepository).Returns(_userRepositoryMock.Object);
         _unitOfWorkMock.Setup(u => u.ProducerRepository).Returns(_producerRepositoryMock.Object);
         
-        _userService = new UserService(
+        _userService = new BLL.Services.UserService(
             _unitOfWorkMock.Object,
             _passwordHasherMock.Object
-            );
+        );
     }
     
     [Fact]
-    public async Task GetUserById_UserExists_ReturnsUser()
-    {
-        // Arrange
-        var userId = Guid.NewGuid();
-        var user = new User
-        {
-            Id = userId
-        };
-        
-        _userRepositoryMock.Setup(u => u.GetUser(userId)).ReturnsAsync(user);
-        
-        // Act
-        var result = await _userService.GetUserById(userId);
-        
-        // Assert
-        result.Should().BeEquivalentTo(user);
-    }
-    
-    [Fact]
-    public async Task GetUserById_UserDoesNotExist_ThrowsNotFoundException()
-    {
-        // Arrange
-        var userId = Guid.NewGuid();
-        
-        // Act
-        Func<Task> action = async () => await _userService.GetUserById(userId);
-        
-        // Assert
-        await action.Should().ThrowAsync<NotFoundException>();
-    }
-
-    [Fact]
-    public async Task DeleteUser_Success_WhenRequestorAdmin()
+    public async Task DeleteUser_Success_WhenRequesterAdmin()
     {
         // Arrange
         var faker = new Faker();
@@ -108,9 +75,9 @@ public class UserServiceTests
         _userRepositoryMock.Verify(u => u.DeleteUser(userToDelete), Times.Once);
         _unitOfWorkMock.Verify(u => u.CompleteAsync(), Times.Once);
     }
-
+    
     [Fact]
-    public async Task DeleteUser_Success_WhenRequestorSameUser()
+    public async Task DeleteUser_Success_WhenRequesterSameUser()
     {
         // Arrange
         
@@ -144,7 +111,7 @@ public class UserServiceTests
     }
 
     [Fact]
-    public async Task DeleteUser_Success_WhenRequestorAdminInUserCompany()
+    public async Task DeleteUser_Success_WhenRequesterAdminInUserCompany()
     {
         // Arrange
         var faker = new Faker();
@@ -199,7 +166,7 @@ public class UserServiceTests
     }
 
     [Fact]
-    public async Task DeleteUser_Fail_WhenRequestorHaveNotAccess()
+    public async Task DeleteUser_Fail_WhenRequesterHaveNotAccess()
     {
         // Arrange
         var faker = new Faker();

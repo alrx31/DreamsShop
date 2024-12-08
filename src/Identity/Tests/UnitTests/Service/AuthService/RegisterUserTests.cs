@@ -2,7 +2,6 @@ using AutoMapper;
 using BLL.DTO;
 using BLL.Exceptions;
 using BLL.IService;
-using BLL.Services;
 using Bogus;
 using DAL.Entities;
 using DAL.IRepositories;
@@ -11,9 +10,9 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Moq;
 
-namespace Tests.UnitTests.Service;
+namespace Tests.UnitTests.Service.AuthService;
 
-public class AuthServiceTests
+public class RegisterUserTests
 {
     private readonly Mock<IHttpContextAccessor> _httpContextAccessorMock;
     private readonly Mock<IPasswordHasher> _passwordHasherMock;
@@ -24,7 +23,7 @@ public class AuthServiceTests
     
     private readonly IAuthService _authService;
 
-    public AuthServiceTests(){
+    public RegisterUserTests(){
         
         _httpContextAccessorMock = new Mock<IHttpContextAccessor>();
         _passwordHasherMock = new Mock<IPasswordHasher>();
@@ -36,15 +35,15 @@ public class AuthServiceTests
         
         _mapperMock = new Mock<IMapper>();
         
-        _authService = new AuthService(
+        _authService = new BLL.Services.AuthService(
             _passwordHasherMock.Object, 
             _mapperMock.Object,
             _unitOfWorkMock.Object,
             _jwtServiceMock.Object,
             _httpContextAccessorMock.Object
-            );
+        );
     }
-
+    
     [Fact]
     public async Task RegisterUser_Fail_WhenEmailIsNotAvaible()
     {
@@ -95,9 +94,4 @@ public class AuthServiceTests
         _userRepositoryMock.Verify(x => x.AddUser(It.IsAny<User>()), Times.Once);
         _unitOfWorkMock.Verify(x => x.CompleteAsync(), Times.Once);
     }
-    
-    // TODO: Add Tests for LoginUser
-    // TODO: Add Tests for RefreshToken methods    
-    // TODO: Add Tests for Logout methods    
-
 }
