@@ -1,4 +1,5 @@
 using BLL.DTO;
+using BLL.Exceptions;
 using BLL.IService;
 using DAL.Entities;
 using DAL.IRepositories;
@@ -10,14 +11,28 @@ public class ProviderService(
     IPasswordHasher passwordHasher
     ) : IProviderService
 {
-    public Task<Provider?> GetProvider(Guid id)
+    public async Task<Provider?> GetProvider(Guid id)
     {
-        throw new NotImplementedException();
+        var provider = await unitOfWork.ProviderRepository.GetProvider(id);
+
+        if (provider is null)
+        {
+            throw new NotFoundException("Provider not found.");
+        }
+
+        return provider;
     }
 
-    public Task<Provider?> GetProvider(string name)
+    public async Task<Provider?> GetProvider(string name)
     {
-        throw new NotImplementedException();
+        var provider = await unitOfWork.ProviderRepository.GetProvider(name);
+
+        if (provider is null)
+        {
+            throw new NotFoundException("Provider not found.");
+        }
+
+        return provider;
     }
 
     public Task RegisterProvider(RegisterProviderDTO model)
