@@ -35,7 +35,7 @@ public class UserService
         
         var requester = await unitOfWork.UserRepository.GetUser(deleteUserDto.requestorId);
 
-        var producer = await unitOfWork.ProducerRepository.GetProducerByAdmin(requester!.Id);
+        var producer = await unitOfWork.ProviderRepository.GetProducerByAdmin(requester!.Id);
 
         if (
             requester.Role == Roles.ADMIN ||

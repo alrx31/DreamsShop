@@ -8,13 +8,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Tests.UnitTests.Repository;
 
-public class ProducerRepositoryTests
+public class ProviderRepositoryTests
 {
     private readonly ApplicationDbContext _context;
     
-    private readonly IProducerRepository _repository;
+    private readonly IProviderRepository _repository;
     
-    public ProducerRepositoryTests()
+    public ProviderRepositoryTests()
     {
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
             .UseInMemoryDatabase(databaseName: "TestDatabase")
@@ -22,7 +22,7 @@ public class ProducerRepositoryTests
 
         _context = new ApplicationDbContext(options);
 
-        _repository = new ProducerRepository(_context);
+        _repository = new ProviderRepository(_context);
     }
     
     [Fact]
@@ -72,7 +72,7 @@ public class ProducerRepositoryTests
         await _context.SaveChangesAsync();
         
         // Act
-        var result = await _repository.GetProducer(producer.Id);
+        var result = await _repository.GetProvider(producer.Id);
         
         //Assert
         result.Should().NotBeNull();
@@ -100,7 +100,7 @@ public class ProducerRepositoryTests
         await _context.SaveChangesAsync();
         
         // Act
-        var result = await _repository.GetProducer(producer.Name);
+        var result = await _repository.GetProvider(producer.Name);
         
         //Assert
         result.Should().NotBeNull();

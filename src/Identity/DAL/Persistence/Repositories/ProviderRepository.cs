@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Persistence.Repositories;
 
-public class ProducerRepository : IProducerRepository
+public class ProviderRepository : IProviderRepository
 {
     
     private readonly ApplicationDbContext _context;
     
-    public ProducerRepository(ApplicationDbContext context)
+    public ProviderRepository(ApplicationDbContext context)
     {
         _context = context;
     }
@@ -19,12 +19,12 @@ public class ProducerRepository : IProducerRepository
         await _context.Producers.AddAsync(producer);
     }
 
-    public async Task<Provider?> GetProducer(Guid id)
+    public async Task<Provider?> GetProvider(Guid id)
     {
         return await _context.Producers.FirstOrDefaultAsync(u=>u.Id == id);
     }
 
-    public async Task<Provider?> GetProducer(string name)
+    public async Task<Provider?> GetProvider(string name)
     {
         return await _context.Producers.FirstOrDefaultAsync(u=>u.Name == name); 
     }

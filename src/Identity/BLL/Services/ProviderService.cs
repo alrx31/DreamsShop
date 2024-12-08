@@ -1,11 +1,13 @@
 using BLL.DTO;
 using BLL.IService;
 using DAL.Entities;
+using DAL.IRepositories;
 
 namespace BLL.Services;
 
 public class ProviderService(
-    
+    IUnitOfWork unitOfWork,
+    IPasswordHasher passwordHasher
     ) : IProviderService
 {
     public Task<Provider?> GetProvider(Guid id)

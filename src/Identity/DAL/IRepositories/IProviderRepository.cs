@@ -2,13 +2,13 @@ using DAL.Entities;
 
 namespace DAL.IRepositories;
 
-public interface IProducerRepository
+public interface IProviderRepository
 {
     Task AddProducer(Provider? producer);
     
-    Task<Provider?> GetProducer(Guid id);
+    Task<Provider?> GetProvider(Guid id);
     
-    Task<Provider?> GetProducer(string name);
+    Task<Provider?> GetProvider(string name);
     
     Task DeleteProducer(Provider? producer);
     

@@ -4,7 +4,7 @@ public interface IUnitOfWork
 {
     IUserRepository UserRepository { get; }
     
-    IProducerRepository ProducerRepository { get; }
+    IProviderRepository ProviderRepository { get; }
     
     IRefreshTokenRepository RefreshTokenRepository { get; }
     
