@@ -100,8 +100,38 @@ public class UserService
         await unitOfWork.CompleteAsync();
     }
 
-    public Task ChangeUserRole(ChangeUserRoleDTO updateModel, Guid id)
+    public async Task ChangeUserRole(ChangeUserRoleDTO updateModel, Guid id)
     {
-        throw new NotImplementedException("change user role");
+        var requester = await unitOfWork.UserRepository.GetUser(updateModel.RequestorId);
+
+        if (requester is null)
+        {
+            throw new NotFoundException("Requester not found.");
+        }
+
+        if (!passwordHasher.Verify(updateModel.Password, requester.Password))
+        {
+            throw new ForbiddenException("Invalid password.");
+        }
+
+        var user = await unitOfWork.UserRepository.GetUser(id);
+
+        if (user is null)
+        {
+            throw new NotFoundException("User not found.");
+        }
+
+        if (requester.Role != Roles.ADMIN &&
+            (requester.ProducerId != user.ProducerId || requester.Role != Roles.PROVIDER_ADMIN ||
+             (updateModel.role != Roles.PROVIDER && updateModel.role != Roles.PROVIDER_ADMIN)))
+        {
+            throw new ForbiddenException("You do not have enough rights.");
+        }
+
+        user.Role = updateModel.role;
+
+        await unitOfWork.UserRepository.UpdateUser(user);
+
+        await unitOfWork.CompleteAsync();
     }
 }

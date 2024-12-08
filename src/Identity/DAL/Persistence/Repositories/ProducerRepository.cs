@@ -45,6 +45,6 @@ public class ProducerRepository : IProducerRepository
 
     public async Task<Producer?> GetProducerByAdmin(Guid requestorId)
     {
-        return await _context.Producers.FirstOrDefaultAsync(p => p.Staff[0].Id == requestorId); 
+        return await _context.Producers.FirstOrDefaultAsync(p => p.Staff.Select(U=>U.Id).Contains(requestorId)); 
     }
 }
