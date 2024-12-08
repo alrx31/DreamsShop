@@ -130,7 +130,7 @@ public class DeleteUserTests
             Email = faker.Internet.Email(),
         };
         
-        var producer = new Producer
+        var producer = new Provider
         {
             Id = Guid.NewGuid(),
             Staff = new List<User>

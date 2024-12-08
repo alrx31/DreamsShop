@@ -4,14 +4,14 @@ namespace DAL.IRepositories;
 
 public interface IProducerRepository
 {
-    Task AddProducer(Producer? producer);
+    Task AddProducer(Provider? producer);
     
-    Task<Producer?> GetProducer(Guid id);
+    Task<Provider?> GetProducer(Guid id);
     
-    Task<Producer?> GetProducer(string name);
+    Task<Provider?> GetProducer(string name);
     
-    Task DeleteProducer(Producer? producer);
+    Task DeleteProducer(Provider? producer);
     
-    Task UpdateProducer(Producer? producer);
-    Task<Producer?> GetProducerByAdmin(Guid requestorId);
+    Task UpdateProducer(Provider? producer);
+    Task<Provider?> GetProducerByAdmin(Guid requestorId);
 }

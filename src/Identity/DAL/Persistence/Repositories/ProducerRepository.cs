@@ -14,36 +14,36 @@ public class ProducerRepository : IProducerRepository
         _context = context;
     }
     
-    public async  Task AddProducer(Producer? producer)
+    public async  Task AddProducer(Provider? producer)
     {
         await _context.Producers.AddAsync(producer);
     }
 
-    public async Task<Producer?> GetProducer(Guid id)
+    public async Task<Provider?> GetProducer(Guid id)
     {
         return await _context.Producers.FirstOrDefaultAsync(u=>u.Id == id);
     }
 
-    public async Task<Producer?> GetProducer(string name)
+    public async Task<Provider?> GetProducer(string name)
     {
         return await _context.Producers.FirstOrDefaultAsync(u=>u.Name == name); 
     }
 
-    public Task DeleteProducer(Producer? producer)
+    public Task DeleteProducer(Provider? producer)
     {
         _context.Producers.Remove(producer);
         
         return Task.CompletedTask;
     }
 
-    public Task UpdateProducer(Producer? producer)
+    public Task UpdateProducer(Provider? producer)
     {
         _context.Producers.Update(producer);
         
         return Task.CompletedTask;
     }
 
-    public async Task<Producer?> GetProducerByAdmin(Guid requestorId)
+    public async Task<Provider?> GetProducerByAdmin(Guid requestorId)
     {
         return await _context.Producers.FirstOrDefaultAsync(p => p.Staff.Select(U=>U.Id).Contains(requestorId)); 
     }

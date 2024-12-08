@@ -8,7 +8,7 @@ public class User
     public string Name { get; set; }
     
     public Guid? ProducerId { get; init; }
-    public Producer Producer { get; init; }
+    public Provider Provider { get; init; }
     
     public Roles Role { get; set; }
 }

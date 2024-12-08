@@ -91,7 +91,7 @@ public class ChangeUserRoleTests
         // Arrange
         var faker = new Faker();
 
-        var producer = new Producer
+        var producer = new Provider
         {
             Id = faker.Random.Guid(),
             Name = faker.Internet.UserName(),

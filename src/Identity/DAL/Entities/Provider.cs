@@ -1,6 +1,6 @@
 namespace DAL.Entities;
 
-public class Producer
+public class Provider
 {
     public Guid Id { get; set; }
     

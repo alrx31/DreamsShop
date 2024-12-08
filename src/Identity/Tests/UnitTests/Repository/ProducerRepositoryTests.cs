@@ -31,7 +31,7 @@ public class ProducerRepositoryTests
         // Arrange
         var faker = new Faker();
 
-        var producer = new Producer
+        var producer = new Provider
         {
             Name = faker.Company.CompanyName(),
             Description = faker.Company.CompanyName(),
@@ -59,7 +59,7 @@ public class ProducerRepositoryTests
         // Arrange
         var faker = new Faker();
         
-        var producer = new Producer
+        var producer = new Provider
         {
             Name = faker.Company.CompanyName(),
             Description = faker.Company.CompanyName(),
@@ -87,7 +87,7 @@ public class ProducerRepositoryTests
         // Arrange
         var faker = new Faker();
         
-        var producer = new Producer
+        var producer = new Provider
         {
             Name = faker.Company.CompanyName(),
             Description = faker.Company.CompanyName(),
@@ -115,7 +115,7 @@ public class ProducerRepositoryTests
         // Arrange
         var faker = new Faker();
         
-        var producer = new Producer
+        var producer = new Provider
         {
             Name = faker.Company.CompanyName(),
             Description = faker.Company.CompanyName(),
@@ -144,7 +144,7 @@ public class ProducerRepositoryTests
         // Arrange
         var faker = new Faker();
 
-        var producer = new Producer
+        var producer = new Provider
         {
             Name = faker.Company.CompanyName(),
             Description = faker.Company.CompanyName(),
