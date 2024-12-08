@@ -20,6 +20,7 @@ public class RegisterUserTests
     private readonly Mock<IUnitOfWork> _unitOfWorkMock;
     private readonly Mock<IMapper> _mapperMock;
     private readonly Mock<IJwtProvider> _jwtServiceMock;
+    private readonly Mock<IRefreshTokenRepository> _refreshTokenRepositoryMock;
     
     private readonly IAuthService _authService;
 
@@ -30,8 +31,10 @@ public class RegisterUserTests
         _userRepositoryMock = new Mock<IUserRepository>();
         _unitOfWorkMock = new Mock<IUnitOfWork>();
         _jwtServiceMock = new Mock<IJwtProvider>();
+        _refreshTokenRepositoryMock = new Mock<IRefreshTokenRepository>();
         
         _unitOfWorkMock.SetupGet(x => x.UserRepository).Returns(_userRepositoryMock.Object);
+        _unitOfWorkMock.SetupGet(x => x.RefreshTokenRepository).Returns(_refreshTokenRepositoryMock.Object);
         
         _mapperMock = new Mock<IMapper>();
         
@@ -83,7 +86,7 @@ public class RegisterUserTests
         
         _passwordHasherMock.Setup(x => x.Generate(RegisterDTO.Password)).Returns(faker.Internet.Password());
         
-        _mapperMock.Setup(x => x.Map<User>(RegisterDTO)).Returns(new User());
+        _mapperMock.Setup(x => x.Map<User>(RegisterDTO)).Returns(new User(){Id = new Guid()});
         
         // Act
         
