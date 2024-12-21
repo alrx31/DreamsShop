@@ -35,6 +35,8 @@ public class OrderTransaction_DeleteTests : BaseRepositoryTest
         
         await _orderTransactionRepository.DeleteAsync(orderTransaction);
         
+        await Context.SaveChangesAsync();
+        
         // Assert
         
         var result = await Context.OrderTransaction.FindAsync(orderTransaction.Id);
