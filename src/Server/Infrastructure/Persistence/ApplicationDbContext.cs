@@ -23,7 +23,7 @@ public class ApplicationDbContext : DbContext
     
     public DbSet<DreamInOrder> DreamInOrder { get; init; }
     
-    public DbSet<OrderTransaction> OrderTransaction { get; init; }
+    public DbSet<OrderTransaction?> OrderTransaction { get; init; }
     
     public DbSet<Media> Media { get; init; }
     
