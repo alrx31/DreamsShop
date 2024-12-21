@@ -1,7 +1,16 @@
+using Infrastructure.DI;
+
 var builder = WebApplication.CreateBuilder(args);
 
+// Add services
+builder.Services.AddInfrastructureDependencies(builder.Configuration);
+
+
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
@@ -14,4 +23,10 @@ if (app.Environment.IsDevelopment() || true)
 
 app.UseHttpsRedirection();
 
+app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
+
+
+app.MapControllers();
 app.Run();
