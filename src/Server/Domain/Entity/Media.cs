@@ -14,7 +14,7 @@ namespace Domain.Entity
         public required string File_Extension { get; set; }
 
         [StringLength(50)]
-        public required string File_Size { get; set; }
+        public required int File_Size { get; set; }
 
         [StringLength(500)]
         public required string File_Path { get; set; }
