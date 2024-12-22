@@ -37,10 +37,10 @@ public class OrderTransactionRepository(ApplicationDbContext context):IOrderTran
         return Task.CompletedTask;
     }
 
-    public async Task<List<OrderTransaction?>> GetAllAsync(int page, int pageSize,
+    public async Task<List<OrderTransaction>> GetAllAsync(int page, int pageSize,
         CancellationToken cancellationToken = default)
     {
-        return await _context.OrderTransaction.Skip(page * pageSize).Take(pageSize).ToListAsync(cancellationToken);
+        return await _context.OrderTransaction.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync(cancellationToken);
     }
 
     public async Task<int> GetCountAsync(CancellationToken cancellationToken = default)
@@ -48,7 +48,7 @@ public class OrderTransactionRepository(ApplicationDbContext context):IOrderTran
         return await _context.OrderTransaction.CountAsync(cancellationToken);
     }
 
-    public async Task<List<OrderTransaction?>> GetRangeAsync(int skip, int take,
+    public async Task<List<OrderTransaction>> GetRangeAsync(int skip, int take,
         CancellationToken cancellationToken = default)
     {
         return await _context.OrderTransaction.Skip(skip).Take(take).ToListAsync(cancellationToken);
