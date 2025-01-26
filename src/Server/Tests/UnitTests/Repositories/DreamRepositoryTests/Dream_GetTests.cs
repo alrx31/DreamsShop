@@ -18,33 +18,16 @@ public class Dream_GetTests : BaseRepositoryTest
     public async Task GetAsync_ShouldReturnDream()
     {
         // Arrange
-        var faker = new Faker();
-        
-        var dream = new Dream
-        {
-            Id = faker.Random.Guid(),
-            Title = faker.Lorem.Sentence(),
-            Desctiption = faker.Lorem.Paragraph(),
-            ImageMediaId = faker.Random.Guid(),
-            PreviewMediaId = faker.Random.Guid(),
-            ProducerId = faker.Random.Guid(),
-        };
+        var dream = new Faker<Dream>().Generate();
         
         await Context.Dream.AddAsync(dream);
-        
         await Context.SaveChangesAsync();
         
         // Act
-        
         var result = await _dreamRepository.GetAsync(dream.Id);
         
         // Assert
-        
         result.Should().NotBeNull();
-        result.Title.Should().Be(dream.Title);
-        result.Desctiption.Should().Be(dream.Desctiption);
-        result.ImageMediaId.Should().Be(dream.ImageMediaId);
-        result.PreviewMediaId.Should().Be(dream.PreviewMediaId);
-        result.ProducerId.Should().Be(dream.ProducerId);
+        result.Should().BeEquivalentTo(dream);
     }
 }

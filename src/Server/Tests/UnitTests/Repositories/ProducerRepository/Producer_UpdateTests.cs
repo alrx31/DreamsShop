@@ -17,25 +17,18 @@ public class Producer_UpdateTests : BaseRepositoryTest
     public async Task UpdateProducer_ShouldUpdateProducer()
     {
         var faker = new Faker();
-        var producer = new Producer()
-        {
-            Id = faker.Random.Guid(),
-            Name = faker.Company.CompanyName(),
-            Description = faker.Random.Words(),
-        };
+        var producer = new Faker<Producer>().Generate();
         
         await Context.Producer.AddAsync(producer);
         await Context.SaveChangesAsync();
         
         // Act
-        
         producer.Name = faker.Company.CompanyName();
         producer.Description = faker.Random.Words();
         
         await _repository.UpdateAsync(producer);
         
         // Assert
-        
         var result = await Context.Producer.FindAsync(producer.Id);
         result.Should().BeEquivalentTo(producer);
         

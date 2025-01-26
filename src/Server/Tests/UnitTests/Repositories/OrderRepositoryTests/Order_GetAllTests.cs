@@ -19,32 +19,7 @@ public class Order_GetAllTests : BaseRepositoryTest
     public async Task GetAllAsync_ShouldReturnListOfOrders()
     {
         // Arrange
-        var faker = new Faker();
-        
-        var orders = new List<Order>
-        {
-            new Order
-            {
-                Id = faker.Random.Guid(),
-                Cost = faker.Random.Decimal(),
-                Consumer_Id = faker.Random.Guid(),
-                Transaction_Id = faker.Random.Guid(),
-            },
-            new Order
-            {
-                Id = faker.Random.Guid(),
-                Cost = faker.Random.Decimal(),
-                Consumer_Id = faker.Random.Guid(),
-                Transaction_Id = faker.Random.Guid(),
-            },
-            new Order
-            {
-                Id = faker.Random.Guid(),
-                Cost = faker.Random.Decimal(),
-                Consumer_Id = faker.Random.Guid(),
-                Transaction_Id = faker.Random.Guid(),
-            },
-        };
+        var orders = new Faker<Order>().Generate(3);
         
         await Context.Order.AddRangeAsync(orders);
         await Context.SaveChangesAsync();
@@ -62,33 +37,8 @@ public class Order_GetAllTests : BaseRepositoryTest
     public async Task GetCountAsync_ShouldReturnCountOfOrders()
     {
         // Arrange
-        var faker = new Faker();
+        var orders = new Faker<Order>().Generate(3);
      
-        var orders = new List<Order>
-        {
-            new Order
-            {
-                Id = faker.Random.Guid(),
-                Cost = faker.Random.Decimal(),
-                Consumer_Id = faker.Random.Guid(),
-                Transaction_Id = faker.Random.Guid(),
-            },
-            new Order
-            {
-                Id = faker.Random.Guid(),
-                Cost = faker.Random.Decimal(),
-                Consumer_Id = faker.Random.Guid(),
-                Transaction_Id = faker.Random.Guid(),
-            },
-            new Order
-            {
-                Id = faker.Random.Guid(),
-                Cost = faker.Random.Decimal(),
-                Consumer_Id = faker.Random.Guid(),
-                Transaction_Id = faker.Random.Guid(),
-            },
-        };
-        
         await Context.Order.AddRangeAsync(orders);
         await Context.SaveChangesAsync();
         
@@ -103,32 +53,7 @@ public class Order_GetAllTests : BaseRepositoryTest
     public async Task GetRangeAsync_ShouldReturnListOfOrders()
     {
         // Arrange
-        var faker = new Faker();
-        
-        var orders = new List<Order>
-        {
-            new Order
-            {
-                Id = faker.Random.Guid(),
-                Cost = faker.Random.Decimal(),
-                Consumer_Id = faker.Random.Guid(),
-                Transaction_Id = faker.Random.Guid(),
-            },
-            new Order
-            {
-                Id = faker.Random.Guid(),
-                Cost = faker.Random.Decimal(),
-                Consumer_Id = faker.Random.Guid(),
-                Transaction_Id = faker.Random.Guid(),
-            },
-            new Order
-            {
-                Id = faker.Random.Guid(),
-                Cost = faker.Random.Decimal(),
-                Consumer_Id = faker.Random.Guid(),
-                Transaction_Id = faker.Random.Guid(),
-            },
-        };
+        var orders = new Faker<Order>().Generate(3);
         
         await Context.Order.AddRangeAsync(orders);
         await Context.SaveChangesAsync();

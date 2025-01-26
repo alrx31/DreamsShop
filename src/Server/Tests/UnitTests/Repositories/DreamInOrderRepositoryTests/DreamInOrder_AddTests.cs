@@ -19,25 +19,15 @@ public class DreamInOrder_AddTests : BaseRepositoryTest
     public async Task AddAsync_ShouldAddEntityToDatabase()
     {
         // Arrange
-        var faker = new Faker();
-        
-        var dreamInOrder = new DreamInOrder
-        {
-            Id = Guid.NewGuid(),
-            Dream_Id = Guid.NewGuid(),
-            Order_Id = Guid.NewGuid(),
-            AddDate = faker.Date.Past()
-        };
+        var dreamInOrder = new Faker<DreamInOrder>().Generate();
         
         // Act
         await _dreamInOrderRepository.AddAsync(dreamInOrder);
         await Context.SaveChangesAsync();
         
         // Assert
-        var entity = await Context.DreamInOrder.FindAsync(dreamInOrder.Id);
-        entity.Should().NotBeNull();
-        entity.Id.Should().Be(dreamInOrder.Id);
-        entity.Dream_Id.Should().Be(dreamInOrder.Dream_Id);
-        entity.Order_Id.Should().Be(dreamInOrder.Order_Id);
+        var result = await Context.DreamInOrder.FindAsync(dreamInOrder.Id);
+        
+        result.Should().BeEquivalentTo(dreamInOrder);
     }
 }

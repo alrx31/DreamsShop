@@ -3,7 +3,7 @@ using Domain.Entity;
 using Domain.IRepositories;
 using FluentAssertions;
 
-namespace Tests.UnitTests.Repositories.MediaRepository;
+namespace Tests.UnitTests.Repositories.MediaRepositoryTests;
 
 public class Media_GetTests : BaseRepositoryTest
 {
@@ -18,17 +18,7 @@ public class Media_GetTests : BaseRepositoryTest
     public async Task GetAsync_ShouldReturnMedia()
     {
         // Arrange
-        var faker = new Faker();
-        
-        var media = new Media
-        {
-            Id = faker.Random.Guid(),
-            FileName = faker.System.FileName(),
-            FilePath = faker.System.DirectoryPath(),
-            FileExtension = faker.System.FileExt(),
-            FileSize = faker.Random.Int(),
-            File = faker.Random.Bytes(10),
-        };
+        var media = new Faker<Media>().Generate();
         
         await Context.Media.AddAsync(media);
         await Context.SaveChangesAsync();
@@ -37,12 +27,6 @@ public class Media_GetTests : BaseRepositoryTest
         var result = await _mediaRepository.GetAsync(media.Id);
         
         // Assert
-        result.Should().NotBeNull();
-        result.Id.Should().Be(media.Id);
-        result.FileName.Should().Be(media.FileName);
-        result.FilePath.Should().Be(media.FilePath);
-        result.FileExtension.Should().Be(media.FileExtension);
-        result.FileSize.Should().Be(media.FileSize);
-        result.File.Should().BeEquivalentTo(media.File);
+        result.Should().BeEquivalentTo(media);
     }
 }

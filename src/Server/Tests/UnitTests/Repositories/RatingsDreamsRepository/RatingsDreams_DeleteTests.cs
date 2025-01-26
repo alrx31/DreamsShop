@@ -17,27 +17,18 @@ public class RatingsDreams_DeleteTests : BaseRepositoryTest
     public async Task DeleteAsync_ShouldDeleteRatingsDreams()
     {
         // Arrange
-        var faker = new Faker();
-        var ratingDreams = new RatingsDreams
-        {
-            Id = faker.Random.Guid(),
-            DreamId = faker.Random.Guid(),
-            ConsumerId = faker.Random.Guid(),
-            Value = faker.Random.Int(),
-            CreatedAt = faker.Date.Past(),
-        };
+        var ratingDreams = new Faker<RatingsDreams>().Generate();
 
         await Context.AddAsync(ratingDreams);
         await Context.SaveChangesAsync();
         
         // Act
-        
         await _ratingsDreamsRepository.DeleteAsync(ratingDreams);
         await Context.SaveChangesAsync();
         
         // Assert
-
         var result = await Context.RatingsDreams.FindAsync(ratingDreams.Id);
+        
         result.Should().BeNull();
     }
 }

@@ -19,31 +19,17 @@ public class Dream_DeleteTests : BaseRepositoryTest
     public async Task DeleteAsync_ShouldDeleteDream()
     {
         // Arrange
-        var faker = new Faker();
-        
-        var dream = new Dream
-        {
-            Id = faker.Random.Guid(),
-            Title = faker.Lorem.Sentence(),
-            Desctiption = faker.Lorem.Paragraph(),
-            ImageMediaId = faker.Random.Guid(),
-            PreviewMediaId = faker.Random.Guid(),
-            ProducerId = faker.Random.Guid(),
-        };
+        var dream = new Faker<Dream>().Generate();
         
         await Context.Dream.AddAsync(dream);
-        
         await Context.SaveChangesAsync();
         
         // Act
-        
         await _dreamRepository.DeleteAsync(dream);
-        
         await Context.SaveChangesAsync();
         
         // Assert
-        
-        var result = await Context.Dream.FirstOrDefaultAsync(x => x.Id == dream.Id);
+        var result = await Context.Dream.FindAsync(dream.Id);
         
         result.Should().BeNull();
     }

@@ -24,15 +24,14 @@ public class RatingsProducer_UpdateTests : BaseRepositoryTest
         await Context.SaveChangesAsync();
         
         // Act
-        
         ratingsProducer.CreatedAt = faker.Date.Past();
         ratingsProducer.Value = faker.Random.Int();
         
         await _repository.UpdateAsync(ratingsProducer);
         
         // Assert
-        
         var result = await Context.RatingsProducer.FindAsync(ratingsProducer.Id);
+        
         result.Should().BeEquivalentTo(ratingsProducer);
     }
 }

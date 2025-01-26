@@ -21,39 +21,22 @@ public class DreamInCategory_UpdateTests : BaseRepositoryTest
     {
         // Arrange
         var faker = new Faker();
-        
-        var dreamInCategory = new DreamInCategory
-        {
-            Id = faker.Random.Guid(),
-            DreamId = faker.Random.Guid(),
-            CategoryId = faker.Random.Guid()
-        };
+        var dreamInCategory = new Faker<DreamInCategory>().Generate();
         
         await Context.DreamInCategory.AddAsync(dreamInCategory);
-        
         await Context.SaveChangesAsync();
         
-        var updatedDreamInCategory = new DreamInCategory
-        {
-            Id = dreamInCategory.Id,
-            DreamId = faker.Random.Guid(),
-            CategoryId = faker.Random.Guid()
-        };
-        
-        dreamInCategory.CategoryId = updatedDreamInCategory.CategoryId;
-        dreamInCategory.DreamId = updatedDreamInCategory.DreamId;
+        dreamInCategory.CategoryId = faker.Random.Guid();
+        dreamInCategory.DreamId = faker.Random.Guid();
         
         // Act
-        
         await _dreamInCategoryRepository.UpdateAsync(dreamInCategory);
-        
         await Context.SaveChangesAsync();
         
         // Assert
-        
         var result = await Context.DreamInCategory.FirstOrDefaultAsync(x => x.Id == dreamInCategory.Id);
         
         result.Should().NotBeNull();
-        result.Should().BeEquivalentTo(updatedDreamInCategory);
+        result.Should().BeEquivalentTo(dreamInCategory);
     }
 }

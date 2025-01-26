@@ -19,14 +19,7 @@ public class OrderTransaction_UpdateTests : BaseRepositoryTest
     {
         // Arrange
         var faker = new Faker();
-        
-        var orderTransaction = new OrderTransaction
-        {
-            Id = faker.Random.Guid(),
-            OrderId = faker.Random.Guid(),
-            Status = faker.PickRandom<OrderTransactionStatuses>(),
-            UpdatedAt = faker.Date.Past()
-        };
+        var orderTransaction = new Faker<OrderTransaction>().Generate();
         
         await Context.OrderTransaction.AddAsync(orderTransaction);
         await Context.SaveChangesAsync();
@@ -34,13 +27,10 @@ public class OrderTransaction_UpdateTests : BaseRepositoryTest
         var newStatus = faker.PickRandom<OrderTransactionStatuses>();
         
         // Act
-        
         orderTransaction.Status = newStatus;
-        
         await _orderTransactionRepository.UpdateAsync(orderTransaction);
         
         // Assert
-        
         var result = await Context.OrderTransaction.FindAsync(orderTransaction.Id);
         
         result.Should().NotBeNull();

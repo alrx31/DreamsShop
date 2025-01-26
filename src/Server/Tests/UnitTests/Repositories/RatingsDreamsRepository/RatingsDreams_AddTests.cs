@@ -17,25 +17,15 @@ public class RatingsDreams_AddTests : BaseRepositoryTest
     public async Task AddAsync_ShouldAddRatingDream()
     {
         // Arrange
-        var faker = new Faker();
-        var ratingDream = new RatingsDreams
-        {
-            Id = faker.Random.Guid(),
-            DreamId = faker.Random.Guid(),
-            ConsumerId = faker.Random.Guid(),
-            Value = faker.Random.Int(),
-            CreatedAt = faker.Date.Past()
-        };
+        var ratingDreams = new Faker<RatingsDreams>().Generate();
         
         // Act
-        
-        await _repository.AddAsync(ratingDream);
+        await _repository.AddAsync(ratingDreams);
         await Context.SaveChangesAsync();
         
         // Assert
+        var result = await Context.RatingsDreams.FindAsync(ratingDreams.Id);
         
-        var result = await Context.RatingsDreams.FindAsync(ratingDream.Id);
-        
-        result.Should().BeEquivalentTo(ratingDream);
+        result.Should().BeEquivalentTo(ratingDreams);
     }
 }

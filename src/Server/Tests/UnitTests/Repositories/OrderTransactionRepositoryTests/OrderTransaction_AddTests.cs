@@ -20,25 +20,14 @@ public class OrderTransaction_AddTests : BaseRepositoryTest
     public async Task AddAsync_ShouldAddOrderTransaction()
     {
         // Arrange
-        var faker = new Faker();
-        
-        var orderTransaction = new OrderTransaction
-        {
-            Id = faker.Random.Guid(),
-            OrderId = faker.Random.Guid(),
-            Status = faker.PickRandom<OrderTransactionStatuses>(),
-            UpdatedAt = faker.Date.Past()
-        };
+        var orderTransaction = new Faker<OrderTransaction>().Generate();
         
         // Act
-        
         await _orderTransactionRepository.AddAsync(orderTransaction);
-        
         await Context.SaveChangesAsync();
         
         // Assert
-        
-        var result = await Context.OrderTransaction.FirstOrDefaultAsync(x => x.Id == orderTransaction.Id);
+        var result = await Context.OrderTransaction.FindAsync(orderTransaction.Id);
         
         result.Should().NotBeNull();
         result.Should().BeEquivalentTo(orderTransaction);

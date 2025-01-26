@@ -19,15 +19,7 @@ public class DreamInOrder_DeleteTests : BaseRepositoryTest
     public async Task DeleteAsync_ShouldDeleteEntityFromDatabase()
     {
         // Arrange
-        var faker = new Faker();
-        
-        var dreamInOrder = new DreamInOrder
-        {
-            Id = Guid.NewGuid(),
-            Dream_Id = Guid.NewGuid(),
-            Order_Id = Guid.NewGuid(),
-            AddDate = faker.Date.Past()
-        };
+        var dreamInOrder = new Faker<DreamInOrder>().Generate();
         
         await Context.DreamInOrder.AddAsync(dreamInOrder);
         await Context.SaveChangesAsync();
@@ -38,6 +30,7 @@ public class DreamInOrder_DeleteTests : BaseRepositoryTest
         
         // Assert
         var entity = await Context.DreamInOrder.FindAsync(dreamInOrder.Id);
+        
         entity.Should().BeNull();
     }
     

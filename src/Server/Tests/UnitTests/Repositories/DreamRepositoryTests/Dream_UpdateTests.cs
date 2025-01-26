@@ -20,48 +20,25 @@ public class Dream_UpdateTests : BaseRepositoryTest
     {
         // Arrange
         var faker = new Faker();
-        
-        var dream = new Dream
-        {
-            Id = faker.Random.Guid(),
-            Title = faker.Lorem.Sentence(),
-            Desctiption = faker.Lorem.Paragraph(),
-            ImageMediaId = faker.Random.Guid(),
-            PreviewMediaId = faker.Random.Guid(),
-            ProducerId = faker.Random.Guid(),
-        };
+        var dream = new Faker<Dream>().Generate();
         
         await Context.Dream.AddAsync(dream);
-        
         await Context.SaveChangesAsync();
         
-        var newTitle = faker.Lorem.Sentence();
-        var newDescription = faker.Lorem.Paragraph();
-        var newImageMediaId = faker.Random.Guid();
-        var newPreviewMediaId = faker.Random.Guid();
-        var newProducerId = faker.Random.Guid();
-        
-        dream.Title = newTitle;
-        dream.Desctiption = newDescription;
-        dream.ImageMediaId = newImageMediaId;
-        dream.PreviewMediaId = newPreviewMediaId;
-        dream.ProducerId = newProducerId;
+        dream.Title = faker.Random.Word();
+        dream.Desctiption = faker.Random.Word();
+        dream.ImageMediaId = faker.Random.Guid();
+        dream.PreviewMediaId = faker.Random.Guid();
+        dream.ProducerId = faker.Random.Guid();
         
         // Act
-        
         await _dreamRepository.UpdateAsync(dream);
-        
         await Context.SaveChangesAsync();
         
         // Assert
-        
-        var result = await Context.Dream.FirstOrDefaultAsync(x => x.Id == dream.Id);
+        var result = await Context.Dream.FindAsync(dream.Id);
         
         result.Should().NotBeNull();
-        result.Title.Should().Be(newTitle);
-        result.Desctiption.Should().Be(newDescription);
-        result.ImageMediaId.Should().Be(newImageMediaId);
-        result.PreviewMediaId.Should().Be(newPreviewMediaId);
-        result.ProducerId.Should().Be(newProducerId);
+        result.Should().BeEquivalentTo(dream);
     }
 }

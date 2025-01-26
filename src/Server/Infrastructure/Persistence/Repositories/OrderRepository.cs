@@ -4,7 +4,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence.Repositories;
 
-public class OrderRepository(ApplicationDbContext context) : IOrderRepository
+public class OrderRepository
+    (ApplicationDbContext context) : IOrderRepository
 {
     public async Task<List<Order>> GetAllAsync(int page, int pageSize, CancellationToken cancellationToken = default)
     {

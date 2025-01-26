@@ -20,36 +20,21 @@ public class Order_UpdateTests : BaseRepositoryTest
     {
         // Arrange
         var faker = new Faker();
-        var order = new Order
-        {
-            Id = faker.Random.Guid(),
-            Cost = faker.Random.Decimal(),
-            Consumer_Id = faker.Random.Guid(),
-            Transaction_Id = faker.Random.Guid(),
-        };
+        var order = new Faker<Order>().Generate();
         
         await Context.Order.AddAsync(order);
         await Context.SaveChangesAsync();
         
-        var updatedOrder = new Order
-        {
-            Id = order.Id,
-            Cost = faker.Random.Decimal(),
-            Consumer_Id = order.Consumer_Id,
-            Transaction_Id = order.Transaction_Id,
-        };
-        
-        order.Cost = updatedOrder.Cost;
-        
+        order.Cost = faker.Random.Decimal();
         
         // Act
         await _orderRepository.UpdateAsync(order);
-        
         await Context.SaveChangesAsync();
         
         // Assert
         var orderFromDb = await Context.Order.FindAsync(order.Id);
+        
         orderFromDb.Should().NotBeNull();
-        orderFromDb.Should().BeEquivalentTo(updatedOrder);
+        orderFromDb.Should().BeEquivalentTo(order);
     }
 }

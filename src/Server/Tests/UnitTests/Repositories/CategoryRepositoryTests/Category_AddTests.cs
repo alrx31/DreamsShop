@@ -19,22 +19,13 @@ public class Category_AddTests : BaseRepositoryTest
     public async Task AddAsync_ShouldAddCategory()
     {
         // Arrange
-        var faker = new Faker();
-        
-        var category = new Category
-        {
-            Id = faker.Random.Guid(),
-            Title = faker.Commerce.Categories(1)[0]
-        };
+        var category = new Faker<Category>().Generate();
         
         // Act
-        
         await _categoryRepository.AddAsync(category);
-        
         await Context.SaveChangesAsync();
         
         // Assert
-        
         var result = await Context.Category.FirstOrDefaultAsync(x => x.Id == category.Id);
         
         result.Should().NotBeNull();
