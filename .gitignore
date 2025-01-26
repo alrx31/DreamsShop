@@ -9,4 +9,4 @@
 /src/Server/Domain/bin
 /src/Server/Infrastructure/obj
 /src/Server/Infrastructure/bin
-/src/Server/Tests/obj
+/src/Server/Tests/obj/
