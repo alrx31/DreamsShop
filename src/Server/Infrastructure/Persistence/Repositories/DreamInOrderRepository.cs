@@ -33,12 +33,12 @@ public class DreamInOrderRepository(ApplicationDbContext context) : IDreamInOrde
 
     public async Task AddAsync(DreamInOrder entity, CancellationToken cancellationToken = default)
     {
-        await _context.DreamInOrder.AddAsync(entity);
+        await _context.DreamInOrder.AddAsync(entity, cancellationToken);
     }
 
     public async Task<DreamInOrder?> GetAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await _context.DreamInOrder.FindAsync(id, cancellationToken);
+        return await _context.DreamInOrder.FindAsync([id], cancellationToken);
     }
 
     public Task UpdateAsync(DreamInOrder entity, CancellationToken cancellationToken = default)

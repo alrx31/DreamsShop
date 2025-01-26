@@ -13,14 +13,11 @@ namespace Domain.Entity
         [StringLength(1000)]
         public required string Description { get; set; }
 
-        public decimal? Raiting { get; set; }
-        
+        public decimal? Rating { get; set; }
         
 
         public ICollection<Dream> Dreams { get; set; }
-
         public ICollection<ProducerUser> ProducerUsers { get; set; }
-
         public ICollection<RatingsProducer> Raitings_Producers { get; set; }
     }
 }

@@ -7,18 +7,16 @@ namespace Domain.Entity
         [Key]
         public required Guid Id { get; set; }
 
-        public required Guid Dream_Id { get; set; }
+        public required Guid DreamId { get; set; }
 
-        public required Guid Consumer_Id { get; set; }
+        public required Guid ConsumerId { get; set; }
 
         public required int Value { get; set; }
 
         public required DateTime CreatedAt { get; set; }
         
-        
 
         public ConsumerUser ConsumerUser { get; set; }
-
         public Dream Dream { get; set; }
     }
 }

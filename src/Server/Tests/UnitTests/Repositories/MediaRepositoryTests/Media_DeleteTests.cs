@@ -24,10 +24,10 @@ public class Media_DeleteTests : BaseRepositoryTest
         var media = new Media
         {
             Id = faker.Random.Guid(),
-            File_Name = faker.System.FileName(),
-            File_Path = faker.System.DirectoryPath(),
-            File_Extension = faker.System.FileExt(),
-            File_Size = faker.Random.Int(),
+            FileName = faker.System.FileName(),
+            FilePath = faker.System.DirectoryPath(),
+            FileExtension = faker.System.FileExt(),
+            FileSize = faker.Random.Int(),
             File = faker.Random.Bytes(10),
         };
         

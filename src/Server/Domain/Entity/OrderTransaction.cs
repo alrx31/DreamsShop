@@ -11,7 +11,7 @@ namespace Domain.Entity
 
         public required DateTime UpdatedAt { get; set; }
 
-        public required  Guid Order_Id { get; set; }
+        public required  Guid OrderId { get; set; }
         
         
 

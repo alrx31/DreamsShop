@@ -26,9 +26,9 @@ public class Dream_DeleteTests : BaseRepositoryTest
             Id = faker.Random.Guid(),
             Title = faker.Lorem.Sentence(),
             Desctiption = faker.Lorem.Paragraph(),
-            Image_Media_Id = faker.Random.Guid(),
-            Preview_Media_Id = faker.Random.Guid(),
-            Producer_Id = faker.Random.Guid(),
+            ImageMediaId = faker.Random.Guid(),
+            PreviewMediaId = faker.Random.Guid(),
+            ProducerId = faker.Random.Guid(),
         };
         
         await Context.Dream.AddAsync(dream);

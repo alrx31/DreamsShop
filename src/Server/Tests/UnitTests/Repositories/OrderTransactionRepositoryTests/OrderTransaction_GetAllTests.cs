@@ -25,21 +25,21 @@ public class OrderTransaction_GetAllTests : BaseRepositoryTest
             new OrderTransaction
             {
                 Id = faker.Random.Guid(),
-                Order_Id = faker.Random.Guid(),
+                OrderId = faker.Random.Guid(),
                 Status = faker.PickRandom<OrderTransactionStatuses>(),
                 UpdatedAt = faker.Date.Past()
             },
             new OrderTransaction
             {
                 Id = faker.Random.Guid(),
-                Order_Id = faker.Random.Guid(),
+                OrderId = faker.Random.Guid(),
                 Status = faker.PickRandom<OrderTransactionStatuses>(),
                 UpdatedAt = faker.Date.Past()
             },
             new OrderTransaction
             {
                 Id = faker.Random.Guid(),
-                Order_Id = faker.Random.Guid(),
+                OrderId = faker.Random.Guid(),
                 Status = faker.PickRandom<OrderTransactionStatuses>(),
                 UpdatedAt = faker.Date.Past()
             }
@@ -84,21 +84,21 @@ public class OrderTransaction_GetAllTests : BaseRepositoryTest
             new OrderTransaction
             {
                 Id = faker.Random.Guid(),
-                Order_Id = faker.Random.Guid(),
+                OrderId = faker.Random.Guid(),
                 Status = faker.PickRandom<OrderTransactionStatuses>(),
                 UpdatedAt = faker.Date.Past()
             },
             new OrderTransaction
             {
                 Id = faker.Random.Guid(),
-                Order_Id = faker.Random.Guid(),
+                OrderId = faker.Random.Guid(),
                 Status = faker.PickRandom<OrderTransactionStatuses>(),
                 UpdatedAt = faker.Date.Past()
             },
             new OrderTransaction
             {
                 Id = faker.Random.Guid(),
-                Order_Id = faker.Random.Guid(),
+                OrderId = faker.Random.Guid(),
                 Status = faker.PickRandom<OrderTransactionStatuses>(),
                 UpdatedAt = faker.Date.Past()
             }

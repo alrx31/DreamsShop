@@ -25,8 +25,8 @@ public class DreamInCategory_UpdateTests : BaseRepositoryTest
         var dreamInCategory = new DreamInCategory
         {
             Id = faker.Random.Guid(),
-            Dream_Id = faker.Random.Guid(),
-            Category_Id = faker.Random.Guid()
+            DreamId = faker.Random.Guid(),
+            CategoryId = faker.Random.Guid()
         };
         
         await Context.DreamInCategory.AddAsync(dreamInCategory);
@@ -36,12 +36,12 @@ public class DreamInCategory_UpdateTests : BaseRepositoryTest
         var updatedDreamInCategory = new DreamInCategory
         {
             Id = dreamInCategory.Id,
-            Dream_Id = faker.Random.Guid(),
-            Category_Id = faker.Random.Guid()
+            DreamId = faker.Random.Guid(),
+            CategoryId = faker.Random.Guid()
         };
         
-        dreamInCategory.Category_Id = updatedDreamInCategory.Category_Id;
-        dreamInCategory.Dream_Id = updatedDreamInCategory.Dream_Id;
+        dreamInCategory.CategoryId = updatedDreamInCategory.CategoryId;
+        dreamInCategory.DreamId = updatedDreamInCategory.DreamId;
         
         // Act
         

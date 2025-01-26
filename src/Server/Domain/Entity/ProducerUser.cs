@@ -18,8 +18,7 @@ namespace Domain.Entity
 
         public required Roles Role { get; set; }
 
-        public required Guid Producer_Id { get; set; }
-        
+        public required Guid ProducerId { get; set; }
         
 
         public Producer Producer { get; set; }

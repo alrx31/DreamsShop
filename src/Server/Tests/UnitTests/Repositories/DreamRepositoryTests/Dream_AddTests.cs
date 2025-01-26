@@ -26,9 +26,9 @@ public class Dream_AddTests : BaseRepositoryTest
             Id = faker.Random.Guid(),
             Title = faker.Lorem.Sentence(),
             Desctiption = faker.Lorem.Paragraph(),
-            Image_Media_Id = faker.Random.Guid(),
-            Preview_Media_Id = faker.Random.Guid(),
-            Producer_Id = faker.Random.Guid(),
+            ImageMediaId = faker.Random.Guid(),
+            PreviewMediaId = faker.Random.Guid(),
+            ProducerId = faker.Random.Guid(),
         };
         
         // Act
@@ -44,8 +44,8 @@ public class Dream_AddTests : BaseRepositoryTest
         result.Should().NotBeNull();
         result.Title.Should().Be(dream.Title);
         result.Desctiption.Should().Be(dream.Desctiption);
-        result.Image_Media_Id.Should().Be(dream.Image_Media_Id);
-        result.Preview_Media_Id.Should().Be(dream.Preview_Media_Id);
-        result.Producer_Id.Should().Be(dream.Producer_Id);
+        result.ImageMediaId.Should().Be(dream.ImageMediaId);
+        result.PreviewMediaId.Should().Be(dream.PreviewMediaId);
+        result.ProducerId.Should().Be(dream.ProducerId);
     }
 }

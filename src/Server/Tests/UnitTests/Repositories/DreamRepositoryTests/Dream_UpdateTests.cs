@@ -26,9 +26,9 @@ public class Dream_UpdateTests : BaseRepositoryTest
             Id = faker.Random.Guid(),
             Title = faker.Lorem.Sentence(),
             Desctiption = faker.Lorem.Paragraph(),
-            Image_Media_Id = faker.Random.Guid(),
-            Preview_Media_Id = faker.Random.Guid(),
-            Producer_Id = faker.Random.Guid(),
+            ImageMediaId = faker.Random.Guid(),
+            PreviewMediaId = faker.Random.Guid(),
+            ProducerId = faker.Random.Guid(),
         };
         
         await Context.Dream.AddAsync(dream);
@@ -43,9 +43,9 @@ public class Dream_UpdateTests : BaseRepositoryTest
         
         dream.Title = newTitle;
         dream.Desctiption = newDescription;
-        dream.Image_Media_Id = newImageMediaId;
-        dream.Preview_Media_Id = newPreviewMediaId;
-        dream.Producer_Id = newProducerId;
+        dream.ImageMediaId = newImageMediaId;
+        dream.PreviewMediaId = newPreviewMediaId;
+        dream.ProducerId = newProducerId;
         
         // Act
         
@@ -60,8 +60,8 @@ public class Dream_UpdateTests : BaseRepositoryTest
         result.Should().NotBeNull();
         result.Title.Should().Be(newTitle);
         result.Desctiption.Should().Be(newDescription);
-        result.Image_Media_Id.Should().Be(newImageMediaId);
-        result.Preview_Media_Id.Should().Be(newPreviewMediaId);
-        result.Producer_Id.Should().Be(newProducerId);
+        result.ImageMediaId.Should().Be(newImageMediaId);
+        result.PreviewMediaId.Should().Be(newPreviewMediaId);
+        result.ProducerId.Should().Be(newProducerId);
     }
 }

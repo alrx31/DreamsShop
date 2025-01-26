@@ -24,8 +24,8 @@ public class DreamInCategory_GetTests : BaseRepositoryTest
         var dreamInCategory = new DreamInCategory
         {
             Id = faker.Random.Guid(),
-            Dream_Id = faker.Random.Guid(),
-            Category_Id = faker.Random.Guid()
+            DreamId = faker.Random.Guid(),
+            CategoryId = faker.Random.Guid()
         };
         
         await Context.DreamInCategory.AddAsync(dreamInCategory);

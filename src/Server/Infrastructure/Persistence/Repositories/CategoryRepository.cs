@@ -8,7 +8,7 @@ public class CategoryRepository(ApplicationDbContext context) : ICategoryReposit
 {
     private readonly ApplicationDbContext _context = context;
 
-    public async Task<List<Category?>> GetAllAsync(int page, int pageSize,
+    public async Task<List<Category>> GetAllAsync(int page, int pageSize,
         CancellationToken cancellationToken = default)
     {
         return await _context.Category.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync(cancellationToken);
@@ -32,7 +32,7 @@ public class CategoryRepository(ApplicationDbContext context) : ICategoryReposit
 
     public async Task<Category?> GetAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await _context.Category.FindAsync(id, cancellationToken);
+        return await _context.Category.FindAsync([id],cancellationToken);
     }
 
     public Task UpdateAsync(Category entity, CancellationToken cancellationToken = default)

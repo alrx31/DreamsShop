@@ -24,10 +24,10 @@ public class Media_UpdateTests : BaseRepositoryTest
         var media = new Media
         {
             Id = faker.Random.Guid(),
-            File_Name = faker.System.FileName(),
-            File_Path = faker.System.DirectoryPath(),
-            File_Extension = faker.System.FileExt(),
-            File_Size = faker.Random.Int(),
+            FileName = faker.System.FileName(),
+            FilePath = faker.System.DirectoryPath(),
+            FileExtension = faker.System.FileExt(),
+            FileSize = faker.Random.Int(),
             File = faker.Random.Bytes(10),
         };
         
@@ -37,17 +37,17 @@ public class Media_UpdateTests : BaseRepositoryTest
         var updatedMedia = new Media
         {
             Id = media.Id,
-            File_Name = faker.System.FileName(),
-            File_Path = faker.System.DirectoryPath(),
-            File_Extension = faker.System.FileExt(),
-            File_Size = faker.Random.Int(),
+            FileName = faker.System.FileName(),
+            FilePath = faker.System.DirectoryPath(),
+            FileExtension = faker.System.FileExt(),
+            FileSize = faker.Random.Int(),
             File = faker.Random.Bytes(10),
         };
         
-        media.File_Name = updatedMedia.File_Name;
-        media.File_Path = updatedMedia.File_Path;
-        media.File_Extension = updatedMedia.File_Extension;
-        media.File_Size = updatedMedia.File_Size;
+        media.FileName = updatedMedia.FileName;
+        media.FilePath = updatedMedia.FilePath;
+        media.FileExtension = updatedMedia.FileExtension;
+        media.FileSize = updatedMedia.FileSize;
         media.File = updatedMedia.File;
         
         // Act
@@ -59,10 +59,10 @@ public class Media_UpdateTests : BaseRepositoryTest
         var result = await Context.Media.FirstOrDefaultAsync(x => x.Id == media.Id);
         result.Should().NotBeNull();
         result.Id.Should().Be(updatedMedia.Id);
-        result.File_Name.Should().Be(updatedMedia.File_Name);
-        result.File_Path.Should().Be(updatedMedia.File_Path);
-        result.File_Extension.Should().Be(updatedMedia.File_Extension);
-        result.File_Size.Should().Be(updatedMedia.File_Size);
+        result.FileName.Should().Be(updatedMedia.FileName);
+        result.FilePath.Should().Be(updatedMedia.FilePath);
+        result.FileExtension.Should().Be(updatedMedia.FileExtension);
+        result.FileSize.Should().Be(updatedMedia.FileSize);
         result.File.Should().BeEquivalentTo(updatedMedia.File);
     }
     

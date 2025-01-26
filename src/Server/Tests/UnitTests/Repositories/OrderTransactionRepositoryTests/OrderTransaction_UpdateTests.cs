@@ -23,7 +23,7 @@ public class OrderTransaction_UpdateTests : BaseRepositoryTest
         var orderTransaction = new OrderTransaction
         {
             Id = faker.Random.Guid(),
-            Order_Id = faker.Random.Guid(),
+            OrderId = faker.Random.Guid(),
             Status = faker.PickRandom<OrderTransactionStatuses>(),
             UpdatedAt = faker.Date.Past()
         };
@@ -44,6 +44,6 @@ public class OrderTransaction_UpdateTests : BaseRepositoryTest
         var result = await Context.OrderTransaction.FindAsync(orderTransaction.Id);
         
         result.Should().NotBeNull();
-        result.Status.Should().Be(newStatus);
+        result?.Status.Should().Be(newStatus);
     }
 }

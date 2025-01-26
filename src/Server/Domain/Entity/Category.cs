@@ -11,7 +11,6 @@ namespace Domain.Entity
         public required string Title { get; set; }
         
         
-
         public ICollection<DreamInCategory> DreamInCategories { get; set; }
     }
 }

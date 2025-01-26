@@ -8,25 +8,21 @@ namespace Domain.Entity
         public required Guid Id { get; set; }
 
         [StringLength(500)]
-        public required string File_Name { get; set; }
+        public required string FileName { get; set; }
 
         [StringLength(10)]
-        public required string File_Extension { get; set; }
+        public required string FileExtension { get; set; }
 
         [StringLength(50)]
-        public required int File_Size { get; set; }
+        public required int FileSize { get; set; }
 
         [StringLength(500)]
-        public required string File_Path { get; set; }
+        public required string FilePath { get; set; }
 
         public required byte[] File { get; set; }
         
         
-        
-        // Связь один к одному с Dream для Image_Media
         public Dream DreamAsImage { get; set; } 
-        
-        // Связь один к одному с Dream для Preview_Media
         public Dream DreamAsPreview { get; set; }
 
     }

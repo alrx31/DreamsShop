@@ -10,6 +10,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastru
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{26F10670-39DB-4262-B51F-8A269B0E13D7}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "conf", "conf", "{D7488313-D9E8-440C-9FEF-BA442E528C51}"
+	ProjectSection(SolutionItems) = preProject
+		Presentation\Dockerfile = Presentation\Dockerfile
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{4C90CDA0-F7A5-4EB5-BC3F-93379A63669D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +43,11 @@ Global
 		{26F10670-39DB-4262-B51F-8A269B0E13D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{26F10670-39DB-4262-B51F-8A269B0E13D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{26F10670-39DB-4262-B51F-8A269B0E13D7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CCF2424C-ECB0-40B8-BC1E-5E3B9F228D83} = {4C90CDA0-F7A5-4EB5-BC3F-93379A63669D}
+		{851A2B32-741A-4735-AB5C-E220DDF99AA8} = {4C90CDA0-F7A5-4EB5-BC3F-93379A63669D}
+		{DF62C0CC-1C2F-4D28-8CCB-A179A4FC1752} = {4C90CDA0-F7A5-4EB5-BC3F-93379A63669D}
+		{EE37796A-98FE-43C2-8AA7-0DCAA08A7F2E} = {4C90CDA0-F7A5-4EB5-BC3F-93379A63669D}
 	EndGlobalSection
 EndGlobal

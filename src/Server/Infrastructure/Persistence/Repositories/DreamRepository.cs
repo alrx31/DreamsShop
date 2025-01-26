@@ -30,7 +30,7 @@ public class DreamRepository(ApplicationDbContext context) : IDreamRepository
 
     public async Task<Dream?> GetAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await _context.Dream.FindAsync(id, cancellationToken);
+        return await _context.Dream.FindAsync([id], cancellationToken);
     }
 
     public Task UpdateAsync(Dream entity, CancellationToken cancellationToken = default)

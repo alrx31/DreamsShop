@@ -25,7 +25,7 @@ public class OrderTransaction_AddTests : BaseRepositoryTest
         var orderTransaction = new OrderTransaction
         {
             Id = faker.Random.Guid(),
-            Order_Id = faker.Random.Guid(),
+            OrderId = faker.Random.Guid(),
             Status = faker.PickRandom<OrderTransactionStatuses>(),
             UpdatedAt = faker.Date.Past()
         };

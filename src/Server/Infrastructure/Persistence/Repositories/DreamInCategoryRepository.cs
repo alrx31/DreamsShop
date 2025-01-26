@@ -40,7 +40,7 @@ public class DreamInCategoryRepository(ApplicationDbContext context) : IDreamInC
 
     public async Task<DreamInCategory?> GetAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await _context.DreamInCategory.FindAsync(id, cancellationToken);
+        return await _context.DreamInCategory.FindAsync([id], cancellationToken);
     }
 
     public Task UpdateAsync(DreamInCategory entity, CancellationToken cancellationToken = default)

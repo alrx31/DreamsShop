@@ -18,12 +18,9 @@ namespace Domain.Entity
 
         public required Roles Role { get; set; }
         
-        
 
         public ICollection<Order> Orders { get; set; }
-
-        public ICollection<RatingsDreams> Raitings_Dreamses { get; set; }
-
-        public ICollection<RatingsProducer> Raitings_Producers { get; set; }
+        public ICollection<RatingsDreams> RaitingsDreamses { get; set; }
+        public ICollection<RatingsProducer> RaitingsProducers { get; set; }
     }
 }

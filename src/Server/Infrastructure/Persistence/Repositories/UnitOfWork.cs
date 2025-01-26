@@ -2,10 +2,11 @@ using Domain.IRepositories;
 
 namespace Infrastructure.Persistence.Repositories;
 
-public class UnitOfWork : IUnitOfWork
+public class UnitOfWork
+    (ApplicationDbContext context): IUnitOfWork
 {
-    public Task SaveChangesAsync(CancellationToken cancellationToken = default)
+    public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        await context.SaveChangesAsync(cancellationToken);
     }
 }
