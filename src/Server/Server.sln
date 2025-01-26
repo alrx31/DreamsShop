@@ -13,6 +13,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "conf", "conf", "{D7488313-D9E8-440C-9FEF-BA442E528C51}"
 	ProjectSection(SolutionItems) = preProject
 		Presentation\Dockerfile = Presentation\Dockerfile
+		..\..\.gitignore = ..\..\.gitignore
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{4C90CDA0-F7A5-4EB5-BC3F-93379A63669D}"
