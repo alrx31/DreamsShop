@@ -1,10 +1,11 @@
 using Domain.Entity;
 using Domain.IRepositories;
+using Domain.IRepositories.Base;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence.Repositories;
 
-public class ProducerUserRepository(ApplicationDbContext context): ICRUDRepository<ProducerUser>
+public class ProducerUserRepository(ApplicationDbContext context): IProducerUserRepository
 {
     public async Task<List<ProducerUser>> GetAllAsync(int page, int pageSize, CancellationToken cancellationToken = default)
     {

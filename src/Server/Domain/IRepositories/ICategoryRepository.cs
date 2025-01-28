@@ -1,7 +1,8 @@
 using Domain.Entity;
+using Domain.IRepositories.Base;
 
 namespace Domain.IRepositories;
 
-public interface ICategoryRepository : ICRUDRepository<Category>
+public interface ICategoryRepository : ICrudRepository<Category>
 {
 }

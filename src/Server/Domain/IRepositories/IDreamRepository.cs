@@ -1,8 +1,9 @@
 using Domain.Entity;
+using Domain.IRepositories.Base;
 
 namespace Domain.IRepositories;
 
-public interface IDreamRepository : ICRUDRepository<Dream>
+public interface IDreamRepository : ICrudRepository<Dream>
 {
     
 }

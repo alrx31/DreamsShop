@@ -3,7 +3,6 @@ using Domain.IRepositories.Base;
 
 namespace Domain.IRepositories;
 
-public interface IOrderTransactionRepository : ICrudRepository<OrderTransaction>
+public interface IRatingsDreamsRepository : ICrudRepository<RatingsDreams>
 {
-    
 }

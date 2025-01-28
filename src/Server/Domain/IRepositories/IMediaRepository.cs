@@ -1,8 +1,9 @@
 using Domain.Entity;
+using Domain.IRepositories.Base;
 
 namespace Domain.IRepositories;
 
-public interface IMediaRepository : ICRUDRepository<Media>
+public interface IMediaRepository : ICrudRepository<Media>
 {
     
 }
