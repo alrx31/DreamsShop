@@ -4,44 +4,45 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence.Repositories;
 
-public class DreamRepository
-    (ApplicationDbContext context) : IDreamRepository
+public class DreamRepository(ApplicationDbContext context) : IDreamRepository
 {
+    private readonly ApplicationDbContext _context = context;
+
     public async Task<List<Dream>> GetAllAsync(int page, int pageSize, CancellationToken cancellationToken = default)
     {
-        return await context.Dream.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync(cancellationToken);
+        return await _context.Dream.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync(cancellationToken);
     }
 
     public async Task<int> GetCountAsync(CancellationToken cancellationToken = default)
     {
-        return await context.Dream.CountAsync(cancellationToken);
+        return await _context.Dream.CountAsync(cancellationToken);
     }
 
     public async Task<List<Dream>> GetRangeAsync(int skip, int take, CancellationToken cancellationToken = default)
     {
-        return await context.Dream.Skip(skip).Take(take).ToListAsync(cancellationToken);
+        return await _context.Dream.Skip(skip).Take(take).ToListAsync(cancellationToken);
     }
 
     public async Task AddAsync(Dream entity, CancellationToken cancellationToken = default)
     {
-        await context.Dream.AddAsync(entity, cancellationToken);
+        await _context.Dream.AddAsync(entity, cancellationToken);
     }
 
     public async Task<Dream?> GetAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await context.Dream.FindAsync([id], cancellationToken);
+        return await _context.Dream.FindAsync([id], cancellationToken);
     }
 
     public Task UpdateAsync(Dream entity, CancellationToken cancellationToken = default)
     {
-        context.Dream.Update(entity);
+        _context.Dream.Update(entity);
         
         return Task.CompletedTask;
     }
 
     public Task DeleteAsync(Dream entity, CancellationToken cancellationToken = default)
     {
-        context.Dream.Remove(entity);
+        _context.Dream.Remove(entity);
         
         return Task.CompletedTask;
     }

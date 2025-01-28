@@ -23,10 +23,12 @@ public class RatingsProducer_DeleteTests : BaseRepositoryTest
         await Context.SaveChangesAsync();
         
         // Act
+        
         await _repository.DeleteAsync(ratingsProducer);
         await Context.SaveChangesAsync();
         
         // Assert
+        
         var result = await Context.RatingsProducer.FindAsync(ratingsProducer.Id);
         
         result.Should().BeNull();

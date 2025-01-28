@@ -18,15 +18,23 @@ public class Category_GetTests : BaseRepositoryTest
     public async Task GetAsync_ShouldReturnCategory()
     {
         // Arrange
-        var category = new Faker<Category>().Generate();
+        var faker = new Faker();
+        
+        var category = new Category
+        {
+            Id = faker.Random.Guid(),
+            Title = faker.Commerce.Categories(1)[0]
+        };
         
         await Context.Category.AddAsync(category);
         await Context.SaveChangesAsync();
         
         // Act
+        
         var result = await _categoryRepository.GetAsync(category.Id);
         
         // Assert
+        
         result.Should().NotBeNull();
         result.Should().BeEquivalentTo(category);
     }
@@ -35,12 +43,20 @@ public class Category_GetTests : BaseRepositoryTest
     public async Task GetAsync_ShouldReturnNull()
     {
         // Arrange
-        var category = new Faker<Category>().Generate();
+        var faker = new Faker();
+        
+        var category = new Category
+        {
+            Id = faker.Random.Guid(),
+            Title = faker.Commerce.Categories(1)[0]
+        };
         
         // Act
+        
         var result = await _categoryRepository.GetAsync(category.Id);
         
         // Assert
+        
         result.Should().BeNull();
     }
     

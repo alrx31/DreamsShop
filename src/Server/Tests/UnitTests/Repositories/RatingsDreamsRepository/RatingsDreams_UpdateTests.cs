@@ -18,19 +18,27 @@ public class RatingsDreams_UpdateTests : BaseRepositoryTest
     {
         // Arrange
         var faker = new Faker();
-        var ratingDreams = new Faker<RatingsDreams>().Generate();
-        
-        await Context.RatingsDreams.AddAsync(ratingDreams);
+        var ratingsDreams = new RatingsDreams
+        {
+            Id = faker.Random.Guid(),
+            DreamId = faker.Random.Guid(),
+            ConsumerId = faker.Random.Guid(),
+            Value = faker.Random.Int(),
+            CreatedAt = faker.Date.Past(),
+        };
+
+        await Context.RatingsDreams.AddAsync(ratingsDreams);
 
         // Act
-        ratingDreams.CreatedAt = faker.Date.Past();
-        ratingDreams.Value = faker.Random.Int();
+        
+        ratingsDreams.CreatedAt = faker.Date.Past();
+        ratingsDreams.Value = faker.Random.Int();
 
-        await _repository.UpdateAsync(ratingDreams);
+        await _repository.UpdateAsync(ratingsDreams);
         
         // Assert
-        var result = await Context.RatingsDreams.FindAsync(ratingDreams.Id);
         
-        result.Should().BeEquivalentTo(ratingDreams);
+        var result = await Context.RatingsDreams.FindAsync(ratingsDreams.Id);
+        result.Should().BeEquivalentTo(ratingsDreams);
     }
 }

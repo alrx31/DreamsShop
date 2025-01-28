@@ -23,9 +23,11 @@ public class RatingsProducer_GetTests : BaseRepositoryTest
         await Context.SaveChangesAsync();
         
         // Act
+        
         var result = await _repository.GetAsync(ratingsProducer.Id);
         
         // Assert
+        
         result.Should().BeEquivalentTo(ratingsProducer);
     }
 }

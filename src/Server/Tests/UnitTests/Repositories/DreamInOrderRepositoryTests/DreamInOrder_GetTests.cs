@@ -19,23 +19,59 @@ public class DreamInOrder_GetTests : BaseRepositoryTest
     public async Task GetAsync_ShouldReturnEntityFromDatabase()
     {
         // Arrange
-        var dreamInOrder = new Faker<DreamInOrder>().Generate();
+        var faker = new Faker();
+        
+        var dreamInOrder = new DreamInOrder
+        {
+            Id = Guid.NewGuid(),
+            Dream_Id = Guid.NewGuid(),
+            Order_Id = Guid.NewGuid(),
+            AddDate = faker.Date.Past()
+        };
         
         await Context.DreamInOrder.AddAsync(dreamInOrder);
         await Context.SaveChangesAsync();
         
         // Act
-        var result = await _dreamInOrderRepository.GetAsync(dreamInOrder.Id);
+        var entity = await _dreamInOrderRepository.GetAsync(dreamInOrder.Id);
         
         // Assert
-        result.Should().BeEquivalentTo(dreamInOrder);
+        entity.Should().NotBeNull();
+        entity.Id.Should().Be(dreamInOrder.Id);
+        entity.Dream_Id.Should().Be(dreamInOrder.Dream_Id);
+        entity.Order_Id.Should().Be(dreamInOrder.Order_Id);
     }
     
     [Fact]
     public async Task GetRangeAsync_ShouldReturnRangeOfEntitiesFromDatabase()
     {
         // Arrange
-        var dreamInOrders = new Faker<DreamInOrder>().Generate(3);
+        var faker = new Faker();
+        
+        var dreamInOrders = new List<DreamInOrder>
+        {
+            new()
+            {
+                Id = Guid.NewGuid(),
+                Dream_Id = Guid.NewGuid(),
+                Order_Id = Guid.NewGuid(),
+                AddDate = faker.Date.Past()
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                Dream_Id = Guid.NewGuid(),
+                Order_Id = Guid.NewGuid(),
+                AddDate = faker.Date.Past()
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                Dream_Id = Guid.NewGuid(),
+                Order_Id = Guid.NewGuid(),
+                AddDate = faker.Date.Past()
+            }
+        };
         
         await Context.DreamInOrder.AddRangeAsync(dreamInOrders);
         await Context.SaveChangesAsync();

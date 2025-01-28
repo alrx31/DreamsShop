@@ -17,17 +17,34 @@ public class ProducerUser_GetTests : BaseRepositoryTest
     public async Task GetAllAsync_ShouldReturnAllProducerUsers()
     {
         // Arrange
-        var producer = new Faker<Producer>().Generate();
-        var producerUser = new Faker<ProducerUser>().RuleFor(p => p.ProducerId, producer.Id).Generate();
-
+        var faker = new Faker();
+        var producer = new Producer
+        {
+            Id = faker.Random.Guid(),
+            Name = faker.Company.CompanyName(),
+            Description = faker.Company.CompanyName(),
+        };
+        var producerUser = new ProducerUser
+        {
+            Id = faker.Random.Guid(),
+            Email = faker.Person.Email,
+            Name = faker.Person.FirstName,
+            Password = faker.Internet.Password(),
+            Role = faker.PickRandom<Roles>(),
+            ProducerId = producer.Id,
+        };
+        
         await Context.Producer.AddAsync(producer);
         await Context.ProducerUser.AddAsync(producerUser);
+        
         await Context.SaveChangesAsync();
         
         // Act
+
         var result = await _repository.GetAsync(producerUser.Id);
         
         // Assert
+
         result.Should().BeEquivalentTo(producerUser);
     }
 }

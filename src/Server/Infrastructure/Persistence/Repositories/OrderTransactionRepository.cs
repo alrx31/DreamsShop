@@ -4,8 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence.Repositories;
 
-public class OrderTransactionRepository
-    (ApplicationDbContext context):IOrderTransactionRepository
+public class OrderTransactionRepository(ApplicationDbContext context):IOrderTransactionRepository
 {
     public async Task AddAsync(OrderTransaction orderTransaction, CancellationToken cancellationToken = default)
     {

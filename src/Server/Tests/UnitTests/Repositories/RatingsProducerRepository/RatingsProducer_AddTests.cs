@@ -17,15 +17,17 @@ public class RatingsProducer_AddTests : BaseRepositoryTest
     public async Task AddAsync_ShouldAddRatingsProducer()
     {
         // Arrange
+        //TODO: do the same with Faker
         var ratingsProducer = new Faker<RatingsProducer>().Generate();
         
         // Act
+        
         await _repository.AddAsync(ratingsProducer);
         await Context.SaveChangesAsync();
         
         // Assert
+
         var result = await Context.RatingsProducer.FindAsync(ratingsProducer.Id);
-        
         result.Should().BeEquivalentTo(ratingsProducer);
     }
 }

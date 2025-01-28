@@ -19,15 +19,25 @@ public class DreamInCategory_GetTests : BaseRepositoryTest
     public async Task GetByIdAsync_ShouldReturnDreamInCategory()
     {
         // Arrange
-        var dreamInCategory = new Faker<DreamInCategory>().Generate();
+        var faker = new Faker();
+        
+        var dreamInCategory = new DreamInCategory
+        {
+            Id = faker.Random.Guid(),
+            DreamId = faker.Random.Guid(),
+            CategoryId = faker.Random.Guid()
+        };
         
         await Context.DreamInCategory.AddAsync(dreamInCategory);
+        
         await Context.SaveChangesAsync();
         
         // Act
+        
         var result = await _dreamInCategoryRepository.GetAsync(dreamInCategory.Id);
         
         // Assert
+        
         result.Should().NotBeNull();
         result.Should().BeEquivalentTo(dreamInCategory);
     }

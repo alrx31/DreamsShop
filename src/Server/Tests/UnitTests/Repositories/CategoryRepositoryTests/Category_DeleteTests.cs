@@ -19,16 +19,25 @@ public class Category_DeleteTests: BaseRepositoryTest
     public async Task DeleteAsync_ShouldDeleteCategory()
     {
         // Arrange
-        var category = new Faker<Category>().Generate();
+        var faker = new Faker();
+        
+        var category = new Category
+        {
+            Id = faker.Random.Guid(),
+            Title = faker.Commerce.Categories(1)[0]
+        };
         
         await Context.Category.AddAsync(category);
         await Context.SaveChangesAsync();
         
         // Act
+        
         await _categoryRepository.DeleteAsync(category);
+        
         await Context.SaveChangesAsync();
         
         // Assert
+        
         var result = await Context.Category.FirstOrDefaultAsync(x => x.Id == category.Id);
         
         result.Should().BeNull();

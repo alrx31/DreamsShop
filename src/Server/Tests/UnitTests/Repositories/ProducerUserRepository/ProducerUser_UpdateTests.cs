@@ -18,11 +18,25 @@ public class ProducerUser_UpdateTests : BaseRepositoryTest
     {
         // Arrange
         var faker = new Faker();
-        var producer = new Faker<Producer>().Generate();
-        var producerUser = new Faker<ProducerUser>().RuleFor(p => p.ProducerId, producer.Id).Generate();
-
+        var producer = new Producer
+        {
+            Id = faker.Random.Guid(),
+            Name = faker.Company.CompanyName(),
+            Description = faker.Company.CompanyName(),
+        };
+        var producerUser = new ProducerUser
+        {
+            Id = faker.Random.Guid(),
+            Email = faker.Person.Email,
+            Name = faker.Person.FirstName,
+            Password = faker.Internet.Password(),
+            Role = faker.PickRandom<Roles>(),
+            ProducerId = producer.Id,
+        };
+        
         await Context.Producer.AddAsync(producer);
         await Context.ProducerUser.AddAsync(producerUser);
+        
         await Context.SaveChangesAsync();
         
         producerUser.Name = faker.Company.CompanyName();
@@ -31,9 +45,11 @@ public class ProducerUser_UpdateTests : BaseRepositoryTest
         producerUser.Role = faker.PickRandom<Roles>();
 
         // Act
+
         await _repository.UpdateAsync(producerUser);
         
         // Assert
+        
         var result = await Context.ProducerUser.FindAsync(producerUser.Id);
         
         result.Should().BeEquivalentTo(producerUser);

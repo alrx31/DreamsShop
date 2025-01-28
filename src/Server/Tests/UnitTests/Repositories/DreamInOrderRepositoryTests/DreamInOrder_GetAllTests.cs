@@ -19,7 +19,32 @@ public class DreamInOrder_GetAllTests : BaseRepositoryTest
     public async Task GetAllAsync_ShouldReturnEntitiesFromDatabase()
     {
         // Arrange
-        var dreamInOrders = new Faker<DreamInOrder>().Generate(3);
+        var faker = new Faker();
+        
+        var dreamInOrders = new List<DreamInOrder>
+        {
+            new()
+            {
+                Id = Guid.NewGuid(),
+                Dream_Id = Guid.NewGuid(),
+                Order_Id = Guid.NewGuid(),
+                AddDate = faker.Date.Past()
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                Dream_Id = Guid.NewGuid(),
+                Order_Id = Guid.NewGuid(),
+                AddDate = faker.Date.Past()
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                Dream_Id = Guid.NewGuid(),
+                Order_Id = Guid.NewGuid(),
+                AddDate = faker.Date.Past()
+            }
+        };
         
         await Context.DreamInOrder.AddRangeAsync(dreamInOrders);
         await Context.SaveChangesAsync();
@@ -36,7 +61,32 @@ public class DreamInOrder_GetAllTests : BaseRepositoryTest
     public async Task GetCountAsync_ShouldReturnCountOfEntitiesFromDatabase()
     {
         // Arrange
-        var dreamInOrders = new Faker<DreamInOrder>().Generate(3);
+        var faker = new Faker();
+        
+        var dreamInOrders = new List<DreamInOrder>
+        {
+            new()
+            {
+                Id = Guid.NewGuid(),
+                Dream_Id = Guid.NewGuid(),
+                Order_Id = Guid.NewGuid(),
+                AddDate = faker.Date.Past()
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                Dream_Id = Guid.NewGuid(),
+                Order_Id = Guid.NewGuid(),
+                AddDate = faker.Date.Past()
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                Dream_Id = Guid.NewGuid(),
+                Order_Id = Guid.NewGuid(),
+                AddDate = faker.Date.Past()
+            }
+        };
         
         await Context.DreamInOrder.AddRangeAsync(dreamInOrders);
         await Context.SaveChangesAsync();
@@ -47,4 +97,6 @@ public class DreamInOrder_GetAllTests : BaseRepositoryTest
         // Assert
         count.Should().Be(3);
     }
+    
+    
 }

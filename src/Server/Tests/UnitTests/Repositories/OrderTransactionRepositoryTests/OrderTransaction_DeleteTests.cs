@@ -18,16 +18,27 @@ public class OrderTransaction_DeleteTests : BaseRepositoryTest
     public async Task DeleteAsync_ShouldDeleteOrderTransaction()
     {
         // Arrange
-        var orderTransaction = new Faker<OrderTransaction>().Generate();
+        var faker = new Faker();
+        
+        var orderTransaction = new OrderTransaction
+        {
+            Id = faker.Random.Guid(),
+            OrderId = faker.Random.Guid(),
+            Status = faker.PickRandom<OrderTransactionStatuses>(),
+            UpdatedAt = faker.Date.Past()
+        };
         
         await Context.OrderTransaction.AddAsync(orderTransaction);
         await Context.SaveChangesAsync();
         
         // Act
+        
         await _orderTransactionRepository.DeleteAsync(orderTransaction);
+        
         await Context.SaveChangesAsync();
         
         // Assert
+        
         var result = await Context.OrderTransaction.FindAsync(orderTransaction.Id);
         
         result.Should().BeNull();

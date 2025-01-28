@@ -18,17 +18,26 @@ public class Producer_DeleteTests : BaseRepositoryTest
     public async Task DeleteAsync_ShouldDeleteProducer()
     {
         // Arrange
-        var producer = new Faker<Producer>().Generate();
+        var faker = new Faker();
 
+        var producer = new Producer
+        {
+            Id = faker.Random.Guid(),
+            Name = faker.Company.CompanyName(),
+            Description = faker.Lorem.Paragraph(),
+        };
+        
         await Context.Producer.AddAsync(producer);
         await Context.SaveChangesAsync();
         
         // Act
+
         await _producerRepository.DeleteAsync(producer);
         await Context.SaveChangesAsync();
 
         // Assert
-        var result = await Context.Producer.FindAsync(producer.Id);
+        
+        var result = await Context.Producer.FirstOrDefaultAsync(p=>p.Id == producer.Id);
 
         result.Should().BeNull();
     }

@@ -17,16 +17,33 @@ public class ProducerUser_AddTests : BaseRepositoryTest
     public async Task AddAsync_ShouldAddProducerUser()
     {
         // Arrange
-        var producer = new Faker<Producer>().Generate();
-        var producerUser = new Faker<ProducerUser>().RuleFor(p => p.ProducerId, producer.Id).Generate();
+        var faker = new Faker();
+        var producer = new Producer
+        {
+            Id = faker.Random.Guid(),
+            Name = faker.Company.CompanyName(),
+            Description = faker.Company.CompanyName(),
+        };
+        var producerUser = new ProducerUser
+        {
+            Id = faker.Random.Guid(),
+            Email = faker.Person.Email,
+            Name = faker.Person.FirstName,
+            Password = faker.Internet.Password(),
+            Role = faker.PickRandom<Roles>(),
+            ProducerId = producer.Id,
+        };
         
         await Context.AddAsync(producer);
         
         // Act
+        
         await _repository.AddAsync(producerUser);
+        
         await Context.SaveChangesAsync();
         
         // Assert
+        
         var result = await Context.ProducerUser.FindAsync(producerUser.Id);
         
         result.Should().BeEquivalentTo(producerUser);

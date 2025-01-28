@@ -19,7 +19,14 @@ public class Order_DeleteTests : BaseRepositoryTest
     public async Task DeleteAsync_ShouldDeleteOrderFromDatabase()
     {
         // Arrange
-        var order = new Faker<Order>().Generate();
+        var faker = new Faker();
+        var order = new Order
+        {
+            Id = faker.Random.Guid(),
+            Cost = faker.Random.Decimal(),
+            Consumer_Id = faker.Random.Guid(),
+            Transaction_Id = faker.Random.Guid(),
+        };
         
         await Context.Order.AddAsync(order);
         await Context.SaveChangesAsync();
@@ -30,7 +37,6 @@ public class Order_DeleteTests : BaseRepositoryTest
         
         // Assert
         var orderFromDb = await Context.Order.FindAsync(order.Id);
-        
         orderFromDb.Should().BeNull();
     }
 }

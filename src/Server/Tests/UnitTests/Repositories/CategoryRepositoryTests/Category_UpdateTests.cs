@@ -20,20 +20,31 @@ public class Category_UpdateTests : BaseRepositoryTest
     {
         // Arrange
         var faker = new Faker();
-        var category = new Faker<Category>().Generate();
+        
+        var category = new Category
+        {
+            Id = faker.Random.Guid(),
+            Title = faker.Commerce.Categories(1)[0]
+        };
         
         await Context.Category.AddAsync(category);
         await Context.SaveChangesAsync();
         
+        var newTitle = faker.Commerce.Categories(1)[0];
+        
         // Act
-        category.Title = faker.Commerce.Categories(1)[0];
+        
+        category.Title = newTitle;
         
         await _categoryRepository.UpdateAsync(category);
+        
         await Context.SaveChangesAsync();
         
         // Assert
+        
         var result = await Context.Category.FirstOrDefaultAsync(x => x.Id == category.Id);
         
-        result.Should().BeEquivalentTo(category);
+        result.Should().NotBeNull();
+        result.Title.Should().Be(newTitle);
     }
 }

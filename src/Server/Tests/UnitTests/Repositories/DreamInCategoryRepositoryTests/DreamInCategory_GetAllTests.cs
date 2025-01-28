@@ -19,12 +19,21 @@ public class DreamInCategory_GetAllTests : BaseRepositoryTest
     public async Task GetAllAsync_ShouldReturnDreamInCategory()
     {
         // Arrange
-        var dreamInCategory = new Faker<DreamInCategory>().Generate();
+        var faker = new Faker();
+        
+        var dreamInCategory = new DreamInCategory
+        {
+            Id = faker.Random.Guid(),
+            DreamId = faker.Random.Guid(),
+            CategoryId = faker.Random.Guid()
+        };
         
         await Context.DreamInCategory.AddAsync(dreamInCategory);
+        
         await Context.SaveChangesAsync();
         
         // Act
+        
         var result = await _dreamInCategoryRepository.GetAllAsync(1, 1);
         
         // Assert
@@ -38,15 +47,25 @@ public class DreamInCategory_GetAllTests : BaseRepositoryTest
     public async Task GetCountAsync_ShouldReturnCount()
     {
         // Arrange
-        var dreamInCategory = new Faker<DreamInCategory>().Generate();
+        var faker = new Faker();
+        
+        var dreamInCategory = new DreamInCategory
+        {
+            Id = faker.Random.Guid(),
+            DreamId = faker.Random.Guid(),
+            CategoryId = faker.Random.Guid()
+        };
         
         await Context.DreamInCategory.AddAsync(dreamInCategory);
+        
         await Context.SaveChangesAsync();
         
         // Act
+        
         var result = await _dreamInCategoryRepository.GetCountAsync();
         
         // Assert
+        
         result.Should().Be(1);
     }
 }

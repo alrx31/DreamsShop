@@ -19,13 +19,34 @@ public class Order_GetTests : BaseRepositoryTest
     public async Task GetOrdersByUserId_ShouldReturnListOfOrders()
     {
         // Arrange
-        var userId = new Faker().Random.Guid();
-        var orders = new Faker<Order>()
-            .RuleFor(o => o.Id, f => f.Random.Guid())
-            .RuleFor(o => o.Cost, f => f.Random.Decimal())
-            .RuleFor(o => o.Consumer_Id, (f, o) => userId)
-            .RuleFor(o => o.Transaction_Id, f => f.Random.Guid())
-            .Generate(3);
+        var faker = new Faker();
+        
+        var userId = faker.Random.Guid();
+        
+        var orders = new List<Order>
+        {
+            new Order
+            {
+                Id = faker.Random.Guid(),
+                Cost = faker.Random.Decimal(),
+                Consumer_Id = userId,
+                Transaction_Id = faker.Random.Guid(),
+            },
+            new Order
+            {
+                Id = faker.Random.Guid(),
+                Cost = faker.Random.Decimal(),
+                Consumer_Id = userId,
+                Transaction_Id = faker.Random.Guid(),
+            },
+            new Order
+            {
+                Id = faker.Random.Guid(),
+                Cost = faker.Random.Decimal(),
+                Consumer_Id = faker.Random.Guid(),
+                Transaction_Id = faker.Random.Guid(),
+            },
+        };
         
         await Context.Order.AddRangeAsync(orders);
         await Context.SaveChangesAsync();
@@ -43,7 +64,15 @@ public class Order_GetTests : BaseRepositoryTest
     public async Task GetAsync_ShouldReturnOrder()
     {
         // Arrange
-        var order = new Faker<Order>().Generate();
+        var faker = new Faker();
+        
+        var order = new Order
+        {
+            Id = faker.Random.Guid(),
+            Cost = faker.Random.Decimal(),
+            Consumer_Id = faker.Random.Guid(),
+            Transaction_Id = faker.Random.Guid(),
+        };
         
         await Context.Order.AddAsync(order);
         await Context.SaveChangesAsync();

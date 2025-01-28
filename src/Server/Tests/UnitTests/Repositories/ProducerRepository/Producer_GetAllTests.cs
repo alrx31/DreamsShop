@@ -17,15 +17,35 @@ public class Producer_GetAllTests : BaseRepositoryTest
     public async Task GetAllAsync_ShouldReturnAllProducers()
     {
         // Arrange
-        var producers = new Faker<Producer>().Generate(2);
+        var faker = new Faker();
+        
+        var producers = new List<Producer>()
+        {
+            new Producer()
+            {
+                Id = faker.Random.Guid(),
+                Name = faker.Name.FirstName(),
+                Description = faker.Lorem.Paragraph(),
+                Rating = faker.Random.Decimal(),
+            },
+            new Producer()
+            {
+                Id = faker.Random.Guid(),
+                Name = faker.Name.FirstName(),
+                Description = faker.Lorem.Paragraph(),
+                Rating = faker.Random.Decimal(),
+            }
+        };
         
         await Context.Producer.AddRangeAsync(producers);
         await Context.SaveChangesAsync();
         
         // Act
+
         var result = await _producerRepository.GetAllAsync(1,2);
         
         // Assert
+        
         result.Should().BeEquivalentTo(producers);
     }
 }

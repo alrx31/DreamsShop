@@ -24,9 +24,11 @@ public class RatingsProducer_GetAllTests : BaseRepositoryTest
         await Context.SaveChangesAsync();
         
         // Act
+
         var result = await _repository.GetAllAsync(1,2);
 
         // Assert
+        
         result.Should().BeEquivalentTo(ratingsProducers);
     }
 }

@@ -18,15 +18,25 @@ public class OrderTransaction_GetTests : BaseRepositoryTest
     public async Task GetAsync_ShouldReturnOrderTransaction()
     {
         // Arrange
-        var orderTransaction = new Faker<OrderTransaction>().Generate();
+        var faker = new Faker();
+        
+        var orderTransaction = new OrderTransaction
+        {
+            Id = faker.Random.Guid(),
+            OrderId = faker.Random.Guid(),
+            Status = faker.PickRandom<OrderTransactionStatuses>(),
+            UpdatedAt = faker.Date.Past()
+        };
         
         await Context.OrderTransaction.AddAsync(orderTransaction);
         await Context.SaveChangesAsync();
         
         // Act
+        
         var result = await _orderTransactionRepository.GetAsync(orderTransaction.Id);
         
         // Assert
+        
         result.Should().NotBeNull();
         result.Should().BeEquivalentTo(orderTransaction);
     }

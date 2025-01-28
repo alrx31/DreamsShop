@@ -20,13 +20,23 @@ public class DreamInCategory_AddTests : BaseRepositoryTest
     public async Task AddAsync_ShouldAddDreamInCategory()
     {
         // Arrange
-        var dreamInCategory = new Faker<DreamInCategory>().Generate();
+        var faker = new Faker();
+        
+        var dreamInCategory = new DreamInCategory
+        {
+            Id = faker.Random.Guid(),
+            DreamId = faker.Random.Guid(),
+            CategoryId = faker.Random.Guid()
+        };
         
         // Act
+        
         await _dreamInCategoryRepository.AddAsync(dreamInCategory);
+        
         await Context.SaveChangesAsync();
         
         // Assert
+        
         var result = await Context.DreamInCategory.FirstOrDefaultAsync(x => x.Id == dreamInCategory.Id);
         
         result.Should().NotBeNull();
