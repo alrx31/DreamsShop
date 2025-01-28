@@ -40,15 +40,12 @@ public class Category_GetAllTests : BaseRepositoryTest
         };
         
         await Context.Category.AddRangeAsync(categories);
-        
         await Context.SaveChangesAsync();
         
         // Act
-        
         var result = await _categoryRepository.GetAllAsync(0, 2);
         
         // Assert
-        
         result.Should().NotBeNull();
         result.Should().HaveCount(2);
         result.Should().BeEquivalentTo(categories.Take(2));
@@ -83,11 +80,9 @@ public class Category_GetAllTests : BaseRepositoryTest
         await Context.SaveChangesAsync();
         
         // Act
-        
         var result = await _categoryRepository.GetRangeAsync(0, 2);
         
         // Assert
-        
         result.Should().NotBeNull();
         result.Should().HaveCount(2);
         result.Should().BeEquivalentTo(categories.Take(2));
@@ -122,11 +117,9 @@ public class Category_GetAllTests : BaseRepositoryTest
         await Context.SaveChangesAsync();
         
         // Act
-        
         var result = await _categoryRepository.GetCountAsync();
         
         // Assert
-        
         result.Should().Be(categories.Count);
     }
 }

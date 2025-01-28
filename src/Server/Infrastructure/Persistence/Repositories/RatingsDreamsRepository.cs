@@ -4,8 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence.Repositories;
 
-public class RatingsDreamsRepository 
-    (ApplicationDbContext context): ICRUDRepository<RatingsDreams>
+public class RatingsDreamsRepository(ApplicationDbContext context): ICRUDRepository<RatingsDreams>
 {
     public async Task<List<RatingsDreams>> GetAllAsync(int page, int pageSize, CancellationToken cancellationToken = default)
     {

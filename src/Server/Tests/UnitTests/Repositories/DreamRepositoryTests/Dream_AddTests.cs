@@ -32,20 +32,13 @@ public class Dream_AddTests : BaseRepositoryTest
         };
         
         // Act
-        
         await _dreamRepository.AddAsync(dream);
-        
         await Context.SaveChangesAsync();
         
         // Assert
-        
         var result = await Context.Dream.FirstOrDefaultAsync(x => x.Id == dream.Id);
         
         result.Should().NotBeNull();
-        result.Title.Should().Be(dream.Title);
-        result.Desctiption.Should().Be(dream.Desctiption);
-        result.ImageMediaId.Should().Be(dream.ImageMediaId);
-        result.PreviewMediaId.Should().Be(dream.PreviewMediaId);
-        result.ProducerId.Should().Be(dream.ProducerId);
+        result.Should().BeEquivalentTo(dream);
     }
 }

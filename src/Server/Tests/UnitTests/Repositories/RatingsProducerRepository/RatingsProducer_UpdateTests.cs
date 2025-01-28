@@ -18,21 +18,27 @@ public class RatingsProducer_UpdateTests : BaseRepositoryTest
     {
         // Arrange
         var faker = new Faker();
-        var ratingsProducer = new Faker<RatingsProducer>().Generate();
+        var ratingsProducer = new RatingsProducer
+        {
+            Id = faker.Random.Guid(),
+            ProducerId = faker.Random.Guid(),
+            ConsumerId = faker.Random.Guid(),
+            Value = faker.Random.Int(),
+            CreatedAt = faker.Date.Past()
+        };
         
         await Context.RatingsProducer.AddAsync(ratingsProducer);
         await Context.SaveChangesAsync();
         
         // Act
-        
         ratingsProducer.CreatedAt = faker.Date.Past();
         ratingsProducer.Value = faker.Random.Int();
         
         await _repository.UpdateAsync(ratingsProducer);
         
         // Assert
-        
         var result = await Context.RatingsProducer.FindAsync(ratingsProducer.Id);
+        
         result.Should().BeEquivalentTo(ratingsProducer);
     }
 }

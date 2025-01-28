@@ -33,18 +33,15 @@ public class Category_UpdateTests : BaseRepositoryTest
         var newTitle = faker.Commerce.Categories(1)[0];
         
         // Act
-        
         category.Title = newTitle;
         
         await _categoryRepository.UpdateAsync(category);
-        
         await Context.SaveChangesAsync();
         
         // Assert
-        
         var result = await Context.Category.FirstOrDefaultAsync(x => x.Id == category.Id);
         
         result.Should().NotBeNull();
-        result.Title.Should().Be(newTitle);
+        result?.Title.Should().Be(newTitle);
     }
 }

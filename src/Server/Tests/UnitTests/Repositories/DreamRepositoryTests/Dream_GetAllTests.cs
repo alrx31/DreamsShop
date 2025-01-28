@@ -52,15 +52,12 @@ public class Dream_GetAllTests : BaseRepositoryTest
         };
         
         await Context.Dream.AddRangeAsync(dreams);
-        
         await Context.SaveChangesAsync();
         
         // Act
-        
         var result = await _dreamRepository.GetAllAsync(1, 10);
         
         // Assert
-        
         result.Should().NotBeNull();
         result.Count.Should().Be(3);
     }
@@ -103,17 +100,13 @@ public class Dream_GetAllTests : BaseRepositoryTest
         };
         
         await Context.Dream.AddRangeAsync(dreams);
-        
         await Context.SaveChangesAsync();
         
         // Act
-        
         var result = await _dreamRepository.GetAllAsync(1, 10);
         
         // Assert
-        
         result.Should().NotBeNull();
         result.Count.Should().Be(3);
     }
-    
 }

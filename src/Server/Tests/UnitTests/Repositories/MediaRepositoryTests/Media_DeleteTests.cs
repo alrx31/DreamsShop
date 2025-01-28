@@ -4,7 +4,7 @@ using Domain.IRepositories;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 
-namespace Tests.UnitTests.Repositories.MediaRepository;
+namespace Tests.UnitTests.Repositories.MediaRepositoryTests;
 
 public class Media_DeleteTests : BaseRepositoryTest
 {
@@ -36,11 +36,11 @@ public class Media_DeleteTests : BaseRepositoryTest
         
         // Act
         await _mediaRepository.DeleteAsync(media);
-
         await Context.SaveChangesAsync();
         
         // Assert
         var result = await Context.Media.FirstOrDefaultAsync(x => x.Id == media.Id);
+        
         result.Should().BeNull();
     }
 }

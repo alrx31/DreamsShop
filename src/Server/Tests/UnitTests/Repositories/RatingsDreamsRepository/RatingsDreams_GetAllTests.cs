@@ -18,6 +18,7 @@ public class RatingsDreams_GetAllTests : BaseRepositoryTest
     {
         // Arrange
         var faker = new Faker();
+        
         var ratingsDreams = new List<RatingsDreams>
         {
             new RatingsDreams
@@ -42,11 +43,9 @@ public class RatingsDreams_GetAllTests : BaseRepositoryTest
         await Context.SaveChangesAsync();
         
         // Act
-
         var result = await _ratingsDreams.GetAllAsync(1, 2);
         
         // Assert
-        
         result.Should().BeEquivalentTo(ratingsDreams);
     }
 }

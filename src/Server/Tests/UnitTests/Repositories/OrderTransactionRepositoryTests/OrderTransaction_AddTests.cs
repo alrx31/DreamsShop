@@ -31,13 +31,10 @@ public class OrderTransaction_AddTests : BaseRepositoryTest
         };
         
         // Act
-        
         await _orderTransactionRepository.AddAsync(orderTransaction);
-        
         await Context.SaveChangesAsync();
         
         // Assert
-        
         var result = await Context.OrderTransaction.FirstOrDefaultAsync(x => x.Id == orderTransaction.Id);
         
         result.Should().NotBeNull();

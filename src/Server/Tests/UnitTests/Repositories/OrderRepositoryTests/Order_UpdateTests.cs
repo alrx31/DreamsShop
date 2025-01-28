@@ -44,11 +44,11 @@ public class Order_UpdateTests : BaseRepositoryTest
         
         // Act
         await _orderRepository.UpdateAsync(order);
-        
         await Context.SaveChangesAsync();
         
         // Assert
         var orderFromDb = await Context.Order.FindAsync(order.Id);
+        
         orderFromDb.Should().NotBeNull();
         orderFromDb.Should().BeEquivalentTo(updatedOrder);
     }

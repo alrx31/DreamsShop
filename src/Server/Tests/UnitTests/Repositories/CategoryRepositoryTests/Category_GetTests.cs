@@ -30,11 +30,9 @@ public class Category_GetTests : BaseRepositoryTest
         await Context.SaveChangesAsync();
         
         // Act
-        
         var result = await _categoryRepository.GetAsync(category.Id);
         
         // Assert
-        
         result.Should().NotBeNull();
         result.Should().BeEquivalentTo(category);
     }
@@ -52,11 +50,9 @@ public class Category_GetTests : BaseRepositoryTest
         };
         
         // Act
-        
         var result = await _categoryRepository.GetAsync(category.Id);
         
         // Assert
-        
         result.Should().BeNull();
     }
     

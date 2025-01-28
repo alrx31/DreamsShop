@@ -29,15 +29,12 @@ public class DreamInCategory_GetTests : BaseRepositoryTest
         };
         
         await Context.DreamInCategory.AddAsync(dreamInCategory);
-        
         await Context.SaveChangesAsync();
         
         // Act
-        
         var result = await _dreamInCategoryRepository.GetAsync(dreamInCategory.Id);
         
         // Assert
-        
         result.Should().NotBeNull();
         result.Should().BeEquivalentTo(dreamInCategory);
     }

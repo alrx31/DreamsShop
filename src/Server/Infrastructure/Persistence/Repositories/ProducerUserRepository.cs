@@ -4,8 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence.Repositories;
 
-public class ProducerUserRepository
-    (ApplicationDbContext context): ICRUDRepository<ProducerUser>
+public class ProducerUserRepository(ApplicationDbContext context): ICRUDRepository<ProducerUser>
 {
     public async Task<List<ProducerUser>> GetAllAsync(int page, int pageSize, CancellationToken cancellationToken = default)
     {

@@ -18,6 +18,7 @@ public class RatingsDreams_AddTests : BaseRepositoryTest
     {
         // Arrange
         var faker = new Faker();
+        
         var ratingDream = new RatingsDreams
         {
             Id = faker.Random.Guid(),
@@ -28,12 +29,10 @@ public class RatingsDreams_AddTests : BaseRepositoryTest
         };
         
         // Act
-        
         await _repository.AddAsync(ratingDream);
         await Context.SaveChangesAsync();
         
         // Assert
-        
         var result = await Context.RatingsDreams.FindAsync(ratingDream.Id);
         
         result.Should().BeEquivalentTo(ratingDream);

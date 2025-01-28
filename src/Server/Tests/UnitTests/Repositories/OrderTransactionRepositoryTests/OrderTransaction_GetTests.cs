@@ -32,11 +32,9 @@ public class OrderTransaction_GetTests : BaseRepositoryTest
         await Context.SaveChangesAsync();
         
         // Act
-        
         var result = await _orderTransactionRepository.GetAsync(orderTransaction.Id);
         
         // Assert
-        
         result.Should().NotBeNull();
         result.Should().BeEquivalentTo(orderTransaction);
     }

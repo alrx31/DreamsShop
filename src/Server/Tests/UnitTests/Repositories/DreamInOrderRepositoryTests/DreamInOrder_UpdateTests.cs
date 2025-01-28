@@ -51,8 +51,8 @@ public class DreamInOrder_UpdateTests : BaseRepositoryTest
         // Assert
         var entity = await Context.DreamInOrder.FindAsync(dreamInOrder.Id);
         entity.Should().NotBeNull();
-        entity.Id.Should().Be(updatedDreamInOrder.Id);
-        entity.Dream_Id.Should().Be(updatedDreamInOrder.Dream_Id);
-        entity.Order_Id.Should().Be(updatedDreamInOrder.Order_Id);
+        entity?.Id.Should().Be(updatedDreamInOrder.Id);
+        entity?.Dream_Id.Should().Be(updatedDreamInOrder.Dream_Id);
+        entity?.Order_Id.Should().Be(updatedDreamInOrder.Order_Id);
     }
 }

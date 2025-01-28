@@ -20,6 +20,7 @@ public class Order_AddTests : BaseRepositoryTest
     {
         // Arrange
         var faker = new Faker();
+        
         var order = new Order
         {
             Id = faker.Random.Guid(),
@@ -34,6 +35,7 @@ public class Order_AddTests : BaseRepositoryTest
         await Context.SaveChangesAsync();
         // Assert
         var orderFromDb = await Context.Order.FindAsync(order.Id);
+        
         orderFromDb.Should().NotBeNull();
         orderFromDb.Should().BeEquivalentTo(order);
     }

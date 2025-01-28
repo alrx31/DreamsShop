@@ -4,7 +4,7 @@ using Domain.IRepositories;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 
-namespace Tests.UnitTests.Repositories.MediaRepository;
+namespace Tests.UnitTests.Repositories.MediaRepositoryTests;
 
 public class Media_UpdateTests : BaseRepositoryTest
 {
@@ -52,18 +52,12 @@ public class Media_UpdateTests : BaseRepositoryTest
         
         // Act
         await _mediaRepository.UpdateAsync(media);
-        
         await Context.SaveChangesAsync();
         
         // Assert
         var result = await Context.Media.FirstOrDefaultAsync(x => x.Id == media.Id);
+        
         result.Should().NotBeNull();
-        result.Id.Should().Be(updatedMedia.Id);
-        result.FileName.Should().Be(updatedMedia.FileName);
-        result.FilePath.Should().Be(updatedMedia.FilePath);
-        result.FileExtension.Should().Be(updatedMedia.FileExtension);
-        result.FileSize.Should().Be(updatedMedia.FileSize);
-        result.File.Should().BeEquivalentTo(updatedMedia.File);
+        result.Should().BeEquivalentTo(media);
     }
-    
 }

@@ -18,6 +18,7 @@ public class ProducerUser_DeleteTests : BaseRepositoryTest
     {
         // Arrange
         var faker = new Faker();
+        
         var producer = new Producer
         {
             Id = faker.Random.Guid(),
@@ -36,17 +37,13 @@ public class ProducerUser_DeleteTests : BaseRepositoryTest
         
         await Context.Producer.AddAsync(producer);
         await Context.ProducerUser.AddAsync(producerUser);
-        
         await Context.SaveChangesAsync();
         
         // Act
-        
         await _repository.DeleteAsync(producerUser);
-
         await Context.SaveChangesAsync();
         
         // Assert
-        
         var result = await Context.ProducerUser.FindAsync(producerUser.Id);
         
         result.Should().BeNull();

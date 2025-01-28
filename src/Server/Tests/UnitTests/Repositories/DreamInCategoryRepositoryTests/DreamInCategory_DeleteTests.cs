@@ -30,17 +30,13 @@ public class DreamInCategory_DeleteTests : BaseRepositoryTest
         };
         
         await Context.DreamInCategory.AddAsync(dreamInCategory);
-        
         await Context.SaveChangesAsync();
         
         // Act
-        
         await _dreamInCategoryRepository.DeleteAsync(dreamInCategory);
-        
         await Context.SaveChangesAsync();
         
         // Assert
-        
         var result = await Context.DreamInCategory.FirstOrDefaultAsync(x => x.Id == dreamInCategory.Id);
         
         result.Should().BeNull();

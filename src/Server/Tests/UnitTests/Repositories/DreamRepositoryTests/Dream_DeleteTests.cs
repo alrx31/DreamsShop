@@ -32,17 +32,13 @@ public class Dream_DeleteTests : BaseRepositoryTest
         };
         
         await Context.Dream.AddAsync(dream);
-        
         await Context.SaveChangesAsync();
         
         // Act
-        
         await _dreamRepository.DeleteAsync(dream);
-        
         await Context.SaveChangesAsync();
         
         // Assert
-        
         var result = await Context.Dream.FirstOrDefaultAsync(x => x.Id == dream.Id);
         
         result.Should().BeNull();

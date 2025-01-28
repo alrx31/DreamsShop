@@ -34,13 +34,11 @@ public class OrderTransaction_UpdateTests : BaseRepositoryTest
         var newStatus = faker.PickRandom<OrderTransactionStatuses>();
         
         // Act
-        
         orderTransaction.Status = newStatus;
         
         await _orderTransactionRepository.UpdateAsync(orderTransaction);
         
         // Assert
-        
         var result = await Context.OrderTransaction.FindAsync(orderTransaction.Id);
         
         result.Should().NotBeNull();

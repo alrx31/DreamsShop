@@ -20,7 +20,6 @@ public class Order_GetTests : BaseRepositoryTest
     {
         // Arrange
         var faker = new Faker();
-        
         var userId = faker.Random.Guid();
         
         var orders = new List<Order>

@@ -18,6 +18,7 @@ public class Producer_AddTests : BaseRepositoryTest
     {
         // Arrange
         var faker = new Faker();
+        
         var producer = new Producer()
         {
             Id = faker.Random.Guid(),
@@ -26,13 +27,10 @@ public class Producer_AddTests : BaseRepositoryTest
         };
         
         // Act
-        
         await _producerRepository.AddAsync(producer);
-        
         await Context.SaveChangesAsync();
         
         // Assert
-
         var result = await Context.Producer.FindAsync(producer.Id);
 
         result.Should().BeEquivalentTo(producer);

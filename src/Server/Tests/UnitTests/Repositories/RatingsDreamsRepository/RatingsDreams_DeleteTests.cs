@@ -18,6 +18,7 @@ public class RatingsDreams_DeleteTests : BaseRepositoryTest
     {
         // Arrange
         var faker = new Faker();
+        
         var ratingDreams = new RatingsDreams
         {
             Id = faker.Random.Guid(),
@@ -31,13 +32,12 @@ public class RatingsDreams_DeleteTests : BaseRepositoryTest
         await Context.SaveChangesAsync();
         
         // Act
-        
         await _ratingsDreamsRepository.DeleteAsync(ratingDreams);
         await Context.SaveChangesAsync();
         
         // Assert
-
         var result = await Context.RatingsDreams.FindAsync(ratingDreams.Id);
+        
         result.Should().BeNull();
     }
 }

@@ -30,7 +30,6 @@ public class DreamInCategory_UpdateTests : BaseRepositoryTest
         };
         
         await Context.DreamInCategory.AddAsync(dreamInCategory);
-        
         await Context.SaveChangesAsync();
         
         var updatedDreamInCategory = new DreamInCategory
@@ -44,13 +43,10 @@ public class DreamInCategory_UpdateTests : BaseRepositoryTest
         dreamInCategory.DreamId = updatedDreamInCategory.DreamId;
         
         // Act
-        
         await _dreamInCategoryRepository.UpdateAsync(dreamInCategory);
-        
         await Context.SaveChangesAsync();
         
         // Assert
-        
         var result = await Context.DreamInCategory.FirstOrDefaultAsync(x => x.Id == dreamInCategory.Id);
         
         result.Should().NotBeNull();

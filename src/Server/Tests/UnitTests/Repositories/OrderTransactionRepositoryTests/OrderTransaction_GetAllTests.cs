@@ -49,11 +49,9 @@ public class OrderTransaction_GetAllTests : BaseRepositoryTest
         await Context.SaveChangesAsync();
         
         // Act
-        
         var result = await _orderTransactionRepository.GetAllAsync();
         
         // Assert
-        
         result.Should().NotBeNull();
         result.Should().BeEquivalentTo(orderTransactions);
     }
@@ -64,11 +62,9 @@ public class OrderTransaction_GetAllTests : BaseRepositoryTest
         // Arrange
         
         // Act
-        
         var result = await _orderTransactionRepository.GetAllAsync();
         
         // Assert
-        
         result.Should().NotBeNull();
         result.Should().BeEmpty();
     }

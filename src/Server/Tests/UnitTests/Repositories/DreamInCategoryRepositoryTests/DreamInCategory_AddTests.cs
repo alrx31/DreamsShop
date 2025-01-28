@@ -30,13 +30,10 @@ public class DreamInCategory_AddTests : BaseRepositoryTest
         };
         
         // Act
-        
         await _dreamInCategoryRepository.AddAsync(dreamInCategory);
-        
         await Context.SaveChangesAsync();
         
         // Assert
-        
         var result = await Context.DreamInCategory.FirstOrDefaultAsync(x => x.Id == dreamInCategory.Id);
         
         result.Should().NotBeNull();

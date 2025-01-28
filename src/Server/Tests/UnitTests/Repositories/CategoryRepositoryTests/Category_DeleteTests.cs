@@ -31,13 +31,10 @@ public class Category_DeleteTests: BaseRepositoryTest
         await Context.SaveChangesAsync();
         
         // Act
-        
         await _categoryRepository.DeleteAsync(category);
-        
         await Context.SaveChangesAsync();
         
         // Assert
-        
         var result = await Context.Category.FirstOrDefaultAsync(x => x.Id == category.Id);
         
         result.Should().BeNull();

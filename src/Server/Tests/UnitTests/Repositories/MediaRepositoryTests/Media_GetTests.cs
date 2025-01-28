@@ -3,7 +3,7 @@ using Domain.Entity;
 using Domain.IRepositories;
 using FluentAssertions;
 
-namespace Tests.UnitTests.Repositories.MediaRepository;
+namespace Tests.UnitTests.Repositories.MediaRepositoryTests;
 
 public class Media_GetTests : BaseRepositoryTest
 {
@@ -38,11 +38,6 @@ public class Media_GetTests : BaseRepositoryTest
         
         // Assert
         result.Should().NotBeNull();
-        result.Id.Should().Be(media.Id);
-        result.FileName.Should().Be(media.FileName);
-        result.FilePath.Should().Be(media.FilePath);
-        result.FileExtension.Should().Be(media.FileExtension);
-        result.FileSize.Should().Be(media.FileSize);
-        result.File.Should().BeEquivalentTo(media.File);
+        result.Should().BeEquivalentTo(media);
     }
 }

@@ -18,12 +18,14 @@ public class ProducerUser_GetAllTests : BaseRepositoryTest
     {
         // Arrange
         var faker = new Faker();
+        
         var producer = new Producer
         {
             Id = faker.Random.Guid(),
             Name = faker.Company.CompanyName(),
             Description = faker.Company.CompanyName(),
         };
+        
         var producerUsers = new List<ProducerUser>
         {
             new ProducerUser
@@ -48,15 +50,12 @@ public class ProducerUser_GetAllTests : BaseRepositoryTest
         
         await Context.Producer.AddAsync(producer);
         await Context.ProducerUser.AddRangeAsync(producerUsers);
-        
         await Context.SaveChangesAsync();
         
         // Act
-
         var result = await _repository.GetAllAsync(1,2);
         
         // Assert
-
         result.Should().BeEquivalentTo(producerUsers);
     }
 }

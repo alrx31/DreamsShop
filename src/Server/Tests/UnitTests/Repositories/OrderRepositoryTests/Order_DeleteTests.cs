@@ -20,6 +20,7 @@ public class Order_DeleteTests : BaseRepositoryTest
     {
         // Arrange
         var faker = new Faker();
+        
         var order = new Order
         {
             Id = faker.Random.Guid(),
@@ -37,6 +38,7 @@ public class Order_DeleteTests : BaseRepositoryTest
         
         // Assert
         var orderFromDb = await Context.Order.FindAsync(order.Id);
+        
         orderFromDb.Should().BeNull();
     }
 }

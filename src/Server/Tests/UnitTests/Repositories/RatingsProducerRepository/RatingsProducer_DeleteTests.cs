@@ -17,18 +17,24 @@ public class RatingsProducer_DeleteTests : BaseRepositoryTest
     public async Task DeleteAsync_ShouldDeleteRatingsProducer()
     {
         // Arrange
-        var ratingsProducer = new Faker<RatingsProducer>().Generate();
+        var faker = new Faker();
+        var ratingsProducer = new RatingsProducer
+        {
+            Id = faker.Random.Guid(),
+            ProducerId = faker.Random.Guid(),
+            ConsumerId = faker.Random.Guid(),
+            Value = faker.Random.Int(),
+            CreatedAt = faker.Date.Past()
+        };
         
         await Context.AddAsync(ratingsProducer);
         await Context.SaveChangesAsync();
         
         // Act
-        
         await _repository.DeleteAsync(ratingsProducer);
         await Context.SaveChangesAsync();
         
         // Assert
-        
         var result = await Context.RatingsProducer.FindAsync(ratingsProducer.Id);
         
         result.Should().BeNull();

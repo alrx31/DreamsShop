@@ -28,13 +28,10 @@ public class Category_AddTests : BaseRepositoryTest
         };
         
         // Act
-        
         await _categoryRepository.AddAsync(category);
-        
         await Context.SaveChangesAsync();
         
         // Assert
-        
         var result = await Context.Category.FirstOrDefaultAsync(x => x.Id == category.Id);
         
         result.Should().NotBeNull();

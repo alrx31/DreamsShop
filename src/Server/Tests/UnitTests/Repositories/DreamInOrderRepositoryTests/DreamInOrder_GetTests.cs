@@ -37,9 +37,9 @@ public class DreamInOrder_GetTests : BaseRepositoryTest
         
         // Assert
         entity.Should().NotBeNull();
-        entity.Id.Should().Be(dreamInOrder.Id);
-        entity.Dream_Id.Should().Be(dreamInOrder.Dream_Id);
-        entity.Order_Id.Should().Be(dreamInOrder.Order_Id);
+        entity?.Id.Should().Be(dreamInOrder.Id);
+        entity?.Dream_Id.Should().Be(dreamInOrder.Dream_Id);
+        entity?.Order_Id.Should().Be(dreamInOrder.Order_Id);
     }
     
     [Fact]

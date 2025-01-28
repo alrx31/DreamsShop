@@ -41,11 +41,9 @@ public class Producer_GetAllTests : BaseRepositoryTest
         await Context.SaveChangesAsync();
         
         // Act
-
         var result = await _producerRepository.GetAllAsync(1,2);
         
         // Assert
-        
         result.Should().BeEquivalentTo(producers);
     }
 }

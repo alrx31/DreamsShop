@@ -31,12 +31,10 @@ public class Producer_DeleteTests : BaseRepositoryTest
         await Context.SaveChangesAsync();
         
         // Act
-
         await _producerRepository.DeleteAsync(producer);
         await Context.SaveChangesAsync();
 
         // Assert
-        
         var result = await Context.Producer.FirstOrDefaultAsync(p=>p.Id == producer.Id);
 
         result.Should().BeNull();
