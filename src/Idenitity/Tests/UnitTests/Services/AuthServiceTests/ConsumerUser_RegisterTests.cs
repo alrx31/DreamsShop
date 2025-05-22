@@ -6,7 +6,7 @@ using Bogus;
 using Domain.Entity;
 using Domain.IRepositories;
 using Domain.IRepositories.Base;
-using Domain.IService;
+using Domain.IServices;
 using FluentAssertions;
 using Moq;
 
@@ -17,13 +17,13 @@ public class ConsumerUser_RegisterTests : BaseServiceTest<ConsumerUserRegisterCo
     private readonly Mock<IMapper> _mapper;
     private readonly Mock<IUnitOfWork> _unitOfWork;
     private readonly Mock<IConsumerUserRepository> _consumerUserRepository;
-    private readonly Mock<IPasswordChecker> _passwordChecker;
+    private readonly Mock<IPasswordManager> _passwordChecker;
 
     public ConsumerUser_RegisterTests()
     {
         _mapper = new Mock<IMapper>();
         _consumerUserRepository = new Mock<IConsumerUserRepository>();
-        _passwordChecker = new Mock<IPasswordChecker>();
+        _passwordChecker = new Mock<IPasswordManager>();
         
         _unitOfWork = new Mock<IUnitOfWork>();
 

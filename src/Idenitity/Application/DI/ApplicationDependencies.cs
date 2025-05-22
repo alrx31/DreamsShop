@@ -15,7 +15,7 @@ public static class ApplicationDependencies
 
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(ConsumerUserRegisterCommandHandler).Assembly));
         
-        services.AddTransient<IValidator<ConsumerUserRegisterDtoValidation>>();
+        //services.AddTransient<IValidator<ConsumerUserRegisterDtoValidation>>();
         
         return services;
     }
