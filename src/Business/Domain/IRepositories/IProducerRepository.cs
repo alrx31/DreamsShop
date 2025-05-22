@@ -3,7 +3,6 @@ using Domain.IRepositories.Base;
 
 namespace Domain.IRepositories;
 
-public interface IDreamInOrderRepository : ICrudRepository<DreamInOrder>
+public interface IProducerRepository : ICrudRepository<Producer>
 {
-    
 }

@@ -5,5 +5,4 @@ namespace Domain.IRepositories;
 
 public interface IDreamRepository : ICrudRepository<Dream>
 {
-    
 }

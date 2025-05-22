@@ -10,6 +10,7 @@ WORKDIR /src
 COPY ["Presentation/Presentation.csproj", "Presentation/"]
 COPY ["Infrastructure/Infrastructure.csproj", "Infrastructure/"]
 COPY ["Domain/Domain.csproj", "Domain/"]
+COPY ["Application/Application.csproj", "Application/"]
 RUN dotnet restore "Presentation/Presentation.csproj"
 COPY . .
 WORKDIR "/src/Presentation"

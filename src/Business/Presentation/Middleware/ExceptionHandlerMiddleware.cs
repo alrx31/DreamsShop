@@ -14,7 +14,11 @@ public class ExceptionHandlerMiddleware(RequestDelegate next) : IMiddleware
         }
         catch (NotFoundException ex)
         {
-            await HandleExceptionAsync(context,HttpStatusCode.NotFound,ex.Message);
+            await HandleExceptionAsync(context, HttpStatusCode.NotFound, ex.Message);
+        }
+        catch (Exception ex)
+        {
+            await HandleExceptionAsync(context, HttpStatusCode.InternalServerError, ex.Message);
         }
     }
     

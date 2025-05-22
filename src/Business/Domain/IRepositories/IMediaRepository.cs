@@ -3,7 +3,6 @@ using Domain.IRepositories.Base;
 
 namespace Domain.IRepositories;
 
-public interface IProducerRepository : ICrudRepository<Producer>
+public interface IMediaRepository : ICrudRepository<Media>
 {
-    
 }
