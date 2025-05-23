@@ -1,9 +1,13 @@
+using System.Text;
+using Application.DTO;
 using Application.MappingProfiles;
 using Application.UseCases.CommandsHandlers;
 using Application.Validators;
 using FluentValidation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Application.DI;
 
@@ -15,7 +19,31 @@ public static class ApplicationDependencies
 
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(ConsumerUserRegisterCommandHandler).Assembly));
         
-        //services.AddTransient<IValidator<ConsumerUserRegisterDtoValidation>>();
+        services.AddTransient<IValidator<ConsumerUserRegisterDto>,ConsumerUserRegisterDtoValidation>();
+        
+        services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                var jwtSettings = configuration.GetSection("Jwt");
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+
+                    ValidIssuer = jwtSettings["Issuer"],
+                    ValidAudience = jwtSettings["Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(jwtSettings["Key"]))
+                };
+            });
+        
+        services.AddAuthorization();
         
         return services;
     }

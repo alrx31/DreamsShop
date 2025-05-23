@@ -1,8 +1,12 @@
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
+using System.Text;
+using Domain.Entity;
 using Domain.IServices;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Infrastructure.Services;
 
@@ -10,14 +14,30 @@ public class JwtService(
     IConfiguration config)
     : IJwtService
 {
-    private readonly string _key = config["Jwt:Key"]!;
+    private readonly IConfigurationSection _jwtSettings = config.GetSection("Jwt")!;
 
 
-    public string GenerateJwtToken(string email, int userId)
+    public string GenerateJwtToken(IHasClaims user)
     {
-        throw new NotImplementedException();
-    }
+        
+         var claims = new[]
+           {
+               new Claim(ClaimTypes.Email, user.Email),
+               new Claim(ClaimTypes.Role, nameof(user.Role)) 
+           };
 
+           var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings["Key"]!));
+           var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+           var token = new JwtSecurityToken(
+               issuer: _jwtSettings["Issuer"],
+               audience: _jwtSettings["Audience"],
+               claims: claims,
+               expires: DateTime.Now.AddMinutes(double.Parse(_jwtSettings["ExpiresInMinutes"]!)),
+               signingCredentials: creds);
+
+           return new JwtSecurityTokenHandler().WriteToken(token);
+    }
     
     public string GenerateRefreshToken()
     {
@@ -29,10 +49,5 @@ public class JwtService(
         }
         
         return Convert.ToBase64String(randomNumber);
-    }
-    
-    public ClaimsPrincipal? GetTokenPrincipal(string jwtToken)
-    {
-        throw new NotImplementedException();
     }
 }

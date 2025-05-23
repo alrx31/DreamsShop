@@ -1,12 +1,11 @@
 using System.Security.Claims;
+using Domain.Entity;
 
 namespace Domain.IServices;
 
 public interface IJwtService
 {
-    string GenerateJwtToken(string email,int userId);
+    string GenerateJwtToken(IHasClaims claims);
     
     string GenerateRefreshToken();
-    
-    ClaimsPrincipal? GetTokenPrincipal(string jwtToken);
 }

@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Entity
 {
-    public class ProducerUser
+    public class ProducerUser : IHasClaims
     {
         [Key]
         public required Guid Id { get; set; }

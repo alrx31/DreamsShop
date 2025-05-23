@@ -16,6 +16,10 @@ public class ExceptionHandlerMiddleware(RequestDelegate next) : IMiddleware
         {
             await HandleExceptionAsync(context, HttpStatusCode.NotFound, ex.Message);
         }
+        catch (AlreadyExistException ex)
+        {
+            await HandleExceptionAsync(context, HttpStatusCode.Conflict, ex.Message);
+        }
         catch (Exception ex)
         {
             await HandleExceptionAsync(context, HttpStatusCode.InternalServerError, ex.Message);

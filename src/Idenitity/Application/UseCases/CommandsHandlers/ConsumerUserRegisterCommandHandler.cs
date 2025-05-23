@@ -33,7 +33,14 @@ public class ConsumerUserRegisterCommandHandler(
         }
         
         await unitOfWork.ConsumerUserRepository
-            .AddAsync(mapper.Map<ConsumerUser>(request.Model), cancellationToken);
+            .AddAsync(
+                mapper.Map<ConsumerUser>(request.Model,
+                opt => opt.Items["PasswordHasher"] = passwordManager),
+                cancellationToken
+                );
+        
         await unitOfWork.SaveChangesAsync(cancellationToken);
+        
+        
     }
 }
