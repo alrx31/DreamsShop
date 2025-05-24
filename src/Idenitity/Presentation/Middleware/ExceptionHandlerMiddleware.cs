@@ -1,20 +1,37 @@
 using System.Net;
 using System.Text.Json;
 using Application.Exceptions;
+using Microsoft.AspNetCore.Diagnostics;
 
 namespace Presentation.Middleware;
 
-public class ExceptionHandlerMiddleware(RequestDelegate next) : IMiddleware
+public class ExceptionHandlerMiddleware : IMiddleware
 {
-    public async Task InvokeAsync(HttpContext context, RequestDelegate next1)
+    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         try
         {
             await next(context);
         }
+        catch (UnauthorizedException ex)
+        {
+            await HandleExceptionAsync(context, HttpStatusCode.Unauthorized, ex.Message);
+        }
+        catch (ForbiddenException ex)
+        {
+            await HandleExceptionAsync(context, HttpStatusCode.Forbidden, ex.Message);
+        }
+        catch (DataValidationException ex)
+        {
+            await HandleExceptionAsync(context, HttpStatusCode.BadRequest, ex.Message);
+        }
         catch (NotFoundException ex)
         {
             await HandleExceptionAsync(context, HttpStatusCode.NotFound, ex.Message);
+        }
+        catch (InvalidDataModelException ex)
+        {
+            await HandleExceptionAsync(context, HttpStatusCode.BadRequest, ex.Message);       
         }
         catch (AlreadyExistException ex)
         {

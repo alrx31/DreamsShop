@@ -20,7 +20,7 @@ services:
   postgres:
     image: postgres:latest
     ports:
-      - 5432:5432
+      - 5433:5433
     environment:
       POSTGRES_USER: DreamsShop_Client
       POSTGRES_PASSWORD: M3fFSh99@Gcb932*5fhh
