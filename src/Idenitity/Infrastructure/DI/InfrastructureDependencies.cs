@@ -22,6 +22,7 @@ public static class InfrastructureDependencies
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IConsumerUserRepository, ConsumerUserRepository>();
         services.AddScoped<IProducerUserRepository, ProducerUserRepository>();
+        services.AddScoped<IRefreshTokerRepository, RefreshTokenRepository>();
         
         services.AddScoped<IPasswordManager, PasswordManager>();
         services.AddScoped<IJwtService, JwtService>();

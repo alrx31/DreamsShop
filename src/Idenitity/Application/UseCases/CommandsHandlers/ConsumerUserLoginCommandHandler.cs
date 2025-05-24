@@ -5,6 +5,7 @@ using Domain.Entity;
 using Domain.IRepositories;
 using Domain.IServices;
 using MediatR;
+using Microsoft.Extensions.Configuration;
 
 namespace Application.UseCases.CommandsHandlers;
 
@@ -12,10 +13,10 @@ public class ConsumerUserLoginCommandHandler
     (
         IUnitOfWork unitOfWork,
         IPasswordManager passwordManager,
-        IJwtService jwtService
+        IJwtService jwtService,
+        IConfiguration configuration
     ): IRequestHandler<ConsumerUserLoginCommand, ConsumerUserAuthResponseDto>
 {
-    
     
     public async Task<ConsumerUserAuthResponseDto> Handle(ConsumerUserLoginCommand request, CancellationToken cancellationToken)
     {
@@ -34,6 +35,19 @@ public class ConsumerUserLoginCommandHandler
 
         var token = jwtService.GenerateJwtToken(user);
 
+        var refreshToken = await unitOfWork.RefreshTokerRepository.GetAsync(user.Id, cancellationToken);
+
+        if (refreshToken is null)
+        {
+            throw new UnauthorizedAccessException("Refresh token Not Found.");
+        }
+
+        refreshToken.RefreshToken = jwtService.GenerateRefreshToken();
+        refreshToken.Expires = DateTime.Now.AddDays(configuration.GetValue<int>("Jwt:RefreshTokenExpireDays"));
+        
+        await unitOfWork.RefreshTokerRepository.UpdateAsync(refreshToken, cancellationToken);
+        await unitOfWork.SaveChangesAsync(cancellationToken);
+        
         return new ConsumerUserAuthResponseDto
         {
             AccessToken = token,

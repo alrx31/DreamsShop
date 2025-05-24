@@ -82,6 +82,24 @@ namespace Infrastructure.Migrations
 
                     b.ToTable("ProducerUser");
                 });
+
+            modelBuilder.Entity("Domain.Entity.RefreshTokenModel", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("Expires")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("RefreshToken")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("RefreshTokens");
+                });
 #pragma warning restore 612, 618
         }
     }

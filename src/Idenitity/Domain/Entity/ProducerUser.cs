@@ -17,7 +17,6 @@ namespace Domain.Entity
         public required string Password { get; set; }
 
         public required Roles Role { get; set; }
-
         public required Guid ProducerId { get; set; }
     }
 }

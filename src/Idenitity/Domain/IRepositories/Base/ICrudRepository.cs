@@ -1,6 +1,6 @@
 namespace Domain.IRepositories.Base;
 
-public interface ICrudRepository<T> : IPaginationRepository<T> where T : class
+public interface ICrudRepository<T>  where T : class
 {
     Task AddAsync(T entity, CancellationToken cancellationToken = default);
     
