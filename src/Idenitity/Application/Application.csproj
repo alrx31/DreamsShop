@@ -31,6 +31,7 @@
       <PackageReference Include="MediatR" Version="12.5.0" />
       <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.16" />
       <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="8.0.16" />
+      <PackageReference Include="SharpGrip.FluentValidation.AutoValidation.Mvc" Version="1.5.0" />
     </ItemGroup>
 
 </Project>

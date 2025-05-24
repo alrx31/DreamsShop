@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 
 namespace Application.DI;
 
@@ -18,8 +19,10 @@ public static class ApplicationDependencies
         services.AddAutoMapper(typeof(ConsumerUserMapperProfile));
 
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(ConsumerUserRegisterCommandHandler).Assembly));
+
+        services.AddFluentValidationAutoValidation();
         
-        services.AddTransient<IValidator<ConsumerUserRegisterDto>,ConsumerUserRegisterDtoValidation>();
+        services.AddScoped<IValidator<ConsumerUserRegisterDto>, ConsumerUserRegisterDtoValidation>();
         
         services.AddAuthentication(options =>
             {

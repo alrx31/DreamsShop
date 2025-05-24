@@ -34,11 +34,11 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+builder.Services.AddControllers();
 
 builder.Services.AddInfrastructureDependencies(builder.Configuration);
 builder.Services.AddApplicationDependencies(builder.Configuration);
 
-builder.Services.AddControllers();
 
 var app = builder.Build();
 

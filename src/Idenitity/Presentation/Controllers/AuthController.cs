@@ -1,4 +1,5 @@
 using Application.DTO;
+using Application.Exceptions;
 using Application.UseCases.Commands;
 using AutoMapper;
 using MediatR;
@@ -12,7 +13,7 @@ namespace Presentation.Controllers;
 public class AuthController(IMediator mediator, IMapper mapper) : ControllerBase
 {
     [HttpPut]
-    public async Task<IActionResult> RegisterConsumerUser(ConsumerUserRegisterDto dto, CancellationToken cancellationToken)
+    public async Task<IActionResult> RegisterConsumerUser([FromBody] ConsumerUserRegisterDto dto, CancellationToken cancellationToken)
     {
         await mediator.Send(new ConsumerUserRegisterCommand(dto), cancellationToken);
         

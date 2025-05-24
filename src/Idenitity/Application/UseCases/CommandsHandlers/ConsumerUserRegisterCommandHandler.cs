@@ -24,11 +24,6 @@ public class ConsumerUserRegisterCommandHandler(
             .GetByEmailAsync(request.Model.Email, cancellationToken);
         if (user is not null) throw new AlreadyExistException("This Email Is Already Registered.");
         
-        if (request.Model.Password != request.Model.PasswordRepeat)
-        {
-            throw new InvalidDataModelException("Passwords do not match.");
-        }
-        
         var passwordLevel = passwordManager.CheckPassword(request.Model.Password);
         if (passwordLevel < AcceptablePasswordLevel)
         {
@@ -43,7 +38,6 @@ public class ConsumerUserRegisterCommandHandler(
                         opt => opt.Items["PasswordHasher"] = passwordManager),
                     cancellationToken
                 );
-
         
             await unitOfWork.SaveChangesAsync(cancellationToken);
             var registeredUser = await unitOfWork.ConsumerUserRepository.GetByEmailAsync(request.Model.Email, cancellationToken);
