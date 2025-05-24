@@ -1,0 +1,29 @@
+networks:
+  dreams-shop: 
+    driver: bridge
+  
+services:
+  identity:
+    build:
+      context: ./Idenitity
+      dockerfile: Dockerfile
+    ports:
+      #- 5001:5001
+      - 8081:8081
+    environment:
+      ConnectionStrings__DefaultConnection: "Host=postgres;Database=DreamsShop_Identity;Username=DreamsShop_Client;Password=M3fFSh99@Gcb932*5fhh"
+    networks:
+      - dreams-shop
+    depends_on:
+      - postgres
+  
+  postgres:
+    image: postgres:latest
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: DreamsShop_Client
+      POSTGRES_PASSWORD: M3fFSh99@Gcb932*5fhh
+      POSTGRES_DB: DreamsShop_Identity
+    networks:
+      - dreams-shop

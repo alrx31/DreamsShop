@@ -21,7 +21,7 @@ public class AuthController(IMediator mediator, IMapper mapper) : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> LoginConsumerUser(ConsumerUserLoginDto dto, CancellationToken cancellationToken)
+    public async Task<IActionResult> LoginConsumerUser([FromBody] ConsumerUserLoginDto dto, CancellationToken cancellationToken)
     {
         return Ok(await mediator.Send(new ConsumerUserLoginCommand(dto), cancellationToken));    
     }

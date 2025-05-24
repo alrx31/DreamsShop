@@ -2,6 +2,6 @@ namespace Application.DTO;
 
 public class ConsumerUserLoginDto
 {
-    public string? Password { get; set; }
-    public string? Email { get; set; }
+    public required string Email { get; init; }
+    public required string Password { get; init; }
 }

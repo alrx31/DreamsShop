@@ -43,7 +43,7 @@ public class ConsumerUserLoginCommandHandler
         }
 
         refreshToken.RefreshToken = jwtService.GenerateRefreshToken();
-        refreshToken.Expires = DateTime.Now.AddDays(configuration.GetValue<int>("Jwt:RefreshTokenExpireDays"));
+        refreshToken.Expires = DateTime.UtcNow.AddDays(configuration.GetValue<int>("Jwt:RefreshTokenExpireDays"));
         
         await unitOfWork.RefreshTokerRepository.UpdateAsync(refreshToken, cancellationToken);
         await unitOfWork.SaveChangesAsync(cancellationToken);

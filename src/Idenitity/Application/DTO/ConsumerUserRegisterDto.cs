@@ -8,5 +8,4 @@ public class ConsumerUserRegisterDto
     public required string Password { get; init; }
     public required string PasswordRepeat { get; init; }
     public required string Name { get; init; }
-    public required Roles Role { get; init; } = Roles.CONSUMER;
 }

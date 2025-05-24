@@ -5,6 +5,11 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{94C6D34E-07FA-437C-891C-33DF158F7C96}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "conf", "conf", "{C3395A0E-F7A1-43F6-81B2-A6FBFB1BF73B}"
+	ProjectSection(SolutionItems) = preProject
+		..\docker-compose.yml = ..\docker-compose.yml
+		Dockerfile = Dockerfile
+		https\dev-certificate.pfx = https\dev-certificate.pfx
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{7ADAFFC4-2E42-4461-A167-EB305A4C91E9}"
 EndProject

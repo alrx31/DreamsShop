@@ -6,5 +6,5 @@ namespace Application.UseCases.Commands;
 public class ConsumerUserLoginCommand
     (ConsumerUserLoginDto consumerUserLoginDto) : IRequest<ConsumerUserAuthResponseDto>
 {
-    public ConsumerUserLoginDto ConsumerUserLoginDto { get; set; } = consumerUserLoginDto;
+    public ConsumerUserLoginDto ConsumerUserLoginDto { get; } = consumerUserLoginDto;
 }

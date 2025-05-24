@@ -1,7 +1,14 @@
 using Application.DI;
 using Infrastructure.DI;
+using Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.WebHost.ConfigureKestrel((context, options) =>
+{
+    options.Configure(context.Configuration.GetSection("Kestrel"));
+});
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -39,14 +46,16 @@ builder.Services.AddControllers();
 builder.Services.AddInfrastructureDependencies(builder.Configuration);
 builder.Services.AddApplicationDependencies(builder.Configuration);
 
-
 var app = builder.Build();
-
-if (app.Environment.IsDevelopment())
+using (var scope = app.Services.CreateScope())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    db.Database.Migrate();
 }
+app.ApplyDatabaseMigration();
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseAuthentication();
 app.UseAuthorization();

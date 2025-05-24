@@ -47,7 +47,6 @@ public class ConsumerUserRegisterCommandHandler(
                 UserId = registeredUser.Id,
                 RefreshToken = jwtService.GenerateRefreshToken(),
                 Expires = DateTime.UtcNow.AddDays(configuration.GetValue<int>("Jwt:RefreshTokenExpiresInMinutes"))
-            
             }, cancellationToken);
         
             await unitOfWork.SaveChangesAsync(cancellationToken);
