@@ -45,8 +45,9 @@ builder.Services.AddControllers();
 
 builder.Services.AddTransient<ExceptionHandlerMiddleware>();
 
-builder.Services.AddInfrastructureDependencies(builder.Configuration);
-builder.Services.AddApplicationDependencies(builder.Configuration);
+builder.Services
+    .AddInfrastructureDependencies(builder.Configuration)
+    .AddApplicationDependencies(builder.Configuration);
 
 var app = builder.Build();
 

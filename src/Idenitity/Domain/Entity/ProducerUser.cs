@@ -1,22 +1,21 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Domain.Entity
+namespace Domain.Entity;
+
+public class ProducerUser : IHasClaims
 {
-    public class ProducerUser : IHasClaims
-    {
-        [Key]
-        public required Guid Id { get; set; }
+    [Key]
+    public required Guid Id { get; set; }
 
-        [StringLength(50)]
-        public required string Name { get; set; }
+    [StringLength(50)]
+    public required string Name { get; set; }
 
-        [StringLength(50)]
-        public required string Email { get; set; }
+    [StringLength(50)]
+    public required string Email { get; set; }
 
-        [StringLength(50)]
-        public required string Password { get; set; }
+    [StringLength(50)]
+    public required string Password { get; set; }
 
-        public required Roles Role { get; set; }
-        public required Guid ProducerId { get; set; }
-    }
+    public required Roles Role { get; set; }
+    public required Guid ProducerId { get; set; }
 }

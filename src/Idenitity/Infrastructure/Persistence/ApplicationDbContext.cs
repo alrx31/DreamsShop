@@ -1,4 +1,5 @@
 using Domain.Entity;
+using Domain.Model;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence;

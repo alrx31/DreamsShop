@@ -1,7 +1,7 @@
 using System.Text;
 using Application.DTO;
 using Application.MappingProfiles;
-using Application.UseCases.CommandsHandlers;
+using Application.UseCases.ConsumerUserRegister;
 using Application.Validators;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

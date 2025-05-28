@@ -1,6 +1,7 @@
 using Application.DTO;
 using Application.Exceptions;
-using Application.UseCases.Commands;
+using Application.UseCases.ConsumerUserLogin;
+using Application.UseCases.ConsumerUserRegister;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;

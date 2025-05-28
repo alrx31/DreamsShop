@@ -1,13 +1,10 @@
 using Application.DTO;
-using Application.UseCases.Commands;
-using AutoMapper;
-using Domain.Entity;
 using Domain.IRepositories;
 using Domain.IServices;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 
-namespace Application.UseCases.CommandsHandlers;
+namespace Application.UseCases.ConsumerUserLogin;
 
 public class ConsumerUserLoginCommandHandler
     (
