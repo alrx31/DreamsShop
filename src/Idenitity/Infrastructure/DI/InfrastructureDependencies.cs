@@ -14,6 +14,8 @@ public static class InfrastructureDependencies
 {
     public static IServiceCollection AddInfrastructureDependencies(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddHttpContextAccessor();
+        
         services.AddDbContext<ApplicationDbContext>(options =>
         {
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
@@ -22,11 +24,11 @@ public static class InfrastructureDependencies
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IConsumerUserRepository, ConsumerUserRepository>();
         services.AddScoped<IProducerUserRepository, ProducerUserRepository>();
-        services.AddScoped<IRefreshTokerRepository, RefreshTokenRepository>();
         
         services.AddScoped<IPasswordManager, PasswordManager>();
         services.AddScoped<IJwtService, JwtService>();
-
+        services.AddScoped<ICookieService, CookieService>();
+        
         return services;
     }
 

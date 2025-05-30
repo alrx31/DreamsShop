@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Application.Exceptions;
 using AutoMapper;
 using Domain.Entity;
@@ -14,7 +15,8 @@ public class ConsumerUserRegisterCommandHandler(
     IUnitOfWork unitOfWork,
     IPasswordManager passwordManager,
     IJwtService jwtService,
-    IConfiguration configuration 
+    IConfiguration configuration,
+    ICookieService cookieService
     ) : IRequestHandler<ConsumerUserRegisterCommand>
 {
     private const byte AcceptablePasswordLevel = 255;
@@ -30,26 +32,27 @@ public class ConsumerUserRegisterCommandHandler(
             throw new DataValidationException("Passwords Must Be More Complex");
         }
 
-        await unitOfWork.ExecuteInTransactionAsync(async (token) =>
+        await unitOfWork.ConsumerUserRepository
+            .AddAsync(
+                mapper.Map<ConsumerUser>(request.Model,
+                    opt => opt.Items["PasswordHasher"] = passwordManager),
+                cancellationToken
+            );
+    
+        await unitOfWork.SaveChangesAsync(cancellationToken);
+
+        var registeredUser = await unitOfWork.ConsumerUserRepository.GetByEmailAsync(request.Model.Email, cancellationToken);
+        
+        var value = JsonSerializer.Serialize(new RefreshTokerCookieModel
         {
-            await unitOfWork.ConsumerUserRepository
-                .AddAsync(
-                    mapper.Map<ConsumerUser>(request.Model,
-                        opt => opt.Items["PasswordHasher"] = passwordManager),
-                    token
-                );
+            Token = jwtService.GenerateRefreshToken(),
+            Expires = DateTime.UtcNow.AddDays(configuration.GetValue<int>("Jwt:RefreshTokenExpiresInDays"))
+        });
         
-            await unitOfWork.SaveChangesAsync(token);
-            var registeredUser = await unitOfWork.ConsumerUserRepository.GetByEmailAsync(request.Model.Email, token);
-            
-            await unitOfWork.RefreshTokerRepository.AddAsync(new RefreshTokenModel
-            {
-                UserId = registeredUser.Id,
-                RefreshToken = jwtService.GenerateRefreshToken(),
-                Expires = DateTime.UtcNow.AddDays(configuration.GetValue<int>("Jwt:RefreshTokenExpiresInMinutes"))
-            }, token);
-        
-            await unitOfWork.SaveChangesAsync(token);
-        }, cancellationToken);
+        cookieService.SetCookie(new CookieModel
+        {
+            Key = registeredUser.Id.ToString(),
+            Value = value
+        });
     }
 }

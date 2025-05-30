@@ -8,5 +8,4 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 {
     public DbSet<ConsumerUser> ConsumerUser { get; init; }
     public DbSet<ProducerUser> ProducerUser { get; init; }
-    public DbSet<RefreshTokenModel> RefreshTokens { get; init; }
 }

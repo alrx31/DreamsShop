@@ -1,6 +1,8 @@
+using System.Text.Json;
 using Application.DTO;
 using Domain.IRepositories;
 using Domain.IServices;
+using Domain.Model;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 
@@ -11,10 +13,10 @@ public class ConsumerUserLoginCommandHandler
         IUnitOfWork unitOfWork,
         IPasswordManager passwordManager,
         IJwtService jwtService,
-        IConfiguration configuration
+        IConfiguration configuration,
+        ICookieService cookieService
     ): IRequestHandler<ConsumerUserLoginCommand, ConsumerUserAuthResponseDto>
 {
-    
     public async Task<ConsumerUserAuthResponseDto> Handle(ConsumerUserLoginCommand request, CancellationToken cancellationToken)
     {
         var user = await unitOfWork.ConsumerUserRepository
@@ -32,18 +34,21 @@ public class ConsumerUserLoginCommandHandler
 
         var token = jwtService.GenerateJwtToken(user);
 
-        var refreshToken = await unitOfWork.RefreshTokerRepository.GetAsync(user.Id, cancellationToken);
+        var refreshToken = cookieService.GetCookie(user.Id.ToString());
 
         if (refreshToken is null)
         {
             throw new UnauthorizedAccessException("Refresh token Not Found.");
         }
 
-        refreshToken.RefreshToken = jwtService.GenerateRefreshToken();
-        refreshToken.Expires = DateTime.UtcNow.AddDays(configuration.GetValue<int>("Jwt:RefreshTokenExpireDays"));
+        var tokenModel = JsonSerializer.Deserialize<RefreshTokerCookieModel>(refreshToken.Value) ?? new RefreshTokerCookieModel();
         
-        await unitOfWork.RefreshTokerRepository.UpdateAsync(refreshToken, cancellationToken);
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        tokenModel.Token = jwtService.GenerateRefreshToken();
+        tokenModel.Expires = DateTime.UtcNow.AddDays(configuration.GetValue<int>("Jwt:RefreshTokenExpireDays"));
+        
+        refreshToken.Value = JsonSerializer.Serialize(tokenModel);
+        
+        cookieService.UpdateCookie(refreshToken);
         
         return new ConsumerUserAuthResponseDto
         {
