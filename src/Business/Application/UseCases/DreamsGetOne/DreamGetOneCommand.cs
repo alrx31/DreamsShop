@@ -5,5 +5,5 @@ namespace Application.UseCases.DreamsGetOne;
 
 public class DreamGetOneCommand : IRequest<Dream?>
 {
-    public required Guid DreamId { get; set; }
+    public required Guid DreamId { get; init; }
 }

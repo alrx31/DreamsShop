@@ -6,11 +6,6 @@ namespace Infrastructure.Persistence.Repositories;
 
 public class DreamRepository(ApplicationDbContext context) : IDreamRepository
 {
-    public async Task<List<Dream>> GetAllAsync(int page, int pageSize, CancellationToken cancellationToken = default)
-    {
-        return await context.Dream.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync(cancellationToken);
-    }
-
     public async Task<int> GetCountAsync(CancellationToken cancellationToken = default)
     {
         return await context.Dream.CountAsync(cancellationToken);

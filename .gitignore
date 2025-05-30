@@ -19,3 +19,9 @@
 /src/Business/Infrastructure/obj/Debug/net8.0/Infrastructure.csproj.CopyComplete
 /src/Business/Presentation/obj/Debug/net8.0/Presentation.csproj.CopyComplete
 /src/Business/Presentation/appsettings.Development.json
+/src/Business/Infrastructure/bin/Debug/net8.0/Microsoft.Extensions.Diagnostics.Abstractions.dll
+/src/Business/Infrastructure/bin/Debug/net8.0/Microsoft.Extensions.Diagnostics.Abstractions.xml
+/src/Business/Infrastructure/bin/Debug/net8.0/Microsoft.Extensions.FileProviders.Abstractions.dll
+/src/Business/Infrastructure/bin/Debug/net8.0/Microsoft.Extensions.FileProviders.Abstractions.xml
+/src/Business/Infrastructure/bin/Debug/net8.0/Microsoft.Extensions.Hosting.Abstractions.dll
+/src/Business/Infrastructure/bin/Debug/net8.0/Microsoft.Extensions.Hosting.Abstractions.xml

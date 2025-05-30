@@ -1,5 +1,6 @@
 using Application.DI;
 using Infrastructure.DI;
+using Presentation.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,8 +14,9 @@ builder.Services
     .AddApplicationDependencies(builder.Configuration)
     .AddInfrastructureDependencies(builder.Configuration);
 
+builder.Services.AddTransient<ExceptionHandlerMiddleware>();
+
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddInfrastructureDependencies(builder.Configuration);
@@ -34,6 +36,8 @@ if (app.Environment.IsDevelopment() || true)
 }
 
 app.UseHttpsRedirection();
+
+app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 app.UseRouting();
 app.UseAuthentication();
