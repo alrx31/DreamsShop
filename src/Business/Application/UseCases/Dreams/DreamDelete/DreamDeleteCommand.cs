@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace Application.UseCases.DreamDelete;
+namespace Application.UseCases.Dreams.DreamDelete;
 
 public class DreamDeleteCommand : IRequest
 {

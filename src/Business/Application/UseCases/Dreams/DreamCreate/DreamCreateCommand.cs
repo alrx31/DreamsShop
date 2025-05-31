@@ -1,7 +1,7 @@
 using Application.DTO;
 using MediatR;
 
-namespace Application.UseCases.DreamCreate;
+namespace Application.UseCases.Dreams.DreamCreate;
 
 public class DreamCreateCommand(DreamCreateDto dto) : IRequest
 {

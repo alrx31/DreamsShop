@@ -1,8 +1,8 @@
 using Application.DTO;
-using Application.UseCases.DreamCreate;
-using Application.UseCases.DreamDelete;
-using Application.UseCases.DreamGetAll;
-using Application.UseCases.DreamsGetOne;
+using Application.UseCases.Dreams.DreamCreate;
+using Application.UseCases.Dreams.DreamDelete;
+using Application.UseCases.Dreams.DreamGetAll;
+using Application.UseCases.Dreams.DreamsGetOne;
 using AutoMapper;
 using Domain.Entity;
 

@@ -2,7 +2,7 @@ using Domain.Entity;
 using Domain.IRepositories;
 using MediatR;
 
-namespace Application.UseCases.DreamGetAll;
+namespace Application.UseCases.Dreams.DreamGetAll;
 
 public class DreamGetAllCommandHandler(
     IUnitOfWork unitOfWork

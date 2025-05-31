@@ -22,6 +22,31 @@ namespace Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Domain.Entity.Category", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<Guid?>("DreamId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DreamId");
+
+                    b.ToTable("Category");
+                });
+
             modelBuilder.Entity("Domain.Entity.Dream", b =>
                 {
                     b.Property<Guid>("Id")
@@ -47,6 +72,18 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Dream");
+                });
+
+            modelBuilder.Entity("Domain.Entity.Category", b =>
+                {
+                    b.HasOne("Domain.Entity.Dream", null)
+                        .WithMany("Categories")
+                        .HasForeignKey("DreamId");
+                });
+
+            modelBuilder.Entity("Domain.Entity.Dream", b =>
+                {
+                    b.Navigation("Categories");
                 });
 #pragma warning restore 612, 618
         }

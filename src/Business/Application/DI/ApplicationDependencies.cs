@@ -1,6 +1,6 @@
 using System.Text;
 using Application.MappingProfiles;
-using Application.UseCases.DreamCreate;
+using Application.UseCases.Dreams.DreamCreate;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

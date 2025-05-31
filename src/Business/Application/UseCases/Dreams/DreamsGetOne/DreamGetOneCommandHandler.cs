@@ -3,7 +3,7 @@ using Domain.Entity;
 using Domain.IRepositories;
 using MediatR;
 
-namespace Application.UseCases.DreamsGetOne;
+namespace Application.UseCases.Dreams.DreamsGetOne;
 
 public class DreamGetOneCommandHandler(
         IUnitOfWork unitOfWork

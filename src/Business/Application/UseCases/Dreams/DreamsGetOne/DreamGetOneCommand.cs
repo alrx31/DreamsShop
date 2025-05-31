@@ -1,7 +1,7 @@
 using Domain.Entity;
 using MediatR;
 
-namespace Application.UseCases.DreamsGetOne;
+namespace Application.UseCases.Dreams.DreamsGetOne;
 
 public class DreamGetOneCommand : IRequest<Dream?>
 {
