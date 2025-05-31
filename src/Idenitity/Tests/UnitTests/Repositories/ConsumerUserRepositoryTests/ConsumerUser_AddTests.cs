@@ -26,7 +26,7 @@ public class ConsumerUser_AddTests : BaseRepositoryTest
             Email = faker.Person.Email,
             Password = faker.Internet.Password(),
             Name = faker.Person.FullName,
-            Role = Roles.CONSUMER
+            Role = Roles.Consumer
         };
         
         // Act
