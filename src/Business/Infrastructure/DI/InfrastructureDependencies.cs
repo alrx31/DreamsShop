@@ -1,6 +1,8 @@
 using Domain.IRepositories;
+using Domain.IService;
 using Infrastructure.Persistence;
 using Infrastructure.Persistence.Repositories;
+using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,6 +21,8 @@ public static class InfrastructureDependencies
 
         services.AddScoped<IDreamRepository, DreamRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+        services.AddScoped<IHttpContextService, HttpContextService>();
         
         return services;
     }

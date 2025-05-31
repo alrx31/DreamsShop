@@ -1,5 +1,6 @@
 using Application.DI;
 using Infrastructure.DI;
+using Microsoft.OpenApi.Models;
 using Presentation.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,11 +18,36 @@ builder.Services
 builder.Services.AddTransient<ExceptionHandlerMiddleware>();
 
 builder.Services.AddControllers();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new() { Title = "My API", Version = "v1" });
 
-builder.Services.AddInfrastructureDependencies(builder.Configuration);
-builder.Services.AddApplicationDependencies(builder.Configuration);
-    
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Введите токен в формате: Bearer {ваш токен}"
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
+
 builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();

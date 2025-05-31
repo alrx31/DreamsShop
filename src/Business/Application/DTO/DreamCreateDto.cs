@@ -4,7 +4,7 @@ public class DreamCreateDto
 {
     public required string Title { get; set; }
 
-    public required string Description { get; set; }
+    public string? Description { get; set; }
 
     public Guid? ProducerId { get; set; }
 

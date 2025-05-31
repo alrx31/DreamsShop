@@ -1,8 +1,9 @@
 namespace Domain.Entity;
 
+[Flags]
 public enum Roles
 {
-    ADMIN,
-    PROVIDER,
-    CONSUMER
+    Consumer = 0b001,
+    Provider = 0b010,
+    Admin = 0b100,
 }
