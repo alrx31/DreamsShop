@@ -25,7 +25,6 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
-RUN mkdir "https1test"
 COPY https/dev-certificate.pfx https/dev-certificate.pfx
 
 ENTRYPOINT ["dotnet", "Presentation.dll"]

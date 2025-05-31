@@ -6,7 +6,7 @@ using Domain.Model;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 
-namespace Application.UseCases.ConsumerUserLogin;
+namespace Application.UseCases.ConsumerUserLogin;   
 
 public class ConsumerUserLoginCommandHandler
     (
@@ -41,14 +41,28 @@ public class ConsumerUserLoginCommandHandler
             throw new UnauthorizedAccessException("Refresh token Not Found.");
         }
 
-        var tokenModel = JsonSerializer.Deserialize<RefreshTokerCookieModel>(refreshToken.Value) ?? new RefreshTokerCookieModel();
+        if (refreshToken.Value is null)
+        {
+            var value = JsonSerializer.Serialize(new RefreshTokerCookieModel
+            {
+                Token = jwtService.GenerateRefreshToken(),
+                Expires = DateTime.UtcNow.AddDays(configuration.GetValue<int>("Jwt:RefreshTokenExpiresInDays"))
+            });
         
-        tokenModel.Token = jwtService.GenerateRefreshToken();
-        tokenModel.Expires = DateTime.UtcNow.AddDays(configuration.GetValue<int>("Jwt:RefreshTokenExpireDays"));
-        
-        refreshToken.Value = JsonSerializer.Serialize(tokenModel);
-        
-        cookieService.UpdateCookie(refreshToken);
+            cookieService.SetCookie(new CookieModel
+            {
+                Key = user.Id.ToString(),
+                Value = value
+            });
+        }
+        else
+        {
+            var tokenModel = JsonSerializer.Deserialize<RefreshTokerCookieModel>(refreshToken.Value) ?? new RefreshTokerCookieModel();
+            tokenModel.Token = jwtService.GenerateRefreshToken();
+            tokenModel.Expires = DateTime.UtcNow.AddDays(configuration.GetValue<int>("Jwt:RefreshTokenExpireDays"));
+            refreshToken.Value = JsonSerializer.Serialize(tokenModel);
+            cookieService.UpdateCookie(refreshToken);
+        }
         
         return new ConsumerUserAuthResponseDto
         {

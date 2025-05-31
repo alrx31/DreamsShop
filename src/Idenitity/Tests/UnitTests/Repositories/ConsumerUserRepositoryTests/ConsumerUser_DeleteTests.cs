@@ -25,7 +25,7 @@ public class ConsumerUser_DeleteTests : BaseRepositoryTest
             Email = faker.Person.Email,
             Password = faker.Internet.Password(),
             Name = faker.Person.FullName,
-            Role = Roles.CONSUMER
+            Role = Roles.Consumer
         };
         
         await Context.ConsumerUser.AddAsync(user);

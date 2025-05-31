@@ -2,6 +2,6 @@ namespace Domain.Entity;
 
 public interface IHasClaims
 {
-    string Email { get; set; }
+    Guid Id { get; set; }
     Roles Role { get; set; }
 }
