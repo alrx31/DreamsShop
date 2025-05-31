@@ -1,8 +1,8 @@
 using System.Text;
 using Application.DTO;
+using Application.DTO.ConsumerUser;
 using Application.MappingProfiles;
-using Application.UseCases.ConsumerUserRegister;
-using Application.Validators;
+using Application.UseCases.ConsumerUserAuth.ConsumerUserRegister;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
@@ -22,7 +22,7 @@ public static class ApplicationDependencies
 
         services.AddFluentValidationAutoValidation();
         
-        services.AddScoped<IValidator<ConsumerUserRegisterDto>, ConsumerUserRegisterDtoValidation>();
+        services.AddScoped<IValidator<ConsumerUserRegisterCommand>, ConsumerUserRegisterCommandValidator>();
         
         services.AddAuthentication(options =>
             {

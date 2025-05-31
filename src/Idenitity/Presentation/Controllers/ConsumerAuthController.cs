@@ -1,21 +1,15 @@
-using System.Text.Json;
-using System.Xml;
 using Application.DTO;
-using Application.Exceptions;
-using Application.UseCases.ConsumerUserLogin;
-using Application.UseCases.ConsumerUserRegister;
-using AutoMapper;
-using Domain.IServices;
-using Domain.Model;
+using Application.DTO.ConsumerUser;
+using Application.UseCases.ConsumerUserAuth.ConsumerUserLogin;
+using Application.UseCases.ConsumerUserAuth.ConsumerUserRegister;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AuthController(IMediator mediator) : ControllerBase
+public class ConsumerAuthController(IMediator mediator) : ControllerBase
 {
     [HttpPut]
     public async Task<IActionResult> RegisterConsumerUser([FromBody] ConsumerUserRegisterDto dto, CancellationToken cancellationToken)
@@ -29,12 +23,5 @@ public class AuthController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> LoginConsumerUser([FromBody] ConsumerUserLoginDto dto, CancellationToken cancellationToken)
     {
         return Ok(await mediator.Send(new ConsumerUserLoginCommand(dto), cancellationToken));    
-    }
-    
-    [HttpGet]
-    [Authorize]
-    public async Task<IActionResult> GetUsers(CancellationToken cancellationToken)
-    {
-        return Ok();
     }
 }

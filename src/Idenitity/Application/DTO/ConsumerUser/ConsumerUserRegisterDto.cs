@@ -1,6 +1,4 @@
-using Domain.Entity;
-
-namespace Application.DTO;
+namespace Application.DTO.ConsumerUser;
 
 public class ConsumerUserRegisterDto
 {

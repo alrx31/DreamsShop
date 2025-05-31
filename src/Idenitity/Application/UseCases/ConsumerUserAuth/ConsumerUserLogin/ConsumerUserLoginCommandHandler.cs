@@ -1,12 +1,13 @@
 using System.Text.Json;
 using Application.DTO;
+using Application.DTO.ConsumerUser;
 using Domain.IRepositories;
 using Domain.IServices;
 using Domain.Model;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 
-namespace Application.UseCases.ConsumerUserLogin;   
+namespace Application.UseCases.ConsumerUserAuth.ConsumerUserLogin;   
 
 public class ConsumerUserLoginCommandHandler
     (
