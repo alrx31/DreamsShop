@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using Domain.IService;
 using Microsoft.AspNetCore.Http;
 
@@ -8,14 +7,9 @@ public class HttpContextService(
     IHttpContextAccessor contextAccessor
     ) : IHttpContextService
 {
-    public List<Claim>? GetUserClaims()
-    {
-        return contextAccessor.HttpContext?.User.Claims.ToList();
-    }
-
     public Guid? GetCurrentUserId()
     {
-        var value = GetUserClaims()?.FirstOrDefault(x => x.Type == "uid")?.Value;
+        var value = contextAccessor.HttpContext?.User.Claims.ToList().FirstOrDefault(x => x.Type == "uid")?.Value;
         return value is null ? null : Guid.Parse(value);
     }
 }

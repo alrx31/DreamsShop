@@ -3,6 +3,16 @@ networks:
     driver: bridge
   
 services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - 80:80
+    depends_on:
+      - business
+      - identity
+    networks:
+      - dreams-shop
+  
   identity:
     build:
       context: ./Idenitity
@@ -11,19 +21,31 @@ services:
       #- 5001:5001
       - 8081:8081
     environment:
-      ConnectionStrings__DefaultConnection: "Host=postgres;Database=DreamsShop_Identity;Username=DreamsShop_Client;Password=M3fFSh99@Gcb932*5fhh"
+      - ASPNETCORE_ENVIRONMENT=Production
     networks:
       - dreams-shop
     depends_on:
       - postgres
   
+  business:
+    build:
+      context: ./Business
+      dockerfile: Dockerfile
+    ports:
+      #- 5002:5002
+      - 8082:8082
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+    networks:
+      - dreams-shop
+    depends_on:
+      - postgres
+    
   postgres:
     image: postgres:latest
-    ports:
-      - 5433:5433
     environment:
       POSTGRES_USER: DreamsShop_Client
       POSTGRES_PASSWORD: M3fFSh99@Gcb932*5fhh
-      POSTGRES_DB: DreamsShop_Identity
+      POSTGRES_DB: DreamsShop_Business
     networks:
       - dreams-shop
