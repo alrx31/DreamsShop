@@ -52,7 +52,7 @@ public class ConsumerUserRegisterCommandHandler(
 
         var registeredUser = await unitOfWork.ConsumerUserRepository.GetByEmailAsync(request.Model.Email, cancellationToken);
         
-        var value = JsonSerializer.Serialize(new RefreshTokerCookieModel
+        var value = JsonSerializer.Serialize(new RefreshTokenCookieModel
         {
             Token = jwtService.GenerateRefreshToken(),
             Expires = DateTime.UtcNow.AddDays(configuration.GetValue<int>("Jwt:RefreshTokenExpiresInDays"))

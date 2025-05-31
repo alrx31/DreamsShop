@@ -44,7 +44,7 @@ public class ConsumerUserLoginCommandHandler
 
         if (refreshToken.Value is null)
         {
-            var value = JsonSerializer.Serialize(new RefreshTokerCookieModel
+            var value = JsonSerializer.Serialize(new RefreshTokenCookieModel
             {
                 Token = jwtService.GenerateRefreshToken(),
                 Expires = DateTime.UtcNow.AddDays(configuration.GetValue<int>("Jwt:RefreshTokenExpiresInDays"))
@@ -58,7 +58,7 @@ public class ConsumerUserLoginCommandHandler
         }
         else
         {
-            var tokenModel = JsonSerializer.Deserialize<RefreshTokerCookieModel>(refreshToken.Value) ?? new RefreshTokerCookieModel();
+            var tokenModel = JsonSerializer.Deserialize<RefreshTokenCookieModel>(refreshToken.Value) ?? new RefreshTokenCookieModel();
             tokenModel.Token = jwtService.GenerateRefreshToken();
             tokenModel.Expires = DateTime.UtcNow.AddDays(configuration.GetValue<int>("Jwt:RefreshTokenExpireDays"));
             refreshToken.Value = JsonSerializer.Serialize(tokenModel);

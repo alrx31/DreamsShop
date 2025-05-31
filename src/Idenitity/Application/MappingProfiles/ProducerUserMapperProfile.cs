@@ -1,4 +1,5 @@
 using Application.DTO.ProducerUser;
+using Application.UseCases.ProducerUserAuth.ProducerUserLogin;
 using Application.UseCases.ProducerUserAuth.ProducerUserRegister;
 using AutoMapper;
 using Domain.Entity;
@@ -20,5 +21,8 @@ public class ProducerUserMapperProfile : Profile
             .ForMember(dest => dest.Password,
                 opt => opt.MapFrom((src, dest, destMember, context) =>
                     ((IPasswordManager)context.Items["PasswordHasher"]).HashPassword(src.Dto.Password)));
+        
+        CreateMap<ProducerUserLoginDto, ProducerUserLoginCommand>()
+            .ConstructUsing(ctor => new ProducerUserLoginCommand(ctor));
     }
 }
