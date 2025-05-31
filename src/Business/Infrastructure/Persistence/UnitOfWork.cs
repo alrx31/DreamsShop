@@ -6,10 +6,14 @@ namespace Infrastructure.Persistence;
 
 public class UnitOfWork(
     ApplicationDbContext context,
-    IDreamRepository dreamRepository
+    IDreamRepository dreamRepository,
+    ICategoryRepository categoryRepository,
+    IDreamCategoryRepository dreamCategoryRepository
     ): IUnitOfWork
 {
     public IDreamRepository DreamRepository { get; } = dreamRepository;
+    public ICategoryRepository CategoryRepository { get; } = categoryRepository;
+    public IDreamCategoryRepository DreamCategoryRepository { get; } = dreamCategoryRepository;
 
     public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
     {

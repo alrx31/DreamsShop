@@ -3,6 +3,6 @@ using Domain.IRepositories.Base;
 
 namespace Domain.IRepositories;
 
-public interface ICategoryRepository : ICrudRepository<Category>
+public interface ICategoryRepository : ICrudRepository<Category>, IGetAllRepository<Category>
 {
 }

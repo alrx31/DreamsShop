@@ -1,5 +1,6 @@
 using Domain.Entity;
 using Domain.IRepositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence.Repositories;
 
@@ -25,5 +26,10 @@ public class CategoryRepository(ApplicationDbContext context) : ICategoryReposit
     {
         context.Category.Remove(entity: entity);
         return Task.CompletedTask;
+    }
+
+    public async Task<List<Category>> GetAllAsync(CancellationToken cancellationToken)
+    {
+        return await context.Category.ToListAsync(cancellationToken);
     }
 }

@@ -17,6 +17,6 @@ namespace Domain.Entity
 
         public decimal? Rating { get; set; }
         
-        public List<Category> Categories { get; set; }
+        public List<DreamCategory> DreamCategories { get; set; }
     }
 }

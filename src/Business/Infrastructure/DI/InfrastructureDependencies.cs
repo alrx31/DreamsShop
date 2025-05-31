@@ -19,11 +19,21 @@ public static class InfrastructureDependencies
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
         });
 
-        services.AddScoped<IDreamRepository, DreamRepository>();
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
-
+        services.AddRepositories();
+        
         services.AddScoped<IHttpContextService, HttpContextService>();
         
+        return services;
+    }
+
+    private static IServiceCollection AddRepositories(this IServiceCollection services)
+    {
+        services.AddScoped<IDreamRepository, DreamRepository>();
+        services.AddScoped<ICategoryRepository, CategoryRepository>();
+        services.AddScoped<IDreamCategoryRepository, DreamCategoryRepository>();
+
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+
         return services;
     }
     

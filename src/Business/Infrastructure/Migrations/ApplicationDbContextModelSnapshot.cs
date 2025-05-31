@@ -32,17 +32,12 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)");
 
-                    b.Property<Guid?>("DreamId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DreamId");
 
                     b.ToTable("Category");
                 });
@@ -74,16 +69,38 @@ namespace Infrastructure.Migrations
                     b.ToTable("Dream");
                 });
 
-            modelBuilder.Entity("Domain.Entity.Category", b =>
+            modelBuilder.Entity("Domain.Entity.DreamCategory", b =>
+                {
+                    b.Property<Guid>("DreamCategoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("Categories")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("DreamId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("Dreams")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("DreamCategoryId");
+
+                    b.HasIndex("DreamId");
+
+                    b.ToTable("DreamCategory");
+                });
+
+            modelBuilder.Entity("Domain.Entity.DreamCategory", b =>
                 {
                     b.HasOne("Domain.Entity.Dream", null)
-                        .WithMany("Categories")
+                        .WithMany("DreamCategories")
                         .HasForeignKey("DreamId");
                 });
 
             modelBuilder.Entity("Domain.Entity.Dream", b =>
                 {
-                    b.Navigation("Categories");
+                    b.Navigation("DreamCategories");
                 });
 #pragma warning restore 612, 618
         }
