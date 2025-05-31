@@ -20,6 +20,10 @@ public class ExceptionHandlerMiddleware : IMiddleware
         {
             await HandleExceptionAsync(context, HttpStatusCode.NotFound, ex.Message);
         }
+        catch (ForbiddenException ex)
+        {
+            await HandleExceptionAsync(context, HttpStatusCode.Forbidden, ex.Message);
+        }
         catch (Exception ex)
         {
             await HandleExceptionAsync(context, HttpStatusCode.InternalServerError, ex.Message);

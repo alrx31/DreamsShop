@@ -4,6 +4,7 @@ using Application.UseCases.Dreams.DreamDelete;
 using Application.UseCases.Dreams.DreamGetAll;
 using Application.UseCases.Dreams.DreamGetCount;
 using Application.UseCases.Dreams.DreamsGetOne;
+using Application.UseCases.Dreams.DreamUpdate;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -55,6 +56,16 @@ public class DreamController(
     public async Task<IActionResult> DeleteDream(Guid dreamId)
     {
         await mediator.Send(mapper.Map<DreamDeleteCommand>(dreamId));
+        return Ok();
+    }
+
+    [HttpPut("{dreamId:required:guid}")]
+    [Authorize]
+    public async Task<IActionResult> UpdateDream(Guid dreamId, [FromBody] DreamUpdateDto model)
+    {
+        await mediator.Send(
+            mapper.Map<DreamUpdateCommand>( (dreamId,model) )
+            );
         return Ok();
     }
 }

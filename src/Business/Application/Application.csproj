@@ -28,7 +28,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="UseCases\Dreams\" />
       <Folder Include="Validators\" />
     </ItemGroup>
 

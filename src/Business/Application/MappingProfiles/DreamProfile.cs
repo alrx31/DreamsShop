@@ -3,6 +3,7 @@ using Application.UseCases.Dreams.DreamCreate;
 using Application.UseCases.Dreams.DreamDelete;
 using Application.UseCases.Dreams.DreamGetAll;
 using Application.UseCases.Dreams.DreamsGetOne;
+using Application.UseCases.Dreams.DreamUpdate;
 using AutoMapper;
 using Domain.Entity;
 
@@ -31,5 +32,9 @@ public class DreamProfile : Profile
         
         CreateMap<Guid, DreamDeleteCommand>()
             .ForMember(dest=>dest.DreamId, opt=>opt.MapFrom(src=>src));
+
+        CreateMap<(Guid, DreamUpdateDto), DreamUpdateCommand>()
+            .ForMember(dest => dest.DreamId, opt => opt.MapFrom(src => src.Item1))
+            .ForMember(dest => dest.Dto, opt => opt.MapFrom(src => src.Item2));
     }
 }
