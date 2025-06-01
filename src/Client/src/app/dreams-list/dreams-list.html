@@ -1,0 +1,34 @@
+@if (loading) {
+  <div class="loader">Загрузка...</div>
+} @else if (error) {
+  <div class="error">Ошибка загрузки данных</div>
+} @else {
+  <div class="dreams-container">
+    @for (dream of dreams; track dream.id) {
+      <div class="dream-card">
+        <!-- Картинка слева -->
+        <div class="dream-image">
+          <img [src]="'https://placehold.co/150x150'" [alt]="dream.title" />
+        </div>
+
+        <!-- Описание справа -->
+        <div class="dream-info">
+          <h3 class="dream-title">{{ dream.title }}</h3>
+          <p class="dream-description">{{ dream.description }}</p>
+          <div class="dream-rating">
+            ⭐ {{ dream.rating }}
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+  <mat-paginator
+    [pageIndex]="page"
+    [pageSize]="size"
+    [hidePageSize]="true"
+    [length]="count"
+    (page)="onPageChange($event)"
+  >
+
+  </mat-paginator>
+}
