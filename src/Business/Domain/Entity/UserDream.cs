@@ -1,8 +1,12 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Domain.Entity;
 
 public class UserDream
 {
-    public required Guid UserId { get; set; }
-    public required Guid DreamId { get; set; }
-    public Dream? Dream { get; set; }
+    [Key]
+    public required Guid Id { get; init; }
+    public required Guid UserId { get; init; }
+    public required Guid DreamId { get; init; }
+    public Dream? Dream { get; init; }
 }
