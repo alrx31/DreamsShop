@@ -37,7 +37,7 @@ public class DreamController(
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllDreams(int skip, int take)
+    public async Task<IActionResult> GetAllDreams(int skip = 0, int take = 5)
     {
         return Ok(await mediator.Send(
             mapper.Map<DreamGetAllCommand>( (skip, take) )
@@ -45,7 +45,7 @@ public class DreamController(
         );
     }
 
-    [HttpGet("/count")]
+    [HttpGet("count")]
     public async Task<IActionResult> GetDreamCount()
     {
         return Ok(await mediator.Send(new DreamGetCountCommand()));

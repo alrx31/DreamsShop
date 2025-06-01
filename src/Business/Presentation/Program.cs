@@ -50,7 +50,20 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddHttpContextAccessor();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularLocalhost",
+        builder => builder
+            .WithOrigins("http://localhost:4200", "https://localhost:4200")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials()
+        );
+});
+
 var app = builder.Build();
+
+app.UseCors("AllowAngularLocalhost");
 
 app.ApplyDatabaseMigration();
 

@@ -2,7 +2,7 @@ using AutoMapper;
 using Domain.IRepositories;
 using MediatR;
 
-namespace Application.UseCases.Category.CategoryAdd;
+namespace Application.UseCases.Category.CategoryCreate;
 
 public class CategoryAddCommandHandler(
     IUnitOfWork unitOfWork,
