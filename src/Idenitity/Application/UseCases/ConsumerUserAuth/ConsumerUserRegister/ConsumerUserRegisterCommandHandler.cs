@@ -1,10 +1,7 @@
-using System.Text.Json;
 using Application.Exceptions;
-using Application.UseCases.ProducerUserAuth.ProducerUserRegister;
 using AutoMapper;
 using Domain.IRepositories;
 using Domain.IServices;
-using Domain.Model;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Configuration;
@@ -15,9 +12,6 @@ public class ConsumerUserRegisterCommandHandler(
     IMapper mapper,
     IUnitOfWork unitOfWork,
     IPasswordManager passwordManager,
-    IJwtService jwtService,
-    IConfiguration configuration,
-    ICookieService cookieService,
     IValidator<ConsumerUserRegisterCommand> commandValidator
     ) : IRequestHandler<ConsumerUserRegisterCommand>
 {
@@ -49,19 +43,5 @@ public class ConsumerUserRegisterCommandHandler(
             );
     
         await unitOfWork.SaveChangesAsync(cancellationToken);
-
-        var registeredUser = await unitOfWork.ConsumerUserRepository.GetByEmailAsync(request.Model.Email, cancellationToken);
-        
-        var value = JsonSerializer.Serialize(new RefreshTokenCookieModel
-        {
-            Token = jwtService.GenerateRefreshToken(),
-            Expires = DateTime.UtcNow.AddDays(configuration.GetValue<int>("Jwt:RefreshTokenExpiresInDays"))
-        });
-        
-        cookieService.SetCookie(new CookieModel
-        {
-            Key = registeredUser.Id.ToString(),
-            Value = value
-        });
     }
 }
