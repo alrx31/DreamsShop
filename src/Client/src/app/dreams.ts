@@ -25,4 +25,16 @@ export class Dreams {
   getDreamsCount(): Observable<number>{
     return this.http.get<number>(`${environment.apiUrl}${this.urlSuffix}/count`)
   }
+
+  getDream(dreamId: string): Observable<Dream> {
+    return this.http.get<Dream>(`${environment.apiUrl}${this.urlSuffix}/${dreamId}`);
+  }
+
+  addDream(dream: Dream) : Observable<Object> {
+    return this.http.post(`${environment.apiUrl}${this.urlSuffix}`, dream);
+  }
+
+  removeDream(dreamId: string) : Observable<Object> {
+    return this.http.delete(`${environment.apiUrl}${this.urlSuffix}/${dreamId}`);
+  }
 }

@@ -1,0 +1,10 @@
+@if (loading) {
+  <div>Loading</div>
+} @else{
+  <div class="dream-card">
+    <h2 class="dream-title">{{ dream.title }}</h2>
+    <p class="dream-id"><strong>ID:</strong> {{ dream.id }}</p>
+    <p class="dream-description">{{ dream.description }}</p>
+    <p class="dream-rating"><strong>Рейтинг:</strong> {{ dream.rating }}</p>
+  </div>
+}

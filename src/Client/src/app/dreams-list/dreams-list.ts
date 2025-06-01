@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
 import {Dream, Dreams} from '../dreams';
 import {MatPaginator, PageEvent} from '@angular/material/paginator';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-dreams-list',
   imports: [
-    MatPaginator
+    MatPaginator,
+    RouterLink
   ],
   templateUrl: './dreams-list.html',
   styleUrl: './dreams-list.scss'
