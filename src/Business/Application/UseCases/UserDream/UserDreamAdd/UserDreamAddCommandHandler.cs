@@ -17,7 +17,7 @@ public class UserDreamAddCommandHandler(
         var userId = httpContextService.GetCurrentUserId();
         if(userId is null) throw new UnauthorizedException("Invalid user id.");
 
-        var dream = await unitOfWork.DreamRepository.GetAsync(request.DreamId, cancellationToken);
+        var dream = await unitOfWork.DreamRepository.GetAsync([request.DreamId], cancellationToken);
         if(dream is null) throw new NotFoundException("Dream not found.");
 
         await unitOfWork.UserDreamRepository.AddAsync(

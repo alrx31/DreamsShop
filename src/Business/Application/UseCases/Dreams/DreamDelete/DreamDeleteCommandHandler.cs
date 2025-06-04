@@ -10,7 +10,7 @@ public class DreamDeleteCommandHandler (
 {
     public async Task Handle(DreamDeleteCommand request, CancellationToken cancellationToken)
     {
-        var dream = await unitOfWork.DreamRepository.GetAsync(request.DreamId, cancellationToken);
+        var dream = await unitOfWork.DreamRepository.GetAsync([request.DreamId], cancellationToken);
         if (dream is null) throw new NotFoundException("Dream not found.");
         
         await unitOfWork.DreamRepository.DeleteAsync(dream, cancellationToken);

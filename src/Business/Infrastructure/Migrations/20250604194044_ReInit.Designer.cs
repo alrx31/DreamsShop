@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250531122056_Add Dream Category")]
-    partial class AddDreamCategory
+    [Migration("20250604194044_ReInit")]
+    partial class ReInit
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -74,31 +74,67 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entity.DreamCategory", b =>
                 {
-                    b.Property<Guid>("DreamCategoryId")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid>("DreamId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("Categories")
+                    b.Property<Guid>("CategoryId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("DreamId")
-                        .HasColumnType("uuid");
+                    b.HasKey("DreamId", "CategoryId");
 
-                    b.Property<Guid>("Dreams")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("DreamCategoryId");
-
-                    b.HasIndex("DreamId");
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("DreamCategory");
                 });
 
+            modelBuilder.Entity("Domain.Entity.UserDream", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("DreamId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("UserId", "DreamId");
+
+                    b.HasIndex("DreamId");
+
+                    b.ToTable("UserDream");
+                });
+
             modelBuilder.Entity("Domain.Entity.DreamCategory", b =>
                 {
-                    b.HasOne("Domain.Entity.Dream", null)
+                    b.HasOne("Domain.Entity.Category", "Category")
                         .WithMany("DreamCategories")
-                        .HasForeignKey("DreamId");
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entity.Dream", "Dream")
+                        .WithMany("DreamCategories")
+                        .HasForeignKey("DreamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Dream");
+                });
+
+            modelBuilder.Entity("Domain.Entity.UserDream", b =>
+                {
+                    b.HasOne("Domain.Entity.Dream", "Dream")
+                        .WithMany()
+                        .HasForeignKey("DreamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Dream");
+                });
+
+            modelBuilder.Entity("Domain.Entity.Category", b =>
+                {
+                    b.Navigation("DreamCategories");
                 });
 
             modelBuilder.Entity("Domain.Entity.Dream", b =>

@@ -10,9 +10,9 @@ public class UserDreamRepository(ApplicationDbContext context) : IUserDreamRepos
         await context.UserDream.AddAsync(entity, cancellationToken);
     }
 
-    public async Task<UserDream?> GetAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<UserDream?> GetAsync(Guid[] ids,CancellationToken cancellationToken = default)
     {
-        return await context.UserDream.FindAsync([id], cancellationToken);
+        return await context.UserDream.FindAsync([ids], cancellationToken);
     }
 
     public Task UpdateAsync(UserDream entity, CancellationToken cancellationToken = default)

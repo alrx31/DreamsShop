@@ -12,7 +12,7 @@ public class DreamUpdateCommandHandler(
 {
     public async Task Handle(DreamUpdateCommand request, CancellationToken cancellationToken)
     {
-        var dream = await unitOfWork.DreamRepository.GetAsync(request.DreamId, cancellationToken);
+        var dream = await unitOfWork.DreamRepository.GetAsync([request.DreamId], cancellationToken);
         if (dream is null) throw new NotFoundException("Dream not found.");
 
         var currentUser = httpContextService.GetCurrentUserId();

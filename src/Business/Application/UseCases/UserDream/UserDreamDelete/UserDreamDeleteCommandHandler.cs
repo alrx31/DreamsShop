@@ -16,7 +16,7 @@ public class UserDreamDeleteCommandHandler(
         var userId = httpContextService.GetCurrentUserId();
         if (userId is null) throw new UnauthorizedException("Invalid user id.");
 
-        var userDream = await unitOfWork.UserDreamRepository.GetAsync(request.DreamId, cancellationToken);
+        var userDream = await unitOfWork.UserDreamRepository.GetAsync([request.DreamId], cancellationToken);
         if (userDream is null) throw new NotFoundException("Dream not found.");
         
         await unitOfWork.UserDreamRepository.DeleteAsync(userDream, cancellationToken);

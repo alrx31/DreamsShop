@@ -1,15 +1,12 @@
-using System.Text;
 using Domain.IRepositories;
 using Domain.IService;
 using Infrastructure.Persistence;
 using Infrastructure.Persistence.Repositories;
 using Infrastructure.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Infrastructure.DI;
 
@@ -38,32 +35,6 @@ public static class InfrastructureDependencies
         
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-        return services;
-    }
-    
-    public static IServiceCollection AddJwtAuthorization(this IServiceCollection services, IConfiguration configuration)
-    {
-        services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(options =>
-            {
-                var jwtSettings = configuration.GetSection("Jwt");
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-
-                    ValidIssuer = jwtSettings["Issuer"],
-                    ValidAudience = jwtSettings["Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(jwtSettings["Key"]))
-                };
-            });
         return services;
     }
     

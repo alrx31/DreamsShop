@@ -6,9 +6,11 @@ using Application.UseCases.Dreams.DreamGetCount;
 using Application.UseCases.Dreams.DreamsGetOne;
 using Application.UseCases.Dreams.DreamUpdate;
 using AutoMapper;
+using Domain.Entity;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Shared;
 
 namespace Presentation.Controller;
 
@@ -20,7 +22,7 @@ public class DreamController(
     ) : ControllerBase
 {
     [HttpPost]
-    [Authorize]
+    [Authorize(Policy = nameof(Policies.DreamOperationsPolicy))]
     public async Task<IActionResult> CreateDream([FromBody] DreamCreateDto model)
     {
         await mediator.Send(mapper.Map<DreamCreateCommand>(model));
@@ -52,7 +54,7 @@ public class DreamController(
     }
 
     [HttpDelete("{dreamId:required:guid}")]
-    [Authorize]
+    [Authorize(Policy = nameof(Policies.DreamOperationsPolicy))]
     public async Task<IActionResult> DeleteDream(Guid dreamId)
     {
         await mediator.Send(mapper.Map<DreamDeleteCommand>(dreamId));
@@ -60,7 +62,7 @@ public class DreamController(
     }
 
     [HttpPut("{dreamId:required:guid}")]
-    [Authorize]
+    [Authorize(Policy = nameof(Policies.DreamOperationsPolicy))]
     public async Task<IActionResult> UpdateDream(Guid dreamId, [FromBody] DreamUpdateDto model)
     {
         await mediator.Send(

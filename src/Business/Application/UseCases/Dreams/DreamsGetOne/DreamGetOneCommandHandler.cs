@@ -11,7 +11,7 @@ public class DreamGetOneCommandHandler(
 {
     public async Task<Dream?> Handle(DreamGetOneCommand request, CancellationToken cancellationToken)
     {
-        var dream = await unitOfWork.DreamRepository.GetAsync(request.DreamId, cancellationToken);
+        var dream = await unitOfWork.DreamRepository.GetAsync([request.DreamId], cancellationToken);
         if (dream is null) throw new NotFoundException("Dream not found.");
         
         return dream;

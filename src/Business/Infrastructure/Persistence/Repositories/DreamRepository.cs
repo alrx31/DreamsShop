@@ -13,7 +13,11 @@ public class DreamRepository(ApplicationDbContext context) : IDreamRepository
 
     public async Task<List<Dream>> GetRangeAsync(int skip, int take, CancellationToken cancellationToken = default)
     {
-        return await context.Dream.Skip(skip).Take(take).ToListAsync(cancellationToken);
+        return await context.Dream
+            .Skip(skip)
+            .Take(take)
+            //.Include(x=>x.Categories)
+            .ToListAsync(cancellationToken);
     }
 
     public async Task AddAsync(Dream entity, CancellationToken cancellationToken = default)
@@ -21,9 +25,12 @@ public class DreamRepository(ApplicationDbContext context) : IDreamRepository
         await context.Dream.AddAsync(entity, cancellationToken);
     }
 
-    public async Task<Dream?> GetAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<Dream?> GetAsync(Guid[] ids,CancellationToken cancellationToken = default)
     {
-        return await context.Dream.FindAsync([id], cancellationToken);
+        return await context.Dream.FindAsync([ids], cancellationToken);
+        /*return await context.Dream
+            .Include(x=>x.Categories)
+            .FirstOrDefaultAsync(x => x.Id == ids.First(), cancellationToken);*/
     }
 
     public Task UpdateAsync(Dream entity, CancellationToken cancellationToken = default)

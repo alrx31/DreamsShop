@@ -10,7 +10,7 @@ public class CategoryUpdateCommandHandler(
 {
     public async Task Handle(CategoryUpdateCommand request, CancellationToken cancellationToken)
     {
-        var category = await unitOfWork.CategoryRepository.GetAsync(request.CategoryId, cancellationToken);
+        var category = await unitOfWork.CategoryRepository.GetAsync([request.CategoryId], cancellationToken);
         if (category is null) throw new NotFoundException("Category not found.");
 
         if (!string.IsNullOrWhiteSpace(request.Dto.Description))
