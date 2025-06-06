@@ -27,10 +27,7 @@ public class DreamRepository(ApplicationDbContext context) : IDreamRepository
 
     public async Task<Dream?> GetAsync(Guid[] ids,CancellationToken cancellationToken = default)
     {
-        return await context.Dream.FindAsync([ids], cancellationToken);
-        /*return await context.Dream
-            .Include(x=>x.Categories)
-            .FirstOrDefaultAsync(x => x.Id == ids.First(), cancellationToken);*/
+        return await context.Dream.FindAsync([ids[0]], cancellationToken);
     }
 
     public Task UpdateAsync(Dream entity, CancellationToken cancellationToken = default)

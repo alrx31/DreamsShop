@@ -12,7 +12,7 @@ public class UserDreamRepository(ApplicationDbContext context) : IUserDreamRepos
 
     public async Task<UserDream?> GetAsync(Guid[] ids,CancellationToken cancellationToken = default)
     {
-        return await context.UserDream.FindAsync([ids], cancellationToken);
+        return await context.UserDream.FindAsync([..ids], cancellationToken);
     }
 
     public Task UpdateAsync(UserDream entity, CancellationToken cancellationToken = default)

@@ -11,8 +11,8 @@ public static class PresentationDependencies
     public static IServiceCollection AddPresentationDependencies(this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.AddJwtAuthorization(configuration);
-        services.AddAuthorizationPolitics();
+        //services.AddJwtAuthorization(configuration);
+        //services.AddAuthorizationPolitics();
         
         return services;
     }

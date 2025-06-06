@@ -13,7 +13,7 @@ public class CategoryRepository(ApplicationDbContext context) : ICategoryReposit
 
     public async Task<Category?> GetAsync(Guid[] ids,CancellationToken cancellationToken = default)
     {
-        return await context.Category.FindAsync([ids], cancellationToken);
+        return await context.Category.FindAsync([ids[0]], cancellationToken);
     }
 
     public Task UpdateAsync(Category entity, CancellationToken cancellationToken = default)
