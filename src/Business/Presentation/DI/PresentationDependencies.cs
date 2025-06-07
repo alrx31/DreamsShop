@@ -11,8 +11,8 @@ public static class PresentationDependencies
     public static IServiceCollection AddPresentationDependencies(this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.AddJwtAuthorization(configuration);
         services.AddAuthorizationPolitics();
+        services.AddJwtAuthorization(configuration);
         
         return services;
     }
@@ -35,7 +35,9 @@ public static class PresentationDependencies
                     ValidateIssuerSigningKey = true,
 
                     IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(jwtSettings["Key"]))
+                        Encoding.UTF8.GetBytes(jwtSettings["Key"])),
+                    
+                    RoleClaimType = "rol"
                 };
             });
         services.AddAuthorization();

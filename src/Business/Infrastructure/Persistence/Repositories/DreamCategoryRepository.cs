@@ -1,5 +1,6 @@
 using Domain.Entity;
 using Domain.IRepositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence.Repositories;
 
@@ -25,5 +26,10 @@ public class DreamCategoryRepository(ApplicationDbContext context) : IDreamCateg
     {
         context.DreamCategory.Remove(entity);
         return Task.CompletedTask;
+    }
+
+    public Task<IQueryable<DreamCategory>> GetCategoriesByDreamIdAsync(Guid dreamId, CancellationToken cancellationToken = default)
+    {
+        return Task.FromResult(context.DreamCategory.Where(x => x.DreamId == dreamId).Distinct());
     }
 }

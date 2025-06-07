@@ -1,9 +1,10 @@
-using Application.DTO;
+using Domain.Model;
 using MediatR;
 
 namespace Application.UseCases.Dreams.DreamCreate;
 
-public class DreamCreateCommand(DreamCreateDto dto) : IRequest
+public record DreamCreateCommand(string Title, string? Description, Guid? ProducerId, decimal? Rating, FileModel? Image)
+    : IRequest
 {
-    public DreamCreateDto Dto { get; init; } = dto;
-}
+    public Guid? ProducerId { get; set; } = ProducerId;
+};

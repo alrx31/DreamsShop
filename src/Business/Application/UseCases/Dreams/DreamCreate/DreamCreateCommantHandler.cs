@@ -22,11 +22,11 @@ public class DreamCreateCommandHandler(
         var userId = httpContextService.GetCurrentUserId();
         if(userId is null) throw new UnauthorizedException("Invalid user id.");
         
-        request.Dto.ProducerId = userId;
+        request.ProducerId = userId;
 
         var dreamModel = mapper.Map<Dream>(request);
         
-        var image = request.Dto.Image;
+        var image = request.Image;
         if (image is not null)
         {
             var objectName = await fileStorageService.UploadFileAsync(image, cancellationToken);

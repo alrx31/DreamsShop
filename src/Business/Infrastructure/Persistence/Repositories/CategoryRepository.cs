@@ -28,8 +28,8 @@ public class CategoryRepository(ApplicationDbContext context) : ICategoryReposit
         return Task.CompletedTask;
     }
 
-    public async Task<List<Category>> GetAllAsync(CancellationToken cancellationToken)
+    public Task<IQueryable<Category>> GetAllAsync(CancellationToken cancellationToken)
     {
-        return await context.Category.ToListAsync(cancellationToken);
+        return Task.FromResult<IQueryable<Category>>(context.Category);
     }
 }
