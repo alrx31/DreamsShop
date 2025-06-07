@@ -9,14 +9,12 @@ namespace Domain.Entity
 
         [StringLength(100)]
         public required string Title { get; set; }
-
         [StringLength(2000)]
         public required string Description { get; set; }
-
         public Guid? ProducerId { get; set; }
-
         public decimal? Rating { get; set; }
+        public required string ImageFileName { get; set; }
         
-        public List<DreamCategory> DreamCategories { get; set; }
+        public ICollection<DreamCategory>? DreamCategories { get; set; }
     }
 }

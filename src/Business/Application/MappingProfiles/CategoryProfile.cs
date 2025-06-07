@@ -1,7 +1,8 @@
 using Application.DTO;
-using Application.UseCases.Category.CategoryAdd;
+using Application.UseCases.Category.CategoryCreate;
 using Application.UseCases.Category.CategoryGet;
 using Application.UseCases.Category.CategoryRemove;
+using Application.UseCases.Category.CategoryUpdate;
 using AutoMapper;
 using Domain.Entity;
 
@@ -25,5 +26,8 @@ public class CategoryProfile : Profile
         CreateMap<Guid, CategoryGetCommand>()
             .ForMember(dest => dest.CategoryId, opt => opt.MapFrom(x => x));
 
+        CreateMap<(Guid, CategoryUpdateDto), CategoryUpdateCommand>()
+            .ForMember(dest => dest.CategoryId, opt => opt.MapFrom(x => x.Item1))
+            .ForMember(dest => dest.Dto, opt => opt.MapFrom(x => x.Item2));
     }
 }

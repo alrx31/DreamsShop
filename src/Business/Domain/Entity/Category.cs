@@ -13,5 +13,5 @@ public class Category
     [StringLength(1000)]
     public string? Description { get; set; }
     
-    List<DreamCategory> DreamCategories{ get; set; }
+    public ICollection<DreamCategory> DreamCategories{ get; set; }
 }

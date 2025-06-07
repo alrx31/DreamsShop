@@ -4,13 +4,17 @@ using Domain.Entity;
 using Domain.IRepositories;
 using Domain.IService;
 using MediatR;
+using Microsoft.Extensions.Options;
+using Shared.Configuration;
 
 namespace Application.UseCases.Dreams.DreamCreate;
 
 public class DreamCreateCommandHandler(
         IUnitOfWork unitOfWork,
         IMapper mapper,
-        IHttpContextService httpContextService
+        IHttpContextService httpContextService,
+        IFileStorageService fileStorageService,
+        IOptions<BaseDreamImageConfiguration> baseDreamImageConfiguration
     ) : IRequestHandler<DreamCreateCommand>
 {
     public async Task Handle(DreamCreateCommand request, CancellationToken cancellationToken)
@@ -19,9 +23,23 @@ public class DreamCreateCommandHandler(
         if(userId is null) throw new UnauthorizedException("Invalid user id.");
         
         request.Dto.ProducerId = userId;
+
+        var dreamModel = mapper.Map<Dream>(request);
+        
+        var image = request.Dto.Image;
+        if (image is not null)
+        {
+            var objectName = await fileStorageService.UploadFileAsync(image, cancellationToken);
+            
+            dreamModel.ImageFileName = objectName;
+        }
+        else
+        {
+            dreamModel.ImageFileName = baseDreamImageConfiguration.Value.DefaultDreamImage;
+        }
         
         await unitOfWork.DreamRepository.AddAsync(
-            mapper.Map<Dream>(request),
+            dreamModel,
             cancellationToken);
         await unitOfWork.SaveChangesAsync(cancellationToken);
     }

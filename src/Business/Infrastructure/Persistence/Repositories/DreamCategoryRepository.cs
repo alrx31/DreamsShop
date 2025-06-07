@@ -10,9 +10,9 @@ public class DreamCategoryRepository(ApplicationDbContext context) : IDreamCateg
         await context.DreamCategory.AddAsync(entity, cancellationToken);
     }
 
-    public async Task<DreamCategory?> GetAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<DreamCategory?> GetAsync(Guid[] ids,CancellationToken cancellationToken = default)
     {
-        return await context.DreamCategory.FindAsync([id], cancellationToken);
+        return await context.DreamCategory.FindAsync([..ids], cancellationToken);
     }
 
     public Task UpdateAsync(DreamCategory entity, CancellationToken cancellationToken = default)

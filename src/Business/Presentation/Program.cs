@@ -1,6 +1,7 @@
 using Application.DI;
 using Infrastructure.DI;
 using Microsoft.OpenApi.Models;
+using Presentation.DI;
 using Presentation.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,7 +14,8 @@ builder.WebHost.ConfigureKestrel((context, options) =>
 // Add services
 builder.Services
     .AddApplicationDependencies(builder.Configuration)
-    .AddInfrastructureDependencies(builder.Configuration);
+    .AddInfrastructureDependencies(builder.Configuration)
+    .AddPresentationDependencies(builder.Configuration);
 
 builder.Services.AddTransient<ExceptionHandlerMiddleware>();
 
@@ -43,14 +45,27 @@ builder.Services.AddSwaggerGen(c =>
                     Id = "Bearer"
                 }
             },
-            Array.Empty<string>()
+            []
         }
     });
 });
 
 builder.Services.AddHttpContextAccessor();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularLocalhost",
+        corsPolicyBuilder => corsPolicyBuilder
+            .WithOrigins("http://localhost:4200", "https://localhost:4200")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials()
+        );
+});
+
 var app = builder.Build();
+
+app.UseCors("AllowAngularLocalhost");
 
 app.ApplyDatabaseMigration();
 

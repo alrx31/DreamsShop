@@ -4,10 +4,15 @@ using Application.UseCases.Dreams.DreamDelete;
 using Application.UseCases.Dreams.DreamGetAll;
 using Application.UseCases.Dreams.DreamGetCount;
 using Application.UseCases.Dreams.DreamsGetOne;
+using Application.UseCases.Dreams.DreamUpdate;
 using AutoMapper;
+using Domain.Entity;
+using Domain.Model;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Presentation.Model.DreamModel;
+using Shared;
 
 namespace Presentation.Controller;
 
@@ -19,10 +24,28 @@ public class DreamController(
     ) : ControllerBase
 {
     [HttpPost]
-    [Authorize]
-    public async Task<IActionResult> CreateDream([FromBody] DreamCreateDto model)
+    [Authorize(Policy = nameof(Policies.DreamOperationsPolicy))]
+    public async Task<IActionResult> CreateDream([FromForm] DreamCreateRequest model)
     {
-        await mediator.Send(mapper.Map<DreamCreateCommand>(model));
+        var dto = new DreamCreateDto
+        {
+            Title = model.Title,
+            Description = model.Description,
+            Rating = model.Rating,
+            ProducerId = model.ProducerId
+        };
+
+        if (model.Image is not null)
+        {
+            dto.Image = new FileModel()
+            {
+                FileName = model.Image.FileName,
+                ContentType = model.Image.ContentType,
+                Content = model.Image?.OpenReadStream()
+            };
+        }
+        
+        await mediator.Send(mapper.Map<DreamCreateCommand>(dto));
         return Ok();
     }
 
@@ -36,7 +59,7 @@ public class DreamController(
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllDreams(int skip, int take)
+    public async Task<IActionResult> GetAllDreams(int skip = 0, int take = 5)
     {
         return Ok(await mediator.Send(
             mapper.Map<DreamGetAllCommand>( (skip, take) )
@@ -44,17 +67,27 @@ public class DreamController(
         );
     }
 
-    [HttpGet("/count")]
+    [HttpGet("count")]
     public async Task<IActionResult> GetDreamCount()
     {
         return Ok(await mediator.Send(new DreamGetCountCommand()));
     }
 
     [HttpDelete("{dreamId:required:guid}")]
-    [Authorize]
+    [Authorize(Policy = nameof(Policies.DreamOperationsPolicy))]
     public async Task<IActionResult> DeleteDream(Guid dreamId)
     {
         await mediator.Send(mapper.Map<DreamDeleteCommand>(dreamId));
+        return Ok();
+    }
+
+    [HttpPut("{dreamId:required:guid}")]
+    [Authorize(Policy = nameof(Policies.DreamOperationsPolicy))]
+    public async Task<IActionResult> UpdateDream(Guid dreamId, [FromForm] DreamUpdateDto model)
+    {
+        await mediator.Send(
+            mapper.Map<DreamUpdateCommand>( (dreamId,model) )
+            );
         return Ok();
     }
 }

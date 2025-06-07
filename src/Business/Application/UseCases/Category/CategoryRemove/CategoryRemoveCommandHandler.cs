@@ -10,7 +10,7 @@ public class CategoryRemoveCommandHandler(
 {
     public async Task Handle(CategoryRemoveCommand request, CancellationToken cancellationToken)
     {
-        var category = await unitOfWork.CategoryRepository.GetAsync(request.CategoryId, cancellationToken);
+        var category = await unitOfWork.CategoryRepository.GetAsync([request.CategoryId], cancellationToken);
         if (category is null) throw new NotFoundException("Category not found.");
         
         await unitOfWork.CategoryRepository.DeleteAsync(category, cancellationToken);

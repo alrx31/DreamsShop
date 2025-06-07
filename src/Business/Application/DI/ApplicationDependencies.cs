@@ -1,51 +1,25 @@
-using System.Text;
 using Application.MappingProfiles;
 using Application.UseCases.Dreams.DreamCreate;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
+using Shared.Configuration;
 
 namespace Application.DI;
 
 public static class ApplicationDependencies
 {
     public static IServiceCollection AddApplicationDependencies(this IServiceCollection services, IConfiguration configuration)
-    {
-        services.AddJwtAuthorization(configuration);
-        
+    {   
+        // register in assembly (need only one)
         services.AddAutoMapper(typeof(DreamProfile));
-
+        services.AddAutoMapper(typeof(CategoryProfile));
+        services.AddAutoMapper(typeof(UserDreamProfile));
+        services.AddAutoMapper(typeof(DreamCategoryProfile));
+        
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(DreamCreateCommandHandler).Assembly));
         
-        //services.AddTransient<IValidator<ConsumerUserRegisterDtoValidation>>();
+        services.Configure<BaseDreamImageConfiguration>(configuration.GetSection("Dream"));
         
-        return services;
-    }
-
-    public static IServiceCollection AddJwtAuthorization(this IServiceCollection services, IConfiguration configuration)
-    {
-        services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(options =>
-            {
-                var jwtSettings = configuration.GetSection("Jwt");
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-
-                    ValidIssuer = jwtSettings["Issuer"],
-                    ValidAudience = jwtSettings["Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(jwtSettings["Key"]))
-                };
-            });
         return services;
     }
 }
