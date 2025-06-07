@@ -7,9 +7,11 @@ using Application.UseCases.Dreams.DreamsGetOne;
 using Application.UseCases.Dreams.DreamUpdate;
 using AutoMapper;
 using Domain.Entity;
+using Domain.Model;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Presentation.Model.DreamModel;
 using Shared;
 
 namespace Presentation.Controller;
@@ -22,10 +24,28 @@ public class DreamController(
     ) : ControllerBase
 {
     [HttpPost]
-    [Authorize(Policy = nameof(Policies.DreamOperationsPolicy))]
-    public async Task<IActionResult> CreateDream([FromBody] DreamCreateDto model)
+    //[Authorize(Policy = nameof(Policies.DreamOperationsPolicy))]
+    public async Task<IActionResult> CreateDream([FromForm] DreamCreateRequest model)
     {
-        await mediator.Send(mapper.Map<DreamCreateCommand>(model));
+        var dto = new DreamCreateDto
+        {
+            Title = model.Title,
+            Description = model.Description,
+            Rating = model.Rating,
+            ProducerId = model.ProducerId
+        };
+
+        if (model.Image is not null)
+        {
+            dto.Image = new FileModel()
+            {
+                FileName = model.Image.FileName,
+                ContentType = model.Image.ContentType,
+                Content = model.Image?.OpenReadStream()
+            };
+        }
+        
+        await mediator.Send(mapper.Map<DreamCreateCommand>(dto));
         return Ok();
     }
 
@@ -63,7 +83,7 @@ public class DreamController(
 
     [HttpPut("{dreamId:required:guid}")]
     [Authorize(Policy = nameof(Policies.DreamOperationsPolicy))]
-    public async Task<IActionResult> UpdateDream(Guid dreamId, [FromBody] DreamUpdateDto model)
+    public async Task<IActionResult> UpdateDream(Guid dreamId, [FromForm] DreamUpdateDto model)
     {
         await mediator.Send(
             mapper.Map<DreamUpdateCommand>( (dreamId,model) )

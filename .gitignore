@@ -55,3 +55,5 @@
 /src/Business/Shared/obj/Debug/net8.0/Shared.pdb
 /src/Business/Shared/obj/Debug/net8.0/Shared.sourcelink.json
 /src/Business/Shared/obj/rider.project.model.nuget.info
+/src/Business/Infrastructure/bin/Debug/net8.0/Shared.dll
+/src/Business/Infrastructure/bin/Debug/net8.0/Shared.pdb

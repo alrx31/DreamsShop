@@ -45,7 +45,7 @@ builder.Services.AddSwaggerGen(c =>
                     Id = "Bearer"
                 }
             },
-            Array.Empty<string>()
+            []
         }
     });
 });
@@ -55,7 +55,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngularLocalhost",
-        builder => builder
+        corsPolicyBuilder => corsPolicyBuilder
             .WithOrigins("http://localhost:4200", "https://localhost:4200")
             .AllowAnyMethod()
             .AllowAnyHeader()

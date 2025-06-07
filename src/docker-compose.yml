@@ -43,9 +43,26 @@ services:
     
   postgres:
     image: postgres:latest
+    ports:
+      - 5432:5432
     environment:
       POSTGRES_USER: DreamsShop_Client
       POSTGRES_PASSWORD: M3fFSh99@Gcb932*5fhh
       POSTGRES_DB: DreamsShop_Business
     networks:
       - dreams-shop
+  
+  minio:
+    image: minio/minio
+    ports:
+      - 9000:9000
+      - 9001:9001
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: "%Gt2enf*@fd/sdF"
+    command: server /data --console-address :9001
+    volumes:
+      - minio_data:/data
+
+volumes:
+  minio_data:
