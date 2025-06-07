@@ -35,7 +35,8 @@ public static class PresentationDependencies
                     ValidateIssuerSigningKey = true,
 
                     IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(jwtSettings["Key"]))
+                        Encoding.UTF8.GetBytes(jwtSettings["Key"])),
+                    RoleClaimType = "rol"
                 };
             });
         services.AddAuthorization();
@@ -48,7 +49,7 @@ public static class PresentationDependencies
         services.AddAuthorizationBuilder()
             .AddPolicy(nameof(Policies.DreamOperationsPolicy), policy =>
             {
-                policy.RequireRole(nameof(Roles.Provider), nameof(Roles.Admin));
+                policy.RequireRole(nameof(Roles.Provider));
             });
         
         return services;

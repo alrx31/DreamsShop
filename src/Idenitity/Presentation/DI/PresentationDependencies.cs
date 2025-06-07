@@ -57,6 +57,8 @@ public static class PresentationDependencies
                 var jwtSettings = configuration.GetSection("Jwt");
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
 

@@ -18,7 +18,7 @@ services:
       context: ./Idenitity
       dockerfile: Dockerfile
     ports:
-      #- 5001:5001
+      - 5001:5001
       - 8081:8081
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
@@ -32,7 +32,7 @@ services:
       context: ./Business
       dockerfile: Dockerfile
     ports:
-      #- 5002:5002
+      - 5002:5002
       - 8082:8082
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
