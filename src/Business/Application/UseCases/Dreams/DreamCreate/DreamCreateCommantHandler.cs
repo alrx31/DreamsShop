@@ -4,6 +4,8 @@ using Domain.Entity;
 using Domain.IRepositories;
 using Domain.IService;
 using MediatR;
+using Microsoft.Extensions.Options;
+using Shared.Configuration;
 
 namespace Application.UseCases.Dreams.DreamCreate;
 
@@ -11,7 +13,8 @@ public class DreamCreateCommandHandler(
         IUnitOfWork unitOfWork,
         IMapper mapper,
         IHttpContextService httpContextService,
-        IFileStorageService fileStorageService
+        IFileStorageService fileStorageService,
+        IOptions<BaseDreamImageConfiguration> baseDreamImageConfiguration
     ) : IRequestHandler<DreamCreateCommand>
 {
     public async Task Handle(DreamCreateCommand request, CancellationToken cancellationToken)
@@ -32,8 +35,8 @@ public class DreamCreateCommandHandler(
         }
         else
         {
-            dreamModel.ImageFileName = null;
-        }     
+            dreamModel.ImageFileName = baseDreamImageConfiguration.Value.DefaultDreamImage;
+        }
         
         await unitOfWork.DreamRepository.AddAsync(
             dreamModel,

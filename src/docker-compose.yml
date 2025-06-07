@@ -61,6 +61,8 @@ services:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: "%Gt2enf*@fd/sdF"
     command: server /data --console-address :9001
+    networks:
+      - dreams-shop
     volumes:
       - minio_data:/data
 

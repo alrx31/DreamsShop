@@ -24,7 +24,7 @@ public class DreamController(
     ) : ControllerBase
 {
     [HttpPost]
-    //[Authorize(Policy = nameof(Policies.DreamOperationsPolicy))]
+    [Authorize(Policy = nameof(Policies.DreamOperationsPolicy))]
     public async Task<IActionResult> CreateDream([FromForm] DreamCreateRequest model)
     {
         var dto = new DreamCreateDto

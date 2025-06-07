@@ -2,6 +2,7 @@ using Application.MappingProfiles;
 using Application.UseCases.Dreams.DreamCreate;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Shared.Configuration;
 
 namespace Application.DI;
 
@@ -14,8 +15,10 @@ public static class ApplicationDependencies
         services.AddAutoMapper(typeof(CategoryProfile));
         services.AddAutoMapper(typeof(UserDreamProfile));
         services.AddAutoMapper(typeof(DreamCategoryProfile));
-
+        
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(DreamCreateCommandHandler).Assembly));
+        
+        services.Configure<BaseDreamImageConfiguration>(configuration.GetSection("Dream"));
         
         return services;
     }
