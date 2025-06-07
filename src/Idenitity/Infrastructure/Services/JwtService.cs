@@ -15,11 +15,9 @@ public class JwtService(
     : IJwtService
 {
     private readonly IConfigurationSection _jwtSettings = config.GetSection("Jwt")!;
-
-
+    
     public string GenerateJwtToken(IHasClaims user)
     {
-        
          var claims = new[]
            {
                new Claim("uid", user.Id.ToString()),

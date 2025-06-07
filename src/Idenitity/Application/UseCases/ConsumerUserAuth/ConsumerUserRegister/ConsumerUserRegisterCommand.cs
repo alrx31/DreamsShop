@@ -4,7 +4,4 @@ using MediatR;
 
 namespace Application.UseCases.ConsumerUserAuth.ConsumerUserRegister;
 
-public class ConsumerUserRegisterCommand(ConsumerUserRegisterDto dto) : IRequest
-{
-    public ConsumerUserRegisterDto Model { get; init; } = dto;
-}
+public record ConsumerUserRegisterCommand(ConsumerUserRegisterDto Dto) : IRequest;
