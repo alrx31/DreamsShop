@@ -4,9 +4,9 @@ namespace Application.DTO;
 
 public class DreamCreateDto
 {
-    public required string Title { get; set; }
-    public string? Description { get; set; }
+    public required string Title { get; init; }
+    public string? Description { get; init; }
     public Guid? ProducerId { get; set; }
-    public decimal? Rating { get; set; }
+    public decimal? Rating { get; init; }
     public FileModel? Image { get; set; }
 }
