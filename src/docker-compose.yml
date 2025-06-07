@@ -40,6 +40,7 @@ services:
       - dreams-shop
     depends_on:
       - postgres
+      - minio
     
   postgres:
     image: postgres:latest
