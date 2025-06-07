@@ -21,17 +21,14 @@ public class ProducerUserLoginCommandHandler(
         var user = await unitOfWork.ProducerUserRepository.GetByEmailAsync(request.Dto.Email, cancellationToken);
         if (user is null) throw new UnauthorizedException("User not found.");
         
-        var cookieModel = new CookieModel()
-        {
-            Key = user.Id.ToString(),
-            Value = JsonSerializer.Serialize(new RefreshTokenCookieModel
+        cookieService.SetCookie(
+            user.Id.ToString(),
+            JsonSerializer.Serialize(new RefreshTokenCookieModel
             {
                 Token = jwtService.GenerateRefreshToken(),
                 Expires = DateTime.UtcNow.AddDays(configuration.GetValue<int>("Jwt:RefreshTokenExpiresInDays"))
             })
-        };
-        
-        cookieService.SetCookie(cookieModel);
+            );
 
         return new ProducerUserAuthResponseDto
         {

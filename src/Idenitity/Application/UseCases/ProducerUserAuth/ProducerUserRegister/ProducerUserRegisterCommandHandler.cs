@@ -18,10 +18,7 @@ public class ProducerUserRegisterCommandHandler(
     public async Task Handle(ProducerUserRegisterCommand request, CancellationToken cancellationToken)
     {
         var validationResult = await commandValidator.ValidateAsync(request, cancellationToken);
-        if (!validationResult.IsValid)
-        {
-            throw new DataValidationException(validationResult.ToString());
-        }
+        if (!validationResult.IsValid) throw new DataValidationException(validationResult.ToString());
         
         var existUser = await unitOfWork.ProducerUserRepository.GetByEmailAsync(request.Dto.Email, cancellationToken);
         if (existUser is not null) throw new AlreadyExistException("Producer user already exist.");

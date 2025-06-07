@@ -9,27 +9,18 @@ public class CookieService
         IHttpContextAccessor contextAccessor
     ): ICookieService
 {
-    public void SetCookie(CookieModel model)
+    public void SetCookie(string key, string value)
     {
-        contextAccessor.HttpContext?.Response.Cookies.Append(model.Key, model.Value ?? string.Empty);
+        contextAccessor.HttpContext?.Response.Cookies.Append(key, value);
     }
 
-    public CookieModel? GetCookie(string key)
+    public string? GetCookie(string key)
     {
-        return new CookieModel
-        {
-            Key = key,
-            Value = contextAccessor.HttpContext?.Request.Cookies[key]
-        };
+        return contextAccessor.HttpContext?.Request.Cookies[key];
     }
 
     public void DeleteCookie(string key)
     {
         contextAccessor.HttpContext?.Response.Cookies.Delete(key);
-    }
-
-    public void UpdateCookie(CookieModel model)
-    {
-        contextAccessor.HttpContext?.Response.Cookies.Append(model.Key, model.Value ?? string.Empty);
     }
 }
