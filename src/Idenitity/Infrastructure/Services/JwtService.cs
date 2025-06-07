@@ -28,8 +28,6 @@ public class JwtService(
            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
            var token = new JwtSecurityToken(
-               issuer: _jwtSettings["Issuer"],
-               audience: _jwtSettings["Audience"],
                claims: claims,
                expires: DateTime.Now.AddMinutes(double.Parse(_jwtSettings["ExpiresInMinutes"]!)),
                signingCredentials: creds);
