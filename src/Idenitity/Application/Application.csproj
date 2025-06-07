@@ -34,4 +34,8 @@
       <PackageReference Include="SharpGrip.FluentValidation.AutoValidation.Mvc" Version="1.5.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="UseCases\ConsumerUserAuth\" />
+    </ItemGroup>
+
 </Project>

@@ -1,7 +1,8 @@
 using Application.DTO;
+using Application.DTO.ConsumerUser;
 using MediatR;
 
-namespace Application.UseCases.ConsumerUserRegister;
+namespace Application.UseCases.ConsumerUserAuth.ConsumerUserRegister;
 
 public class ConsumerUserRegisterCommand(ConsumerUserRegisterDto dto) : IRequest
 {

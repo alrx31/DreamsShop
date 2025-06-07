@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Entity;
 
-public class ConsumerUserData
+public class UserData
 {
     [Key]
     public required Guid Id { get; set; }

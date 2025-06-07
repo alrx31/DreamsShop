@@ -44,4 +44,9 @@ public class ProducerUserRepository(ApplicationDbContext context): IProducerUser
         
         return Task.CompletedTask;
     }
+
+    public async Task<ProducerUser?> GetByEmailAsync(string email, CancellationToken cancellationToken = default)
+    {
+        return await context.ProducerUser.FirstOrDefaultAsync(x => x.Email == email, cancellationToken); 
+    }
 }
