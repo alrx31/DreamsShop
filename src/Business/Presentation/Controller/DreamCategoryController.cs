@@ -24,6 +24,4 @@ public class DreamCategoryController(IMediator mediator, IMapper mapper) : Contr
         await mediator.Send(mapper.Map<DreamCategoryDeleteCommand>( (dreamId, categoryId) ));
         return Ok();
     }
-    
-    
 }

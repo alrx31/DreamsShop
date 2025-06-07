@@ -46,15 +46,12 @@ public class FileStorageService : IFileStorageService
         var statArgs = new StatObjectArgs()
             .WithBucket(_minioConfiguration.BucketName)
             .WithObject(fileName);
-        
         var stat = await _minioClient.StatObjectAsync(statArgs, cancellationToken);
-
         
         var getObjectArgs = new GetObjectArgs()
             .WithBucket(_minioConfiguration.BucketName)
             .WithObject(fileName)
             .WithCallbackStream(stream => stream.CopyTo(memoryStream));
-        
         await _minioClient.GetObjectAsync(getObjectArgs, cancellationToken);
         
         memoryStream.Position = 0;
@@ -72,7 +69,6 @@ public class FileStorageService : IFileStorageService
         var removeArgs = new RemoveObjectArgs()
             .WithBucket(_minioConfiguration.BucketName)
             .WithObject(fileName);
-
         await _minioClient.RemoveObjectAsync(removeArgs, cancellationToken);
     }
 }
