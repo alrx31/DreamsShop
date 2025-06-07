@@ -1,8 +1,11 @@
 using Application.DTO;
 using Application.DTO.ConsumerUser;
 using Application.UseCases.ConsumerUserAuth.ConsumerUserLogin;
+using Application.UseCases.ConsumerUserAuth.ConsumerUserRefreshAccessToken;
 using Application.UseCases.ConsumerUserAuth.ConsumerUserRegister;
+using Domain.Entity;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Controllers;
@@ -23,5 +26,12 @@ public class ConsumerAuthController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> LoginConsumerUser([FromBody] ConsumerUserLoginDto dto, CancellationToken cancellationToken)
     {
         return Ok(await mediator.Send(new ConsumerUserLoginCommand(dto), cancellationToken));    
+    }
+
+    [HttpPatch]
+    [Authorize(Roles = nameof(Roles.Consumer))]
+    public async Task<IActionResult> RefreshAccessToken([FromBody] string accessToken, CancellationToken cancellationToken)
+    {
+        return Ok(await mediator.Send(new ConsumerUserRefreshAccessTokenCommand(accessToken), cancellationToken));
     }
 }

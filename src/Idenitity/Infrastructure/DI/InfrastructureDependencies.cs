@@ -28,6 +28,7 @@ public static class InfrastructureDependencies
         services.AddScoped<IPasswordManager, PasswordManager>();
         services.AddScoped<IJwtService, JwtService>();
         services.AddScoped<ICookieService, CookieService>();
+        services.AddScoped<IHttpContextService, HttpContextService>();
         
         return services;
     }
