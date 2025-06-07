@@ -22,6 +22,26 @@ namespace Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Domain.Entity.Category", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Category");
+                });
+
             modelBuilder.Entity("Domain.Entity.Dream", b =>
                 {
                     b.Property<Guid>("Id")
@@ -47,6 +67,40 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Dream");
+                });
+
+            modelBuilder.Entity("Domain.Entity.DreamCategory", b =>
+                {
+                    b.Property<Guid>("DreamCategoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("Categories")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("DreamId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("Dreams")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("DreamCategoryId");
+
+                    b.HasIndex("DreamId");
+
+                    b.ToTable("DreamCategory");
+                });
+
+            modelBuilder.Entity("Domain.Entity.DreamCategory", b =>
+                {
+                    b.HasOne("Domain.Entity.Dream", null)
+                        .WithMany("DreamCategories")
+                        .HasForeignKey("DreamId");
+                });
+
+            modelBuilder.Entity("Domain.Entity.Dream", b =>
+                {
+                    b.Navigation("DreamCategories");
                 });
 #pragma warning restore 612, 618
         }

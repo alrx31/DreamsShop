@@ -2,7 +2,7 @@ using Application.Exceptions;
 using Domain.IRepositories;
 using MediatR;
 
-namespace Application.UseCases.DreamDelete;
+namespace Application.UseCases.Dreams.DreamDelete;
 
 public class DreamDeleteCommandHandler (
     IUnitOfWork unitOfWork

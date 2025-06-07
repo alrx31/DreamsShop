@@ -5,7 +5,7 @@ namespace Domain.Entity
     public class Dream
     {
         [Key]
-        public required Guid Id { get; set; }
+        public required Guid Id { get; init; }
 
         [StringLength(100)]
         public required string Title { get; set; }
@@ -16,5 +16,7 @@ namespace Domain.Entity
         public Guid? ProducerId { get; set; }
 
         public decimal? Rating { get; set; }
+        
+        public List<DreamCategory> DreamCategories { get; set; }
     }
 }

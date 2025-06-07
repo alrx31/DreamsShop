@@ -12,6 +12,10 @@ public class ExceptionHandlerMiddleware : IMiddleware
         {
             await next(context);
         }
+        catch (UnauthorizedException ex)
+        {
+            await HandleExceptionAsync(context, HttpStatusCode.Unauthorized, ex.Message);
+        }
         catch (NotFoundException ex)
         {
             await HandleExceptionAsync(context, HttpStatusCode.NotFound, ex.Message);

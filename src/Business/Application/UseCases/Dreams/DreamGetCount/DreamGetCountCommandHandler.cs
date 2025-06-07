@@ -1,7 +1,7 @@
 using Domain.IRepositories;
 using MediatR;
 
-namespace Application.UseCases.DreamGetCount;
+namespace Application.UseCases.Dreams.DreamGetCount;
 
 public class DreamGetCountCommandHandler (
     IUnitOfWork unitOfWork
