@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {Dream, Dreams} from '../services/dreams';
+import {Dream, Dreams} from '../../services/dreams';
 import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({

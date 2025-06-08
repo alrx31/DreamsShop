@@ -6,7 +6,6 @@ import {provideHttpClient, withInterceptors} from '@angular/common/http';
 import {authReducer} from './store/auth.reducer';
 import {provideStore} from '@ngrx/store';
 import {addTokenInterceptor} from './interceptors/add-token-interceptor';
-import {retryInterceptor} from './interceptors/retry-interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -15,8 +14,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideStore({ auth: authReducer }),
     provideHttpClient(withInterceptors([
-      addTokenInterceptor,
-      retryInterceptor
+      addTokenInterceptor
     ]))
   ]
 };
