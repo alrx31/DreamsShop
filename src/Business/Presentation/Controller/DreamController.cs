@@ -24,8 +24,7 @@ public class DreamController(
     [Authorize(Policy = nameof(Policies.DreamOperationsPolicy))]
     public async Task<IActionResult> CreateDream([FromForm] DreamCreateDto model)
     {
-        await mediator.Send(mapper.Map<DreamCreateCommand>(model));
-        return Ok();
+        return Ok(await mediator.Send(mapper.Map<DreamCreateCommand>(model)));
     }
 
     [HttpGet("{dreamId:required:guid}")]

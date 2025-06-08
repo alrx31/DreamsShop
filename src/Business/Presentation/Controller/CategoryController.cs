@@ -20,8 +20,7 @@ public class CategoryController(
     [HttpPost]
     public async Task<IActionResult> CreateCategory([FromBody] CategoryCreateDto model)
     {
-        await mediator.Send(mapper.Map<CategoryAddCommand>(model));
-        return Ok();
+        return Ok(await mediator.Send(mapper.Map<CategoryAddCommand>(model)));
     }
 
     [HttpDelete("{categoryId:required:guid}")]

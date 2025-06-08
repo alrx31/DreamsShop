@@ -7,13 +7,15 @@ namespace Application.UseCases.Category.CategoryCreate;
 public class CategoryAddCommandHandler(
     IUnitOfWork unitOfWork,
     IMapper mapper
-    ) : IRequestHandler<CategoryAddCommand>
+    ) : IRequestHandler<CategoryAddCommand, Guid>
 {
-    public async Task Handle(CategoryAddCommand request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(CategoryAddCommand request, CancellationToken cancellationToken)
     {
-        await unitOfWork.CategoryRepository.AddAsync(
+        var id = await unitOfWork.CategoryRepository.AddAsync(
             mapper.Map<Domain.Entity.Category>(request),
             cancellationToken);
         await unitOfWork.SaveChangesAsync(cancellationToken);
+        
+        return id;
     }
 }

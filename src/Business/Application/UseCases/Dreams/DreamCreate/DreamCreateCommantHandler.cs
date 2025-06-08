@@ -15,9 +15,9 @@ public class DreamCreateCommandHandler(
         IHttpContextService httpContextService,
         IFileStorageService fileStorageService,
         IOptions<BaseDreamImageConfiguration> baseDreamImageConfiguration
-    ) : IRequestHandler<DreamCreateCommand>
+    ) : IRequestHandler<DreamCreateCommand, Guid>
 {
-    public async Task Handle(DreamCreateCommand request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(DreamCreateCommand request, CancellationToken cancellationToken)
     {
         var userId = httpContextService.GetCurrentUserId();
         if(userId is null) throw new UnauthorizedException("Invalid user id.");
@@ -38,9 +38,11 @@ public class DreamCreateCommandHandler(
             dreamModel.ImageFileName = baseDreamImageConfiguration.Value.DefaultDreamImage;
         }
         
-        await unitOfWork.DreamRepository.AddAsync(
+        var id = await unitOfWork.DreamRepository.AddAsync(
             dreamModel,
             cancellationToken);
         await unitOfWork.SaveChangesAsync(cancellationToken);
+        
+        return id;
     }
 }
