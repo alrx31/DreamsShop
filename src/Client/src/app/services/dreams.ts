@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {environment} from './environment/environment';
+import {environment} from '../environment/environment';
 
 export interface Dream {
   id : string;
@@ -9,6 +9,15 @@ export interface Dream {
   description: string;
   producerId: string;
   rating: number;
+  imageBase64: string;
+  imageContentType: string;
+  categories: CategoryResponseInDream[];
+}
+
+export interface CategoryResponseInDream {
+  categoryId: string;
+  title: string;
+  description: string;
 }
 
 @Injectable({
