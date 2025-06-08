@@ -30,7 +30,7 @@ public class DreamGetAllCommandHandler(
             imageBytesList.Add(stream.ToArray());
         }
 
-        var dreamIds = dreams.Select(d => d.Id).ToList();
+        var dreamIds = dreams.Select(d => d.DreamId).ToList();
 
         var dreamCategoryMap = new Dictionary<Guid, List<CategoryResponseDto>>();
         foreach (var dreamId in dreamIds)
@@ -40,10 +40,10 @@ public class DreamGetAllCommandHandler(
 
             var categories = await unitOfWork.CategoryRepository.GetAllAsync(cancellationToken);
             var matchedCategories = categories
-                .Where(c => categoryIds.Contains(c.Id))
+                .Where(c => categoryIds.Contains(c.CategoryId))
                 .Select(c => new CategoryResponseDto
                 {
-                    CategoryId = c.Id,
+                    CategoryId = c.CategoryId,
                     Title = c.Title,
                     Description = c.Description
                 });
@@ -53,13 +53,13 @@ public class DreamGetAllCommandHandler(
 
         var result = dreams.ToList().Select((dream, index) => new DreamResponseDto
         {
-            Id = dream.Id,
+            Id = dream.DreamId,
             Title = dream.Title,
             Description = dream.Description,
             ProducerId = dream.ProducerId,
             Rating = dream.Rating,
 
-            Categories = dreamCategoryMap[dream.Id],
+            Categories = dreamCategoryMap[dream.DreamId],
             
             ImageBase64 = Convert.ToBase64String(imageBytesList[index]),
             ImageContentType = imageResults[index].ContentType

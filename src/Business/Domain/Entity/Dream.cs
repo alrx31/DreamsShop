@@ -5,7 +5,7 @@ namespace Domain.Entity
     public class Dream
     {
         [Key]
-        public required Guid Id { get; init; }
+        public required Guid DreamId { get; init; }
 
         [StringLength(100)]
         public required string Title { get; set; }

@@ -6,9 +6,10 @@ namespace Infrastructure.Persistence.Repositories;
 
 public class CategoryRepository(ApplicationDbContext context) : ICategoryRepository
 {
-    public async Task AddAsync(Category entity, CancellationToken cancellationToken = default)
+    public async Task<Guid> AddAsync(Category entity, CancellationToken cancellationToken = default)
     {
-        await context.Category.AddAsync(entity, cancellationToken);
+        return (await context.Category.AddAsync(entity, cancellationToken))
+            .Entity.CategoryId;
     }
 
     public async Task<Category?> GetAsync(Guid[] ids,CancellationToken cancellationToken = default)

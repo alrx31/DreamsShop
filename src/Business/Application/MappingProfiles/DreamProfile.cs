@@ -31,7 +31,7 @@ public class DreamProfile : Profile
             ));
 
         CreateMap<DreamCreateCommand, Dream>()
-            .ForMember(dest => dest.Id, opt => opt.Ignore())
+            .ForMember(dest => dest.DreamId, opt => opt.Ignore())
             .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
             .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
             .ForMember(dest => dest.ProducerId, opt => opt.MapFrom(src => src.ProducerId))

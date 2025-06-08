@@ -19,9 +19,10 @@ public class DreamRepository(ApplicationDbContext context) : IDreamRepository
             .Take(take));
     }
 
-    public async Task AddAsync(Dream entity, CancellationToken cancellationToken = default)
+    public async Task<Guid> AddAsync(Dream entity, CancellationToken cancellationToken = default)
     {
-        await context.Dream.AddAsync(entity, cancellationToken);
+        return (await context.Dream.AddAsync(entity, cancellationToken))
+            .Entity.DreamId;
     }
 
     public async Task<Dream?> GetAsync(Guid[] ids,CancellationToken cancellationToken = default)

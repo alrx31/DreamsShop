@@ -21,16 +21,16 @@ public class DreamGetOneCommandHandler(
         await dreamImg.Content!.CopyToAsync(stream, cancellationToken);
         var imageBytes = stream.ToArray();
         
-        var dreamCategories = await unitOfWork.DreamCategoryRepository.GetCategoriesByDreamIdAsync(dream.Id, cancellationToken);
+        var dreamCategories = await unitOfWork.DreamCategoryRepository.GetCategoriesByDreamIdAsync(dream.DreamId, cancellationToken);
         var categories = await unitOfWork.CategoryRepository.GetAllAsync(cancellationToken);
 
         var res = dreamCategories.Join(
             categories,
             x => x.CategoryId,
-            y => y.Id,
+            y => y.CategoryId,
             (x, y) => new CategoryResponseDto
             {
-                CategoryId = y.Id,
+                CategoryId = y.CategoryId,
                 Description = y.Description,
                 Title = y.Title
             }
@@ -38,7 +38,7 @@ public class DreamGetOneCommandHandler(
         
         var answerDto = new DreamResponseDto
         {
-            Id = dream.Id,
+            Id = dream.DreamId,
             Title = dream.Title,
             Description = dream.Description,
             ProducerId = dream.ProducerId,

@@ -16,7 +16,7 @@ public class CategoryProfile : Profile
             .ConstructUsing(ctor => new CategoryAddCommand(ctor));
 
         CreateMap<CategoryAddCommand, Category>()
-            .ForMember(dest => dest.Id, opt => opt.Ignore())
+            .ForMember(dest => dest.CategoryId, opt => opt.Ignore())
             .ForMember(dest => dest.Title, opt => opt.MapFrom(x => x.Dto.Title))
             .ForMember(dest => dest.Description, opt => opt.MapFrom(x => x.Dto.Description));
 

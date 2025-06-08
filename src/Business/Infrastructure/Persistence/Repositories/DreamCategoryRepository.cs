@@ -6,9 +6,10 @@ namespace Infrastructure.Persistence.Repositories;
 
 public class DreamCategoryRepository(ApplicationDbContext context) : IDreamCategoryRepository
 {
-    public async Task AddAsync(DreamCategory entity, CancellationToken cancellationToken = default)
+    public async Task<Guid> AddAsync(DreamCategory entity, CancellationToken cancellationToken = default)
     {
         await context.DreamCategory.AddAsync(entity, cancellationToken);
+        return Guid.Empty;
     }
 
     public async Task<DreamCategory?> GetAsync(Guid[] ids,CancellationToken cancellationToken = default)
