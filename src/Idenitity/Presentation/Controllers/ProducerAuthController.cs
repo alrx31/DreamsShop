@@ -34,6 +34,6 @@ public class ProducerAuthController(
     [Authorize(Roles = nameof(Roles.Provider))]
     public async Task<IActionResult> RefreshAccessToken([FromBody] string accessToken)
     {
-        return Ok(await mediator.Send(new ProducerUserRefreshAccessTokenCommand(accessToken)));
+        return Ok(await mediator.Send(new ProducerUserRefreshAccessTokenCommand()));
     }
 }

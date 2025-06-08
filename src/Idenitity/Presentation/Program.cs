@@ -1,5 +1,6 @@
 using Application.DI;
 using Infrastructure.DI;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.OpenApi.Models;
 using Presentation.DI;
 using Presentation.Middleware;
@@ -22,7 +23,20 @@ builder.Services
     .AddInfrastructureDependencies(builder.Configuration)
     .AddApplicationDependencies(builder.Configuration);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularLocalhost",
+        corsPolicyBuilder => corsPolicyBuilder
+            .WithOrigins("http://localhost:4200", "https://localhost:4200")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials()
+    );
+});
+
 var app = builder.Build();
+
+app.UseCors("AllowAngularLocalhost");
 
 app.ApplyDatabaseMigration();
 
