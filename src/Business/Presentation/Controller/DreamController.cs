@@ -6,9 +6,11 @@ using Application.UseCases.Dreams.DreamGetCount;
 using Application.UseCases.Dreams.DreamsGetOne;
 using Application.UseCases.Dreams.DreamUpdate;
 using AutoMapper;
+using Domain.Model;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Presentation.Model.Dream;
 using Shared;
 
 namespace Presentation.Controller;
@@ -22,9 +24,23 @@ public class DreamController(
 {
     [HttpPost]
     [Authorize(Policy = nameof(Policies.DreamOperationsPolicy))]
-    public async Task<IActionResult> CreateDream([FromForm] DreamCreateDto model)
+    public async Task<IActionResult> CreateDream([FromForm] DreamCreateRequest model)
     {
-        return Ok(await mediator.Send(mapper.Map<DreamCreateCommand>(model)));
+        var dto = new DreamCreateDto
+        {
+            Title = model.Title,
+            Description = model.Description,
+            Rating = model.Rating,
+            ProducerId = model.ProducerId,
+            Image = new FileModel
+            {
+                FileName = model.Image.FileName,
+                ContentType = model.Image.ContentType,
+                Content = model.Image.OpenReadStream()
+            }
+        };
+        
+        return Ok(await mediator.Send(mapper.Map<DreamCreateCommand>(dto)));
     }
 
     [HttpGet("{dreamId:required:guid}")]

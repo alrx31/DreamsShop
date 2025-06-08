@@ -26,7 +26,7 @@ public class DreamProfile : Profile
                     {
                         FileName = src.Image.FileName,
                         ContentType = src.Image.ContentType,
-                        Content = src.Image.OpenReadStream()
+                        Content = src.Image.Content
                     }
             ));
 
