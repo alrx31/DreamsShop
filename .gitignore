@@ -300,3 +300,15 @@
 /src/Business/Shared/obj/rider.project.model.nuget.info
 /src/Business/Infrastructure/bin/Debug/net8.0/Shared.dll
 /src/Business/Infrastructure/bin/Debug/net8.0/Shared.pdb
+/src/Business/Application/bin/Debug/net8.0/Microsoft.AspNetCore.Connections.Abstractions.dll
+/src/Business/Application/bin/Debug/net8.0/Microsoft.AspNetCore.Connections.Abstractions.xml
+/src/Business/Application/bin/Debug/net8.0/Microsoft.AspNetCore.Http.Features.dll
+/src/Business/Application/bin/Debug/net8.0/Microsoft.AspNetCore.Http.Features.xml
+/src/Business/Application/bin/Debug/net8.0/Microsoft.Extensions.Features.dll
+/src/Business/Application/bin/Debug/net8.0/Microsoft.Extensions.Features.xml
+/src/Business/Application/bin/Debug/net8.0/Microsoft.Net.Http.Headers.dll
+/src/Business/Application/bin/Debug/net8.0/Microsoft.Net.Http.Headers.xml
+/src/Business/Application/bin/Debug/net8.0/Shared.dll
+/src/Business/Application/bin/Debug/net8.0/Shared.pdb
+/src/Business/Application/bin/Debug/net8.0/System.IO.Pipelines.dll
+/src/Business/Application/bin/Debug/net8.0/System.IO.Pipelines.xml

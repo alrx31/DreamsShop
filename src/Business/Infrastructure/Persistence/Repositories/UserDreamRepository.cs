@@ -5,9 +5,10 @@ namespace Infrastructure.Persistence.Repositories;
 
 public class UserDreamRepository(ApplicationDbContext context) : IUserDreamRepository
 {
-    public async Task AddAsync(UserDream entity, CancellationToken cancellationToken = default)
+    public async Task<Guid> AddAsync(UserDream entity, CancellationToken cancellationToken = default)
     {
         await context.UserDream.AddAsync(entity, cancellationToken);
+        return Guid.Empty;
     }
 
     public async Task<UserDream?> GetAsync(Guid[] ids,CancellationToken cancellationToken = default)

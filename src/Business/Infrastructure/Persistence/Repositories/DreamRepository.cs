@@ -11,18 +11,18 @@ public class DreamRepository(ApplicationDbContext context) : IDreamRepository
         return await context.Dream.CountAsync(cancellationToken);
     }
 
-    public async Task<List<Dream>> GetRangeAsync(int skip, int take, CancellationToken cancellationToken = default)
+    public Task<IQueryable<Dream>> GetRangeAsync(int skip, int take, CancellationToken cancellationToken = default)
     {
-        return await context.Dream
+        return Task.FromResult(context.Dream
+            .Include(x=>x.DreamCategories)
             .Skip(skip)
-            .Take(take)
-            //.Include(x=>x.Categories)
-            .ToListAsync(cancellationToken);
+            .Take(take));
     }
 
-    public async Task AddAsync(Dream entity, CancellationToken cancellationToken = default)
+    public async Task<Guid> AddAsync(Dream entity, CancellationToken cancellationToken = default)
     {
-        await context.Dream.AddAsync(entity, cancellationToken);
+        return (await context.Dream.AddAsync(entity, cancellationToken))
+            .Entity.DreamId;
     }
 
     public async Task<Dream?> GetAsync(Guid[] ids,CancellationToken cancellationToken = default)

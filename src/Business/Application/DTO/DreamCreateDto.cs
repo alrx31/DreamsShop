@@ -1,4 +1,4 @@
-using Domain.Model;
+using Microsoft.AspNetCore.Http;
 
 namespace Application.DTO;
 
@@ -6,7 +6,7 @@ public class DreamCreateDto
 {
     public required string Title { get; init; }
     public string? Description { get; init; }
-    public Guid? ProducerId { get; set; }
+    public Guid? ProducerId { get; init; }
     public decimal? Rating { get; init; }
-    public FileModel? Image { get; set; }
+    public IFormFile? Image { get; init; }
 }

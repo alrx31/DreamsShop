@@ -9,9 +9,9 @@ namespace Application.UseCases.Dreams.DreamsGetOne;
 public class DreamGetOneCommandHandler(
         IUnitOfWork unitOfWork,
         IFileStorageService fileStorageService
-    ) : IRequestHandler<DreamGetOneCommand, DreamGetDto?>
+    ) : IRequestHandler<DreamGetOneCommand, DreamResponseDto?>
 {
-    public async Task<DreamGetDto?> Handle(DreamGetOneCommand request, CancellationToken cancellationToken)
+    public async Task<DreamResponseDto?> Handle(DreamGetOneCommand request, CancellationToken cancellationToken)
     {
         var dream = await unitOfWork.DreamRepository.GetAsync([request.DreamId], cancellationToken);
         if (dream is null) throw new NotFoundException("Dream not found.");
@@ -20,15 +20,32 @@ public class DreamGetOneCommandHandler(
         using var stream = new MemoryStream();
         await dreamImg.Content!.CopyToAsync(stream, cancellationToken);
         var imageBytes = stream.ToArray();
+        
+        var dreamCategories = await unitOfWork.DreamCategoryRepository.GetCategoriesByDreamIdAsync(dream.DreamId, cancellationToken);
+        var categories = await unitOfWork.CategoryRepository.GetAllAsync(cancellationToken);
 
-        var answerDto = new DreamGetDto
+        var res = dreamCategories.Join(
+            categories,
+            x => x.CategoryId,
+            y => y.CategoryId,
+            (x, y) => new CategoryResponseDto
+            {
+                CategoryId = y.CategoryId,
+                Description = y.Description,
+                Title = y.Title
+            }
+        );
+        
+        var answerDto = new DreamResponseDto
         {
-            Id = dream.Id,
+            Id = dream.DreamId,
             Title = dream.Title,
             Description = dream.Description,
             ProducerId = dream.ProducerId,
             Rating = dream.Rating,
 
+            Categories = res.ToList(),
+            
             ImageBase64 = Convert.ToBase64String(imageBytes),
             ImageContentType = dreamImg.ContentType
         };

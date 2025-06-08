@@ -2,7 +2,7 @@ using Domain.Entity;
 
 namespace Application.DTO;
 
-public class DreamGetDto
+public class DreamResponseDto
 {
     public required Guid Id { get; init; }
     
@@ -11,7 +11,7 @@ public class DreamGetDto
     public Guid? ProducerId { get; set; }
     public decimal? Rating { get; set; }
     
-    public ICollection<Category>? Categories { get; set; }
+    public ICollection<CategoryResponseDto>? Categories { get; set; }
     
     public string? ImageBase64 { get; set; }
     public string? ImageContentType { get; set; }
