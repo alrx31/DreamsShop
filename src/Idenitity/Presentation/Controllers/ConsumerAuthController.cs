@@ -30,7 +30,7 @@ public class ConsumerAuthController(IMediator mediator) : ControllerBase
 
     [HttpPatch]
     [Authorize(Roles = nameof(Roles.Consumer))]
-    public async Task<IActionResult> RefreshAccessToken([FromBody] string accessToken, CancellationToken cancellationToken)
+    public async Task<IActionResult> RefreshAccessToken(CancellationToken cancellationToken)
     {
         return Ok(await mediator.Send(new ConsumerUserRefreshAccessTokenCommand(), cancellationToken));
     }

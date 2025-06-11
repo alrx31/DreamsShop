@@ -31,7 +31,6 @@ public class ConsumerUserLoginCommandHandler
         var token = jwtService.GenerateJwtToken(user);
 
         var refreshToken = cookieService.GetCookie(user.Id.ToString());
-        if (refreshToken is null) throw new UnauthorizedAccessException("Refresh token Not Found.");
 
         if (string.IsNullOrWhiteSpace(refreshToken))
         {
