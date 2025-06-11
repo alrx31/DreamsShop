@@ -2,9 +2,19 @@
   <div>Loading</div>
 } @else{
   <div class="dream-card">
-    <h2 class="dream-title">{{ dream.title }}</h2>
-    <p class="dream-id"><strong>ID:</strong> {{ dream.id }}</p>
-    <p class="dream-description">{{ dream.description }}</p>
-    <p class="dream-rating"><strong>Рейтинг:</strong> {{ dream.rating }}</p>
+
+    <div class="dream-card-image">
+      <img [src]="'data:' + dream.imageContentType + ';base64,' + dream.imageBase64" [alt]="dream.title">
+    </div>
+
+    <div class="dream-card-text">
+      <h2 class="dream-title">{{ dream.title }}</h2>
+      <h6 class="dream-id">{{ dream.id }}</h6>
+      <p class="dream-description"><b>Description:</b> {{ dream.description }}</p>
+      <p class="dream-rating"><b>Rating:</b> {{ dream.rating }}</p>
+      <button class="dream-card-delete-button" (click)="onDeleteButtonSubmit()">Delete</button>
+    </div>
+
+
   </div>
 }

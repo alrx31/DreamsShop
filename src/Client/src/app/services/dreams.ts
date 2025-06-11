@@ -39,6 +39,10 @@ export class Dreams {
     return this.http.get<Dream>(`${environment.apiUrl}${this.urlSuffix}/${dreamId}`);
   }
 
+  deleteDream(dreamId: string) {
+    return this.http.delete(`${environment.apiUrl}${this.urlSuffix}/${dreamId}`);
+  }
+
   addDream(dream: Dream) : Observable<Object> {
     return this.http.post(`${environment.apiUrl}${this.urlSuffix}`, dream);
   }

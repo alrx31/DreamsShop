@@ -14,12 +14,13 @@ export class DreamPage {
   loading: boolean = true;
 
   constructor(private dreamsService: Dreams,
-              private router: ActivatedRoute) {}
+              private activatedRoute: ActivatedRoute,
+              private router:Router) {}
 
   ngOnInit(): void{
     this.loading = true;
 
-    this.router.params.subscribe(params =>{
+    this.activatedRoute.params.subscribe(params =>{
       const dreamId = params['dreamId'];
       this.dreamsService.getDream(dreamId).subscribe({
         next: dream => {
@@ -31,6 +32,18 @@ export class DreamPage {
           console.log(err);
         }
       })
+    })
+  }
+
+  onDeleteButtonSubmit(){
+    this.dreamsService.deleteDream(this.dream.id).subscribe({
+      next: dream => {
+        this.router.navigate(['/']);
+      },
+      error: err => {
+        alert(err);
+        console.log(err);
+      }
     })
   }
 }

@@ -1,1 +1,29 @@
-<p>register works!</p>
+<div class="form-wrapper">
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <h1>Hello, Fill This Fields</h1>
+    <br>
+
+    <div class="form-input">
+      <label>Email</label>
+      <input formControlName="email" type="email" required/>
+    </div>
+
+    <div class="form-input">
+      <label>Name</label>
+      <input formControlName="name" type="text" required/>
+    </div>
+
+    <div class="form-input">
+      <label>Password</label>
+      <input formControlName="password" type="password" required/>
+    </div>
+
+    <div class="form-input">
+      <label>Repeat Password</label>
+      <input formControlName="passwordRepeat" type="password" required/>
+    </div>
+
+    <button type="submit">Sign Up</button>
+    <p>Have an account? <a (click)="routeToLogin()">Sign In</a></p>
+  </form>
+</div>
