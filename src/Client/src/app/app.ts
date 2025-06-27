@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {Router, RouterOutlet} from '@angular/router';
-import {Header} from './components/header/header';
+import {Header} from './components/aditional/header/header';
 import {routes} from './app.routes';
 import {environment} from './environment/environment';
 

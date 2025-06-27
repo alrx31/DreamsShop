@@ -1,6 +1,7 @@
 @if (loading) {
-  <div>Loading</div>
+  <app-loader></app-loader>
 } @else{
+  <app-back-button></app-back-button>
   <div class="dream-card">
 
     <div class="dream-card-image">
@@ -9,7 +10,6 @@
 
     <div class="dream-card-text">
       <h2 class="dream-title">{{ dream.title }}</h2>
-      <h6 class="dream-id">{{ dream.id }}</h6>
       <p class="dream-description"><b>Description:</b> {{ dream.description }}</p>
       <p class="dream-rating"><b>Rating:</b> {{ dream.rating }}</p>
       <button class="dream-card-delete-button" (click)="onDeleteButtonSubmit()">Delete</button>
@@ -18,3 +18,4 @@
 
   </div>
 }
+

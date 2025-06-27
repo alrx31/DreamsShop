@@ -1,10 +1,15 @@
 import { Component } from '@angular/core';
-import {Dream, Dreams} from '../../services/dreams';
+import {Dream, Dreams} from '../../../services/dreams';
 import {ActivatedRoute, Router} from '@angular/router';
+import {BackButton} from '../../aditional/back-button/back-button';
+import {Loader} from '../../aditional/loader/loader';
 
 @Component({
   selector: 'app-dream-page',
-  imports: [],
+  imports: [
+    BackButton,
+    Loader
+  ],
   templateUrl: './dream-page.html',
   styleUrl: './dream-page.scss'
 })
@@ -41,7 +46,7 @@ export class DreamPage {
         this.router.navigate(['/']);
       },
       error: err => {
-        alert(err);
+        alert(err.message);
         console.log(err);
       }
     })

@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
-import {Auth} from '../../services/auth';
+import {Auth} from '../../../services/auth';
 import {Router} from '@angular/router';
 import {Store} from '@ngrx/store';
-import {environment} from '../../environment/environment';
+import {environment} from '../../../environment/environment';
 
 @Component({
   selector: 'app-login',
