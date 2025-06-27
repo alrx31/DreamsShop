@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../environment/environment';
-import {Observable} from 'rxjs';
+import {Router} from '@angular/router';
 
 interface loginResponse {
   accessToken: string;
@@ -20,10 +20,11 @@ interface registerRequest {
 export class Auth {
   private urlSuffix = 'ConsumerAuth';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+              private router: Router) { }
 
-  refreshToken(token: string | null){
-    return this.http.patch<string>(`${environment.authUrl}${this.urlSuffix}`, {token});
+  refreshToken(){
+    return this.http.patch<string>(`${environment.authUrl}${this.urlSuffix}`, {});
   }
 
   login(email: string, password: string){
@@ -32,5 +33,10 @@ export class Auth {
 
   register(model: registerRequest){
     return this.http.put(`${environment.authUrl}${this.urlSuffix}`, model)
+  }
+
+  logout(){
+    localStorage.removeItem(environment.accessTokenName);
+    this.router.navigate(['/login']);
   }
 }

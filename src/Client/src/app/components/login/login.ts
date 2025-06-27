@@ -4,7 +4,6 @@ import {Auth} from '../../services/auth';
 import {Router} from '@angular/router';
 import {Store} from '@ngrx/store';
 import {environment} from '../../environment/environment';
-import {setToken} from '../../store/auth.actions';
 
 @Component({
   selector: 'app-login',
@@ -38,12 +37,11 @@ export class Login {
         const token = response.accessToken;
 
         localStorage.setItem(environment.accessTokenName, token);
-        this.store.dispatch(setToken({ accessToken: token }));
 
         this.router.navigate(['/']);
       },
       error: (err) => {
-        alert('Error');
+        alert(err.message);
         console.error(err);
       }
     });
