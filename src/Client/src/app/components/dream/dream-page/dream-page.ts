@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import {Dream, Dreams} from '../../../services/dreams';
+import {Dream, Dreams} from '../../../services/dreams/dreams';
 import {ActivatedRoute, Router} from '@angular/router';
 import {BackButton} from '../../aditional/back-button/back-button';
 import {Loader} from '../../aditional/loader/loader';
 
 @Component({
-  selector: 'app-dream-page',
+  selector: 'app-dreams-page',
   imports: [
     BackButton,
     Loader

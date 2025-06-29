@@ -1,10 +1,12 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {environment} from '../environment/environment';
+import {environment} from '../../environment/environment';
 import {Router} from '@angular/router';
+import {UserAfterLoginInfo} from '../../environment/UserAfterLoginInfo';
 
 interface loginResponse {
   accessToken: string;
+  userData: UserAfterLoginInfo;
 }
 
 interface registerRequest {
@@ -17,6 +19,7 @@ interface registerRequest {
 @Injectable({
   providedIn: 'root'
 })
+
 export class Auth {
   private urlSuffix = 'ConsumerAuth';
 

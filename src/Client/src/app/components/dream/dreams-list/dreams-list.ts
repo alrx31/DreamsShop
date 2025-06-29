@@ -1,15 +1,20 @@
-import { Component } from '@angular/core';
-import {Dream, Dreams} from '../../../services/dreams';
+import {Component} from '@angular/core';
+import {Dream, Dreams} from '../../../services/dreams/dreams';
 import {MatPaginator, PageEvent} from '@angular/material/paginator';
 import {RouterLink} from '@angular/router';
 import {Loader} from '../../aditional/loader/loader';
+import {CreateDreamPopUp} from '../create-dream-pop-up/create-dream-pop-up';
+import {MatDialog, MatDialogModule} from '@angular/material/dialog';
+import { UserRoles } from '../../../environment/UserRoles';
+
 
 @Component({
   selector: 'app-dreams-list',
   imports: [
     MatPaginator,
     RouterLink,
-    Loader
+    Loader,
+    MatDialogModule,
   ],
   templateUrl: './dreams-list.html',
   styleUrl: './dreams-list.scss'
@@ -22,8 +27,17 @@ export class DreamsList {
   count: number = 1;
   loading: boolean = true;
   error = '';
+  role: UserRoles | null = null;
 
-  constructor(private dreamsService: Dreams) {}
+  constructor(
+    private dreamsService: Dreams,
+    private dialog: MatDialog
+  ) {
+    const userInfo = localStorage.getItem('UserInfo');
+    if(userInfo){
+      this.role = +JSON.parse(userInfo).role as UserRoles;
+    }
+  }
 
   ngOnInit(){
     this.loadDreams();
@@ -51,9 +65,20 @@ export class DreamsList {
     });
   }
 
-   onPageChange(event: PageEvent) {
+  onPageChange(event: PageEvent) {
     this.page = event.pageIndex;
     this.size = event.pageSize;
     this.loadDreams()
   }
+
+  onCreateDreamClick(){
+    const dialogRef = this.dialog.open(CreateDreamPopUp);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadDreams();
+      }
+    });
+  }
+  protected readonly UserRoles = UserRoles;
 }

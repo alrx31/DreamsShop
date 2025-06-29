@@ -69,6 +69,23 @@ mat-paginator{
   background-color: transparent;
 }
 
+button.add-dream-btn {
+  display: block;
+  margin: 1rem auto;
+  padding: 0.8rem 1.2rem;
+  background-color: #28a745;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 0.6rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+
+  &:hover {
+    background-color: #218838;
+  }
+}
+
 .error {
   color: red;
 }

@@ -1,9 +1,10 @@
-import { HttpInterceptorFn } from '@angular/common/http';
+import {HttpInterceptorFn} from '@angular/common/http';
 import {inject} from '@angular/core';
-import {Store} from '@ngrx/store';
-import {environment} from '../environment/environment';
-import {Router} from '@angular/router';
-import {Auth} from '../services/auth';
+import {environment} from '../../environment/environment';
+import {Auth} from '../../services/auth/auth';
+import {CreateDreamPopUp} from '../../components/dream/create-dream-pop-up/create-dream-pop-up';
+
+CreateDreamPopUp
 
 export const addTokenInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(Auth);

@@ -1,8 +1,7 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
-import {Auth} from '../../../services/auth';
+import {Auth} from '../../../services/auth/auth';
 import {Router} from '@angular/router';
-import {Store} from '@ngrx/store';
 import {environment} from '../../../environment/environment';
 
 @Component({
@@ -19,8 +18,7 @@ export class Login {
   constructor(
     private fb: FormBuilder,
     private authService: Auth,
-    private router: Router,
-    private store: Store
+    private router: Router
   ) {
     this.loginForm = this.fb.group({
       email: [''],
@@ -35,8 +33,10 @@ export class Login {
     this.authService.login(email || '', password || '').subscribe({
       next: (response) => {
         const token = response.accessToken;
+        const userData = response.userData;
 
         localStorage.setItem(environment.accessTokenName, token);
+        localStorage.setItem('UserInfo', JSON.stringify(userData));
 
         this.router.navigate(['/']);
       },

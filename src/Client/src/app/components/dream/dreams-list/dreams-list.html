@@ -5,7 +5,7 @@
 } @else {
   <div class="dreams-container">
     @for (dream of dreams; track dream.id) {
-      <a [routerLink]="['/dream', dream.id]" class="dream-card">
+      <a [routerLink]="['/dreams', dream.id]" class="dream-card">
         <div class="dream-image">
           <img [src]="'data:' + dream.imageContentType + ';base64,' + dream.imageBase64" [alt]="dream.title" />
         </div>
