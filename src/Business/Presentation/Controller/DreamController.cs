@@ -34,9 +34,9 @@ public class DreamController(
             ProducerId = model.ProducerId,
             Image = new FileModel
             {
-                FileName = model.Image.FileName,
-                ContentType = model.Image.ContentType,
-                Content = model.Image.OpenReadStream()
+                FileName = model?.Image?.FileName,
+                ContentType = model?.Image?.ContentType,
+                Content = model?.Image?.OpenReadStream()
             }
         };
         

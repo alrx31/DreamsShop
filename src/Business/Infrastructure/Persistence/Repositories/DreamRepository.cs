@@ -43,4 +43,13 @@ public class DreamRepository(ApplicationDbContext context) : IDreamRepository
         
         return Task.CompletedTask;
     }
+
+    public Task<IQueryable<Dream>> GetRangeAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken = default)
+    {
+        return Task.FromResult(context.Dream
+            .Join(context.UserDream,
+                dream => dream.DreamId,
+                userDream => userDream.DreamId,
+                (dream, userDream) => dream));
+    }
 }

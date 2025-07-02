@@ -31,8 +31,8 @@ public class FileStorageService : IFileStorageService
             .WithBucket(_minioConfiguration.BucketName)
             .WithObject(fileName)
             .WithStreamData(file.Content)
-            .WithObjectSize(file.Content.Length)
-            .WithContentType(file.ContentType);
+            .WithObjectSize(file?.Content?.Length ?? 0)
+            .WithContentType(file?.ContentType ?? "");
 
         await _minioClient.PutObjectAsync(putObjectArgs, cancellationToken);
         
