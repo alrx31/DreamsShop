@@ -8,7 +8,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Dream> Dream { get; init; }
     public DbSet<Category> Category { get; init; }
     public DbSet<DreamCategory> DreamCategory { get; init; }
-    public DbSet<UserDream> UserDream { get; init; }
     public DbSet<Order> Orders { get; init; }
     public DbSet<OrderDream> OrderDreams { get; init; }
 
@@ -18,9 +17,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
         builder.Entity<DreamCategory>()
             .HasKey(c => new { c.DreamId, c.CategoryId });
-
-        builder.Entity<UserDream>()
-            .HasKey(c => new { c.UserId, c.DreamId });
             
         builder.Entity<OrderDream>()
             .HasKey(c => new { c.OrderId, c.DreamId });

@@ -10,5 +10,5 @@ public class Order
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
 
-    public ICollection<OrderDream>? OrderDreams { get; set; }
+    public IEnumerable<OrderDream>? OrderDreams { get; set; }
 }

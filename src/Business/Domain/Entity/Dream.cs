@@ -15,7 +15,7 @@ namespace Domain.Entity
         public decimal? Rating { get; set; }
         public required string ImageFileName { get; set; }
 
-        public ICollection<DreamCategory>? DreamCategories { get; set; }
-        public ICollection<OrderDream>? OrderDreams { get; set; } 
+        public IEnumerable<DreamCategory>? DreamCategories { get; set; }
+        public IEnumerable<OrderDream>? OrderDreams { get; set; }
     }
 }

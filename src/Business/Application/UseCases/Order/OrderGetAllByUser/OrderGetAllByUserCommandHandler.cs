@@ -1,3 +1,4 @@
+using Application.Exceptions;
 using Domain.IRepositories;
 using Domain.IService;
 using MediatR;
@@ -14,7 +15,7 @@ public class OrderGetAllByUserCommandHandler(
         var userId = httpContextService.GetCurrentUserId();
         if (userId is null)
         {
-            throw new UnauthorizedAccessException("User is not authenticated.");
+            throw new UnauthorizedException("User is not authenticated.");
         }
         
         return await unitOfWork.OrderRepository.GetOrdersByUser(userId.Value, cancellationToken);

@@ -41,7 +41,6 @@ public static class InfrastructureDependencies
         services.AddScoped<IDreamRepository, DreamRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped<IDreamCategoryRepository, DreamCategoryRepository>();
-        services.AddScoped<IUserDreamRepository, UserDreamRepository>();
         services.AddScoped<IOrderDreamRepository, OrderDreamRepository>();
         services.AddScoped<IOrderRepository, OrderRepository>();
         

@@ -31,6 +31,7 @@ namespace Presentation.Controller
         }
 
         [HttpGet]
+        [Authorize(Roles = nameof(Roles.Consumer))]
         public async Task<IActionResult> GetAllUserOrders()
         {
             return Ok(await mediator.Send(new OrderGetAllByUserCommand()));
