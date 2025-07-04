@@ -8,7 +8,7 @@ namespace Application.UseCases.Order.CreateOrder;
 public class OrderCreateCommandHandler(
         IUnitOfWork unitOfWork,
         IHttpContextService httpContextService
-    ): IRequestHandler<OrderCreateCommand, Guid>
+    ) : IRequestHandler<OrderCreateCommand, Guid>
 {
     public async Task<Guid> Handle(OrderCreateCommand request, CancellationToken cancellationToken)
     {

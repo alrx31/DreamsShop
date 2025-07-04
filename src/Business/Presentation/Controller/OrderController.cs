@@ -3,7 +3,9 @@ using Application.UseCases.Order.CreateOrder;
 using Application.UseCases.Order.OrderGetAllByUser;
 using Application.UseCases.Order.OrderGetOne;
 using AutoMapper;
+using Domain.Entity;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Controller
@@ -16,6 +18,7 @@ namespace Presentation.Controller
     ) : ControllerBase
     {
         [HttpPost]
+        [Authorize(Roles = nameof(Roles.Consumer))]
         public async Task<IActionResult> CreateOrder([FromBody] OrderCreateDto model)
         {
             return Ok(await mediator.Send(mapper.Map<OrderCreateCommand>(model)));
