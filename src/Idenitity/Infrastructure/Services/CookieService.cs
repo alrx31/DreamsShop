@@ -13,9 +13,9 @@ public class CookieService
     {
         HttpOnly = true,
         Secure = true,
-        SameSite = SameSiteMode.Strict
+        SameSite = SameSiteMode.Strict,
+        Expires = DateTimeOffset.UtcNow.AddDays(7) // Set cookie to expire in 7 days
     };
-
     public void SetCookie(string key, string value)
     {
         contextAccessor.HttpContext?.Response.Cookies.Append(key, value, cookieOptions);
