@@ -1,5 +1,4 @@
 using System.Text.Json;
-using Application.UseCases.ConsumerUserAuth.ConsumerUserRefreshAccessToken;
 using Domain.IRepositories;
 using Domain.IServices;
 using Domain.Model;
@@ -16,10 +15,10 @@ public class ProducerUserRefreshAccessTokenCommandHandler (
 {
     public async Task<string> Handle(ProducerUserRefreshAccessTokenCommand request, CancellationToken cancellationToken)
     {
-        var userId = httpContextService.GetCurrentUserId() ?? throw new UnauthorizedAccessException("Invalid token.");
-        if (string.IsNullOrWhiteSpace(userId.ToString())) throw new UnauthorizedAccessException("Invalid token.");
+        var userId = httpContextService.GetCurrentUserId();
+        if (!userId.HasValue || userId == Guid.Empty) throw new UnauthorizedAccessException("Invalid token.");
 
-        var user = await unitOfWork.ProducerUserRepository.GetAsync(userId, cancellationToken);
+        var user = await unitOfWork.ProducerUserRepository.GetAsync(userId.Value, cancellationToken);
         if(user is null) throw new UnauthorizedAccessException("User not found.");
         
         var cookie = cookieService.GetCookie(userId.ToString()!);

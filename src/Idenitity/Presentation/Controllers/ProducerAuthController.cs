@@ -18,22 +18,22 @@ public class ProducerAuthController(
     ) : ControllerBase
 {
     [HttpPut]
-    public async Task<IActionResult> RegisterProducerUser([FromBody] ProducerUserRegisterDto model)
+    public async Task<IActionResult> RegisterProducerUser([FromBody] ProducerUserRegisterDto model, CancellationToken cancellationToken)
     {
-        await mediator.Send(mapper.Map<ProducerUserRegisterCommand>(model));
+        await mediator.Send(mapper.Map<ProducerUserRegisterCommand>(model), cancellationToken);
         return Ok();
     }
 
     [HttpPost]
-    public async Task<IActionResult> LoginProducerUser([FromBody] ProducerUserLoginDto model)
+    public async Task<IActionResult> LoginProducerUser([FromBody] ProducerUserLoginDto model, CancellationToken cancellationToken)
     {
-        return Ok(await mediator.Send(mapper.Map<ProducerUserLoginCommand>(model)));
+        return Ok(await mediator.Send(mapper.Map<ProducerUserLoginCommand>(model), cancellationToken));
     }
 
     [HttpPatch]
     [Authorize(Roles = nameof(Roles.Provider))]
-    public async Task<IActionResult> RefreshAccessToken([FromBody] string accessToken)
+    public async Task<IActionResult> RefreshAccessToken(CancellationToken cancellationToken)
     {
-        return Ok(await mediator.Send(new ProducerUserRefreshAccessTokenCommand()));
+        return Ok(await mediator.Send(new ProducerUserRefreshAccessTokenCommand(), cancellationToken));
     }
 }
