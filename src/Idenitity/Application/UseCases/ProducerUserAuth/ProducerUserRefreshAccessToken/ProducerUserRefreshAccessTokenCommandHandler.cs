@@ -21,7 +21,7 @@ public class ProducerUserRefreshAccessTokenCommandHandler (
         var user = await unitOfWork.ProducerUserRepository.GetAsync(userId.Value, cancellationToken);
         if(user is null) throw new UnauthorizedAccessException("User not found.");
         
-        var cookie = cookieService.GetCookie(userId.ToString()!);
+        var cookie = cookieService.GetCookie(userId.Value.ToString());
         if(string.IsNullOrWhiteSpace(cookie)) throw new UnauthorizedAccessException("Invalid token.");
         
         var refreshToken = JsonSerializer.Deserialize<RefreshTokenCookieModel>(cookie)!;
