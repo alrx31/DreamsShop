@@ -4,11 +4,11 @@ using MediatR;
 
 namespace Application.UseCases.Order.CreateOrder;
 
-public class CreateOrderCommandHandler(
+public class OrderCreateCommandHandler(
         IUnitOfWork unitOfWork
-    ): IRequestHandler<CreateOrderCommand, Guid>
+    ): IRequestHandler<OrderCreateCommand, Guid>
 {
-    public async Task<Guid> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(OrderCreateCommand request, CancellationToken cancellationToken)
     {
         var dreams = await unitOfWork.DreamRepository.GetRangeAsync(request.DTO.DreamIds ?? [], cancellationToken);
         if (dreams.Count() != (request.DTO.DreamIds?.Count ?? 0) || dreams is null)
