@@ -1,0 +1,41 @@
+meta {
+  name: CreateDream
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{host_business}}Dream
+  body: multipartForm
+  auth: none
+}
+
+body:multipart-form {
+  Title: test
+  Description: test
+  ProducerId: 
+  Rating: 
+  Image: @file(/home/alex/PROGRAM/DreamsShops/Business/DreamsShop/src/Business/https/dev-certificate.pfx)
+}
+
+script:pre-request {
+  const axios = require("axios");
+   
+  const response = await axios.post("http://localhost:5001/api/ProducerAuth", {
+    "email":"str@ing",
+    "password":"string11"
+  });
+  
+  req.setHeader("Authorization", `Bearer ${response.data.accessToken}`)
+}
+
+tests {
+  const axios = require("axios");
+   
+  const response = await axios.post("http://localhost:5001/api/ConsumerAuth", {
+    "email":"str@ing",
+    "password":"string11"
+  });
+  
+  req.setHeader("Auth", `Bearer ${response.data}`)
+}

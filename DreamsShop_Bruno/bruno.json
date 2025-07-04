@@ -1,0 +1,32 @@
+{
+  "version": "1",
+  "name": "DreamsShop",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ],
+  "size": 0,
+  "filesCount": 0,
+  "presets": {
+    "requestType": "http",
+    "requestUrl": "http://localhost:5002/api/"
+  },
+  "clientCertificates": {
+    "enabled": true,
+    "certs": [
+      {
+        "domain": "localhost:8082",
+        "type": "pfx",
+        "pfxFilePath": "../src/Business/https/dev-certificate.pfx",
+        "passphrase": "password"
+      },
+      {
+        "domain": "localhost:5002",
+        "type": "pfx",
+        "pfxFilePath": "../src/Business/https/dev-certificate.pfx",
+        "passphrase": "password"
+      }
+    ]
+  }
+}

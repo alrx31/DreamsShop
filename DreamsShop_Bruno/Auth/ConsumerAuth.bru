@@ -1,0 +1,18 @@
+meta {
+  name: ConsumerAuth
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{host_identity}}ConsumerAuth
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "email":"str@ing",
+    "password":"string11"
+  }
+}
