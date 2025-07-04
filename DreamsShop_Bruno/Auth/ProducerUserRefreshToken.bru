@@ -1,0 +1,22 @@
+meta {
+  name: ProducerUserRefreshToken
+  type: http
+  seq: 6
+}
+
+patch {
+  url: {{host_identity}}ProducerAuth
+  body: none
+  auth: inherit
+}
+
+script:pre-request {
+  const axios = require("axios");
+   
+  const response = await axios.post("http://localhost:5001/api/ProducerAuth", {
+    "email":"usov.llesha@gmail.com",
+    "password":"ProducerBestWorld"
+  });
+  
+  req.setHeader("Authorization", `Bearer ${response.data.accessToken}`)
+}
