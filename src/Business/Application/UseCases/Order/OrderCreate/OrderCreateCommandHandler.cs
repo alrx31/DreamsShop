@@ -1,11 +1,13 @@
 using Application.Exceptions;
 using Domain.IRepositories;
+using Domain.IService;
 using MediatR;
 
 namespace Application.UseCases.Order.CreateOrder;
 
 public class OrderCreateCommandHandler(
-        IUnitOfWork unitOfWork
+        IUnitOfWork unitOfWork,
+        IHttpContextService httpContextService
     ): IRequestHandler<OrderCreateCommand, Guid>
 {
     public async Task<Guid> Handle(OrderCreateCommand request, CancellationToken cancellationToken)
@@ -20,6 +22,14 @@ public class OrderCreateCommandHandler(
         {
             CreatedAt = DateTime.UtcNow
         };
+
+        var userId = httpContextService.GetCurrentUserId();
+        if (userId is null)
+        {
+            throw new UnauthorizedAccessException("User is not authenticated.");
+        }
+
+        order.UserId = userId.Value;
 
         var orderId = await unitOfWork.OrderRepository.AddAsync(order, cancellationToken);
         if (orderId == Guid.Empty)
