@@ -5,17 +5,17 @@ meta {
 }
 
 post {
-  url: {{host_business}}Dream
+  url: http://localhost:5002/api/Dream
   body: multipartForm
   auth: none
 }
 
 body:multipart-form {
-  Title: test
+  Title: test1
   Description: test
   ProducerId: 
   Rating: 
-  Image: @file(/home/alex/PROGRAM/DreamsShops/Business/DreamsShop/src/Business/https/dev-certificate.pfx)
+  Image: @file()
 }
 
 script:pre-request {
@@ -27,15 +27,4 @@ script:pre-request {
   });
   
   req.setHeader("Authorization", `Bearer ${response.data.accessToken}`)
-}
-
-tests {
-  const axios = require("axios");
-   
-  const response = await axios.post("http://localhost:5001/api/ConsumerAuth", {
-    "email":"str@ing",
-    "password":"string11"
-  });
-  
-  req.setHeader("Auth", `Bearer ${response.data}`)
 }

@@ -5,7 +5,12 @@ meta {
 }
 
 get {
-  url: {{host_business}}Dream
+  url: {{host_business}}Dream?skip=0&take=5
   body: none
   auth: none
+}
+
+params:query {
+  skip: 0
+  take: 5
 }

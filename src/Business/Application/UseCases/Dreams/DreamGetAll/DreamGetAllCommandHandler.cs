@@ -1,20 +1,38 @@
 using Application.DTO;
 using Domain.IRepositories;
 using Domain.IService;
+using Domain.Model;
 using MediatR;
+using Microsoft.VisualBasic;
 
 namespace Application.UseCases.Dreams.DreamGetAll;
 
 public class DreamGetAllCommandHandler(
     IUnitOfWork unitOfWork,
-    IFileStorageService fileStorageService
-    ): IRequestHandler<DreamGetAllCommand, List<DreamResponseDto>>
+    IFileStorageService fileStorageService,
+    ICacheService<DreamCacheKey, List<DreamResponseDto>> cacheService
+    ) : IRequestHandler<DreamGetAllCommand, List<DreamResponseDto>>
 {
+    private bool useCache = false;
     public async Task<List<DreamResponseDto>> Handle(DreamGetAllCommand request, CancellationToken cancellationToken)
     {
+        var cacheKey = new DreamCacheKey
+        {
+            StartIndex = request.StartIndex,
+            Count = request.Count
+        };
+
+        if (request.StartIndex == cacheKey.DafaultStartIndex && request.Count == cacheKey.DefaultCount)
+        {
+            useCache = true;
+
+            var cachedDreams = await cacheService.GetAsync(cacheKey);
+            if (cachedDreams is not null) return cachedDreams;
+        }
+
         var dreams = await unitOfWork.DreamRepository
                 .GetRangeAsync(request.StartIndex, request.Count, cancellationToken);
-        
+
         if (!dreams.Any()) return [];
 
         var imageFileNames = dreams.Select(d => d.ImageFileName).ToList();
@@ -60,10 +78,16 @@ public class DreamGetAllCommandHandler(
             Rating = dream.Rating,
 
             Categories = dreamCategoryMap[dream.DreamId],
-            
+
             ImageBase64 = Convert.ToBase64String(imageBytesList[index]),
             ImageContentType = imageResults[index].ContentType
         }).ToList();
+
+        if (useCache)
+        {
+            await cacheService.SetAsync(cacheKey, result);
+            useCache = false;
+        }
 
         return result;
     }

@@ -86,3 +86,8 @@ src/Business/Tests/bin/Debug/net8.0/System.Reactive.dll
 .vscode/settings.json
 src/Business/Tests/obj/Debug/net8.0/Tests.csproj.CopyComplete
 DreamsShop_Client_Business.session.sql
+src/Business/Infrastructure/bin/Debug/net8.0/Application.dll
+src/Business/Infrastructure/bin/Debug/net8.0/Application.pdb
+src/Business/Presentation/bin/Debug/net8.0/Microsoft.Extensions.Caching.StackExchangeRedis.dll
+src/Business/Presentation/bin/Debug/net8.0/Pipelines.Sockets.Unofficial.dll
+src/Business/Presentation/bin/Debug/net8.0/StackExchange.Redis.dll

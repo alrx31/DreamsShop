@@ -1,5 +1,6 @@
 using Application.DTO;
 using Application.Exceptions;
+using Domain.Entity;
 using Domain.IRepositories;
 using Domain.IService;
 using MediatR;
@@ -8,11 +9,15 @@ namespace Application.UseCases.Dreams.DreamsGetOne;
 
 public class DreamGetOneCommandHandler(
         IUnitOfWork unitOfWork,
-        IFileStorageService fileStorageService
+        IFileStorageService fileStorageService,
+        ICacheService<string, DreamResponseDto> cacheService
     ) : IRequestHandler<DreamGetOneCommand, DreamResponseDto?>
 {
     public async Task<DreamResponseDto?> Handle(DreamGetOneCommand request, CancellationToken cancellationToken)
     {
+        var cachedDream = await cacheService.GetAsync(request.DreamId.ToString() + nameof(Dream));
+        if (cachedDream is not null) return cachedDream;
+
         var dream = await unitOfWork.DreamRepository.GetAsync([request.DreamId], cancellationToken);
         if (dream is null) throw new NotFoundException("Dream not found.");
         
@@ -49,7 +54,9 @@ public class DreamGetOneCommandHandler(
             ImageBase64 = Convert.ToBase64String(imageBytes),
             ImageContentType = dreamImg.ContentType
         };
-        
+
+        await cacheService.SetAsync(request.DreamId.ToString() + nameof(Dream), answerDto);
+
         return answerDto;
     }
 }
