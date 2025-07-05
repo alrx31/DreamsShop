@@ -45,11 +45,7 @@ public class OrderCreateCommandHandler(
                 DreamId = dream.DreamId
             };
 
-            var orderDreamId = await unitOfWork.OrderDreamRepository.AddAsync(orderDream, cancellationToken);
-            if (orderDreamId == Guid.Empty)
-            {
-                throw new BadRequestException("Failed to add dream to order.");
-            }
+            await unitOfWork.OrderDreamRepository.AddAsync(orderDream, cancellationToken);
         }
 
         await unitOfWork.SaveChangesAsync(cancellationToken);

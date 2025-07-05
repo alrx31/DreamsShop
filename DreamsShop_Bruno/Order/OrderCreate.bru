@@ -1,0 +1,28 @@
+meta {
+  name: OrderCreate
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{host_business}}Order
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "dreamIds": ["5109a9f8-1293-4855-87e6-df17789d0e7e"]
+  }
+  
+}
+
+script:pre-request {
+  const axios = require("axios");
+  const response = await axios.post("http://localhost:5001/api/ConsumerAuth", {
+    "email":"usov.lesha2017@gmail.com",
+    "password":"DotNetOnLinuxWorks!"
+  });
+  
+  req.setHeader("Authorization", `Bearer ${response.data.accessToken}`)
+}

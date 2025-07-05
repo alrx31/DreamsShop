@@ -1,4 +1,6 @@
+using Application.DTO.Order;
 using Application.Exceptions;
+using AutoMapper;
 using Domain.IRepositories;
 using Domain.IService;
 using MediatR;
@@ -7,10 +9,11 @@ namespace Application.UseCases.Order.OrderGetOne;
 
 public class OrderGetOneCommandHandler(
     IUnitOfWork unitOfWork,
+    IMapper mapper,
     IHttpContextService httpContextService
-) : IRequestHandler<OrderGetOneCommand, Domain.Entity.Order>
+) : IRequestHandler<OrderGetOneCommand, OrderResponseDto>
 {
-    public async Task<Domain.Entity.Order> Handle(OrderGetOneCommand request, CancellationToken cancellationToken)
+    public async Task<OrderResponseDto> Handle(OrderGetOneCommand request, CancellationToken cancellationToken)
     {
         var order = await unitOfWork.OrderRepository.GetAsync([request.Id], cancellationToken);
         var userId = httpContextService.GetCurrentUserId();
@@ -25,6 +28,6 @@ public class OrderGetOneCommandHandler(
             throw new ForbiddenException("You do not have permission to access this order.");
         }
 
-        return order;
+        return mapper.Map<OrderResponseDto>(order);
     }
 }
