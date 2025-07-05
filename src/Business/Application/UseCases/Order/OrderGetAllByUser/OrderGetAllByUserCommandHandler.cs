@@ -1,4 +1,6 @@
+using Application.DTO.Order;
 using Application.Exceptions;
+using AutoMapper;
 using Domain.IRepositories;
 using Domain.IService;
 using MediatR;
@@ -7,17 +9,19 @@ namespace Application.UseCases.Order.OrderGetAllByUser;
 
 public class OrderGetAllByUserCommandHandler(
     IUnitOfWork unitOfWork,
+    IMapper mapper,
     IHttpContextService httpContextService
-) : IRequestHandler<OrderGetAllByUserCommand, IEnumerable<Domain.Entity.Order>>
+) : IRequestHandler<OrderGetAllByUserCommand, IEnumerable<OrderResponseDto>>
 {
-    public async Task<IEnumerable<Domain.Entity.Order>> Handle(OrderGetAllByUserCommand request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<OrderResponseDto>> Handle(OrderGetAllByUserCommand request, CancellationToken cancellationToken)
     {
         var userId = httpContextService.GetCurrentUserId();
-        if (userId is null)
+        if (!userId.HasValue)
         {
             throw new UnauthorizedException("User is not authenticated.");
         }
-        
-        return await unitOfWork.OrderRepository.GetOrdersByUser(userId.Value, cancellationToken);
+
+        var orders = await unitOfWork.OrderRepository.GetOrdersByUser(userId.Value, request.StartIndex, request.Skip, cancellationToken);
+        return mapper.Map<IEnumerable<OrderResponseDto>>(orders);
     }
 }

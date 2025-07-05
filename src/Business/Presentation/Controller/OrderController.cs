@@ -32,9 +32,9 @@ namespace Presentation.Controller
 
         [HttpGet]
         [Authorize(Roles = nameof(Roles.Consumer))]
-        public async Task<IActionResult> GetAllUserOrders()
+        public async Task<IActionResult> GetAllUserOrders(int skip = 0, int take = 5)
         {
-            return Ok(await mediator.Send(new OrderGetAllByUserCommand()));
+            return Ok(await mediator.Send(new OrderGetAllByUserCommand(skip, take)));
         }
     }
 }

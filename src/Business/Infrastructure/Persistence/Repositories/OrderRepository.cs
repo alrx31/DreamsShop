@@ -1,5 +1,6 @@
 using Domain.Entity;
 using Domain.IRepositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence.Repositories;
 
@@ -19,12 +20,21 @@ public class OrderRepository(ApplicationDbContext context) : IOrderRepository
 
     public async Task<Order?> GetAsync(Guid[] ids, CancellationToken cancellationToken = default)
     {
-        return await context.Orders.FindAsync([ids[0]], cancellationToken);
+        return await context.Orders
+            .Include(o => o.OrderDreams)
+            .FirstOrDefaultAsync(o => o.OrderId == ids[0], cancellationToken);
     }
 
-    public Task<IQueryable<Order>> GetOrdersByUser(Guid userId, CancellationToken cancellationToken)
+    public Task<IQueryable<Order>> GetOrdersByUser(Guid userId, int skip, int take, CancellationToken cancellationToken)
     {
-        return Task.FromResult(context.Orders.Where(x => x.UserId == userId));
+        return Task.FromResult(
+            context.Orders
+            .Where(x => x.UserId == userId)
+            .Include(d => d.OrderDreams)
+            .Skip(skip)
+            .Take(take)
+            .AsQueryable()
+            );
     }
 
     public Task UpdateAsync(Order entity, CancellationToken cancellationToken = default)
