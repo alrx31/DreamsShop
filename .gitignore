@@ -25,6 +25,10 @@
 /src/Business/Infrastructure/bin/Debug/net8.0/Microsoft.Extensions.FileProviders.Abstractions.xml
 /src/Business/Infrastructure/bin/Debug/net8.0/Microsoft.Extensions.Hosting.Abstractions.dll
 /src/Business/Infrastructure/bin/Debug/net8.0/Microsoft.Extensions.Hosting.Abstractions.xml
+/src/Client/.vscode/extensions.json
+/src/Client/.vscode/launch.json
+/src/Client/.vscode/tasks.json
+/src/Client/package-lock.json
 /src/Idenitity/Application/bin/Debug/net8.0/Application.deps.json
 /src/Idenitity/Application/bin/Debug/net8.0/Application.dll
 /src/Idenitity/Application/bin/Debug/net8.0/Application.pdb
