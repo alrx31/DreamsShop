@@ -12,13 +12,6 @@ namespace Presentation.Controllers;
 [Route("api/[controller]")]
 public class ConsumerUserController (IMediator mediator, IMapper mapper) : ControllerBase
 {
-    [HttpGet]
-    [Authorize(Roles = nameof(Roles.Admin))]
-    public async Task<IActionResult> GetUsers(CancellationToken cancellationToken)
-    {
-        return Ok();
-    }
-
     [HttpDelete("{userId:required:guid}")]
     [Authorize(Roles = nameof(Roles.Admin))]
     public async Task<IActionResult> DeleteUser(Guid userId, CancellationToken cancellationToken)

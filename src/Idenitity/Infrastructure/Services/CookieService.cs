@@ -9,9 +9,16 @@ public class CookieService
         IHttpContextAccessor contextAccessor
     ): ICookieService
 {
+    private readonly CookieOptions cookieOptions = new()
+    {
+        HttpOnly = true,
+        Secure = true,
+        SameSite = SameSiteMode.Strict,
+        Expires = DateTimeOffset.UtcNow.AddDays(7) // Set cookie to expire in 7 days
+    };
     public void SetCookie(string key, string value)
     {
-        contextAccessor.HttpContext?.Response.Cookies.Append(key, value);
+        contextAccessor.HttpContext?.Response.Cookies.Append(key, value, cookieOptions);
     }
 
     public string? GetCookie(string key)
