@@ -13,7 +13,6 @@ public static class ApplicationDependencies
         // register in assembly (need only one)
         services.AddAutoMapper(typeof(DreamProfile));
         services.AddAutoMapper(typeof(CategoryProfile));
-        services.AddAutoMapper(typeof(UserDreamProfile));
         services.AddAutoMapper(typeof(DreamCategoryProfile));
         
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(DreamCreateCommandHandler).Assembly));

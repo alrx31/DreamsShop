@@ -35,8 +35,8 @@ public static class PresentationDependencies
                     ValidateIssuerSigningKey = true,
 
                     IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(jwtSettings["Key"])),
-
+                        Encoding.UTF8.GetBytes(jwtSettings["Key"]!)),
+                  
                     RoleClaimType = "rol"
                 };
             });

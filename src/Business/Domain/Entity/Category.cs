@@ -10,6 +10,6 @@ public class Category
     public required string Title { get; set; }
     [StringLength(1000)]
     public string? Description { get; set; }
-    
-    public ICollection<DreamCategory> DreamCategories{ get; set; }
+        
+    public IEnumerable<DreamCategory>? DreamCategories { get; set; }
 }

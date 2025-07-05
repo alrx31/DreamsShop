@@ -14,7 +14,8 @@ namespace Domain.Entity
         public Guid? ProducerId { get; set; }
         public decimal? Rating { get; set; }
         public required string ImageFileName { get; set; }
-        
-        public ICollection<DreamCategory>? DreamCategories { get; set; }
+
+        public IEnumerable<DreamCategory>? DreamCategories { get; set; }
+        public IEnumerable<OrderDream>? OrderDreams { get; set; }
     }
 }

@@ -1,0 +1,18 @@
+meta {
+  name: ConsumerUserLogin
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{host_identity}}ConsumerAuth
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "email": "usov.lesha2017@gmail.com",
+    "password": "DotNetOnLinuxWorks!"
+  }
+}

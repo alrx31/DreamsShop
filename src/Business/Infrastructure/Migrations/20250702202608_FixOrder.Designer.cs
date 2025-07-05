@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250702202608_FixOrder")]
+    partial class FixOrder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -120,6 +123,21 @@ namespace Infrastructure.Migrations
                     b.ToTable("OrderDreams");
                 });
 
+            modelBuilder.Entity("Domain.Entity.UserDream", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("DreamId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("UserId", "DreamId");
+
+                    b.HasIndex("DreamId");
+
+                    b.ToTable("UserDream");
+                });
+
             modelBuilder.Entity("Domain.Entity.DreamCategory", b =>
                 {
                     b.HasOne("Domain.Entity.Category", "Category")
@@ -156,6 +174,17 @@ namespace Infrastructure.Migrations
                     b.Navigation("Dream");
 
                     b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("Domain.Entity.UserDream", b =>
+                {
+                    b.HasOne("Domain.Entity.Dream", "Dream")
+                        .WithMany()
+                        .HasForeignKey("DreamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Dream");
                 });
 
             modelBuilder.Entity("Domain.Entity.Category", b =>

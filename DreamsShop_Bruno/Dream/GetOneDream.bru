@@ -1,0 +1,15 @@
+meta {
+  name: GetOneDream
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{host_business}}Dream/{{dreamId}}
+  body: none
+  auth: inherit
+}
+
+vars:pre-request {
+  dreamId: 28e85f5f-d19b-4560-b1aa-28e0799ca159
+}

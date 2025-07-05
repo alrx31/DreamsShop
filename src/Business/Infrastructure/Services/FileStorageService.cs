@@ -1,6 +1,5 @@
 using Domain.IService;
 using Domain.Model;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Minio;
 using Minio.DataModel.Args;
@@ -31,8 +30,8 @@ public class FileStorageService : IFileStorageService
             .WithBucket(_minioConfiguration.BucketName)
             .WithObject(fileName)
             .WithStreamData(file.Content)
-            .WithObjectSize(file.Content.Length)
-            .WithContentType(file.ContentType);
+            .WithObjectSize(file?.Content?.Length ?? 0)
+            .WithContentType(file?.ContentType ?? "");
 
         await _minioClient.PutObjectAsync(putObjectArgs, cancellationToken);
         
