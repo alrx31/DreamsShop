@@ -1,8 +1,7 @@
 using System.Text;
-using Domain.Entity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Shared;
+using Microsoft.OpenApi.Models;
 
 namespace Presentation.DI;
 
@@ -12,7 +11,6 @@ public static class PresentationDependencies
         IConfiguration configuration)
     {
         services.AddJwtAuthorization(configuration);
-        services.AddAuthorizationPolitics();
         
         return services;
     }
@@ -35,24 +33,13 @@ public static class PresentationDependencies
                     ValidateIssuerSigningKey = true,
 
                     IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(jwtSettings["Key"]!)),
-                  
+                        Encoding.UTF8.GetBytes(jwtSettings["Key"])),
                     RoleClaimType = "rol"
                 };
             });
+        
         services.AddAuthorization();
-        
         return services;
     }
-
-    private static IServiceCollection AddAuthorizationPolitics(this IServiceCollection services)
-    {
-        services.AddAuthorizationBuilder()
-            .AddPolicy(nameof(Policies.DreamOperationsPolicy), policy =>
-            {
-                policy.RequireRole(nameof(Roles.Provider), nameof(Roles.Admin));
-            });
-        
-        return services;
-    }
+    
 }

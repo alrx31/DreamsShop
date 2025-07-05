@@ -28,6 +28,7 @@ public static class InfrastructureDependencies
         services.AddScoped<IPasswordManager, PasswordManager>();
         services.AddScoped<IJwtService, JwtService>();
         services.AddScoped<ICookieService, CookieService>();
+        services.AddScoped<IHttpContextService, HttpContextService>();
         
         return services;
     }
@@ -35,14 +36,33 @@ public static class InfrastructureDependencies
     public static void ApplyDatabaseMigration(this IHost host)
     {
         using var scope = host.Services.CreateScope();
-
         var services = scope.ServiceProvider;
-
         var context = services.GetRequiredService<ApplicationDbContext>();
 
-        if (context.Database.GetPendingMigrations().Any())
+        const int maxRetries = 10;
+        int retryCount = 0;
+
+        while (true)
         {
-            context.Database.Migrate();
+            try
+            {
+                if (context.Database.GetPendingMigrations().Any())
+                {
+                    context.Database.Migrate();
+                }
+                break;
+            }
+            catch (Exception ex)
+            {
+                retryCount++;
+                if (retryCount >= maxRetries)
+                {
+                    throw new Exception("Exceeded max retry attempts to connect to DB", ex);
+                }
+
+                Console.WriteLine($"Retrying DB connection ({retryCount}/{maxRetries})...");
+                Thread.Sleep(2000);
+            }
         }
     }
 }
