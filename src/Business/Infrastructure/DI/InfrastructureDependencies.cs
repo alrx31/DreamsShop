@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Shared.Configuration;
 
 namespace Infrastructure.DI;
 
@@ -14,15 +15,24 @@ public static class InfrastructureDependencies
 {
     public static IServiceCollection AddInfrastructureDependencies(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddDatabases(configuration);
+        services.AddRepositories();
+        
+        services.AddScoped<IHttpContextService, HttpContextService>();
+        services.AddScoped<IFileStorageService, FileStorageService>();
+        
+        return services;
+    }
+
+    private static IServiceCollection AddDatabases(this IServiceCollection services, IConfiguration configuration)
+    {
         services.AddDbContext<ApplicationDbContext>(options =>
         {
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
         });
+        
+        services.Configure<MinioConfiguration>(configuration.GetSection("Minio"));
 
-        services.AddRepositories();
-        
-        services.AddScoped<IHttpContextService, HttpContextService>();
-        
         return services;
     }
 
@@ -31,7 +41,9 @@ public static class InfrastructureDependencies
         services.AddScoped<IDreamRepository, DreamRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped<IDreamCategoryRepository, DreamCategoryRepository>();
-
+        services.AddScoped<IOrderDreamRepository, OrderDreamRepository>();
+        services.AddScoped<IOrderRepository, OrderRepository>();
+        
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         return services;

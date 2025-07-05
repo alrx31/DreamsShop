@@ -6,14 +6,15 @@ namespace Infrastructure.Persistence.Repositories;
 
 public class CategoryRepository(ApplicationDbContext context) : ICategoryRepository
 {
-    public async Task AddAsync(Category entity, CancellationToken cancellationToken = default)
+    public async Task<Guid> AddAsync(Category entity, CancellationToken cancellationToken = default)
     {
-        await context.Category.AddAsync(entity, cancellationToken);
+        return (await context.Category.AddAsync(entity, cancellationToken))
+            .Entity.CategoryId;
     }
 
-    public async Task<Category?> GetAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<Category?> GetAsync(Guid[] ids,CancellationToken cancellationToken = default)
     {
-        return await context.Category.FindAsync([id], cancellationToken);
+        return await context.Category.FindAsync([ids[0]], cancellationToken);
     }
 
     public Task UpdateAsync(Category entity, CancellationToken cancellationToken = default)
@@ -28,8 +29,8 @@ public class CategoryRepository(ApplicationDbContext context) : ICategoryReposit
         return Task.CompletedTask;
     }
 
-    public async Task<List<Category>> GetAllAsync(CancellationToken cancellationToken)
+    public Task<IQueryable<Category>> GetAllAsync(CancellationToken cancellationToken)
     {
-        return await context.Category.ToListAsync(cancellationToken);
+        return Task.FromResult<IQueryable<Category>>(context.Category);
     }
 }

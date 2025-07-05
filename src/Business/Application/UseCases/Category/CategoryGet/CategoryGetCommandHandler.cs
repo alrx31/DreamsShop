@@ -10,7 +10,7 @@ public class CategoryGetCommandHandler(
 {
     public async Task<Domain.Entity.Category?> Handle(CategoryGetCommand request, CancellationToken cancellationToken)
     {
-        var category = await unitOfWork.CategoryRepository.GetAsync(request.CategoryId, cancellationToken);
+        var category = await unitOfWork.CategoryRepository.GetAsync([request.CategoryId],cancellationToken);
         if (category is null) throw new NotFoundException("Category not found.");
         
         return category;
