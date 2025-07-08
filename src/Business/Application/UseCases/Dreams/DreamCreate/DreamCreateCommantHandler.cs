@@ -1,8 +1,10 @@
+using Application.DTO;
 using Application.Exceptions;
 using AutoMapper;
 using Domain.Entity;
 using Domain.IRepositories;
-using Domain.IService;
+using Domain.IService;  
+using Domain.Model;
 using MediatR;
 using Microsoft.Extensions.Options;
 using Shared.Configuration;
@@ -14,6 +16,7 @@ public class DreamCreateCommandHandler(
         IMapper mapper,
         IHttpContextService httpContextService,
         IFileStorageService fileStorageService,
+        ICacheService<DreamCacheKey, List<DreamResponseDto>> cacheService,
         IOptions<BaseDreamImageConfiguration> baseDreamImageConfiguration
     ) : IRequestHandler<DreamCreateCommand, Guid>
 {
@@ -41,8 +44,11 @@ public class DreamCreateCommandHandler(
         var id = await unitOfWork.DreamRepository.AddAsync(
             dreamModel,
             cancellationToken);
+ 
         await unitOfWork.SaveChangesAsync(cancellationToken);
-        
+
+        await cacheService.RemoveAsync(new DreamCacheKey());
+
         return id;
     }
 }

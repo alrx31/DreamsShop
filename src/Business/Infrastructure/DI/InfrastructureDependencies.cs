@@ -15,13 +15,10 @@ public static class InfrastructureDependencies
 {
     public static IServiceCollection AddInfrastructureDependencies(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDatabases(configuration);
-        services.AddRepositories();
-        
-        services.AddScoped<IHttpContextService, HttpContextService>();
-        services.AddScoped<IFileStorageService, FileStorageService>();
-        
-        return services;
+        return services
+            .AddDatabases(configuration)
+            .AddServices(configuration)
+            .AddRepositories();
     }
 
     private static IServiceCollection AddDatabases(this IServiceCollection services, IConfiguration configuration)
@@ -36,17 +33,28 @@ public static class InfrastructureDependencies
         return services;
     }
 
+    private static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
+    {
+        return services
+            .AddScoped<IHttpContextService, HttpContextService>()
+            .AddScoped<IFileStorageService, FileStorageService>()
+            .AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = configuration.GetConnectionString("Redis");
+            })
+            .AddScoped(typeof(ICacheService<,>), typeof(RedisCacheService<,>));
+    }
+
     private static IServiceCollection AddRepositories(this IServiceCollection services)
     {
-        services.AddScoped<IDreamRepository, DreamRepository>();
-        services.AddScoped<ICategoryRepository, CategoryRepository>();
-        services.AddScoped<IDreamCategoryRepository, DreamCategoryRepository>();
-        services.AddScoped<IOrderDreamRepository, OrderDreamRepository>();
-        services.AddScoped<IOrderRepository, OrderRepository>();
-        
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        return services
+            .AddScoped<IDreamRepository, DreamRepository>()
+            .AddScoped<ICategoryRepository, CategoryRepository>()
+            .AddScoped<IDreamCategoryRepository, DreamCategoryRepository>()
+            .AddScoped<IOrderDreamRepository, OrderDreamRepository>()
+            .AddScoped<IOrderRepository, OrderRepository>()
 
-        return services;
+            .AddScoped<IUnitOfWork, UnitOfWork>();
     }
     
     public static void ApplyDatabaseMigration(this IHost host)

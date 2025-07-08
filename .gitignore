@@ -1,15 +1,8 @@
 /src/Server/.idea/.idea.Server/.idea/.gitignore
 /src/Server/.idea/.idea.Server/.idea/indexLayout.xml
 /src/Server/.idea/.idea.Server/.idea/vcs.xml
-/src/Server/Application/obj
-/src/Server/Application/bin
-/src/Server/Presentation/obj
-/src/Server/Presentation/bin
-/src/Server/Domain/obj
-/src/Server/Domain/bin
-/src/Server/Infrastructure/obj
-/src/Server/Infrastructure/bin
-/src/Server/Tests/obj/
+**/bin/
+**/obj/
 /src/Identity/.idea
 /src/Idenitity/https/dev-certificate.pfx
 /src/Idenitity/Infrastructure/Migrations/20250524075649_AddRefreshToken.cs
@@ -86,3 +79,7 @@ src/Business/Tests/bin/Debug/net8.0/System.Reactive.dll
 .vscode/settings.json
 src/Business/Tests/obj/Debug/net8.0/Tests.csproj.CopyComplete
 DreamsShop_Client_Business.session.sql
+src/Business/Infrastructure/bin/Debug/net8.0/Application.pdb
+src/Business/Presentation/bin/Debug/net8.0/Microsoft.Extensions.Caching.StackExchangeRedis.dll
+src/Business/Presentation/bin/Debug/net8.0/Pipelines.Sockets.Unofficial.dll
+src/Business/Presentation/bin/Debug/net8.0/StackExchange.Redis.dll
