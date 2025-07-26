@@ -1,0 +1,21 @@
+<ng-container *ngIf="!error; else errorTemplate">
+  <ng-container *ngIf="loading; else profileTemplate">
+    <app-loader></app-loader>
+  </ng-container>
+</ng-container>
+
+<ng-template #errorTemplate>
+  <div class="error-message">{{ error }}</div>
+</ng-template>
+
+<ng-template #profileTemplate>
+  <div class="profile-card">
+    <h2>User Profile</h2>
+    <div class="profile-info">
+      <p><strong>ID:</strong> {{ userInfo.id }}</p>
+      <p><strong>Name:</strong> {{ userInfo.name }}</p>
+      <p><strong>Email:</strong> {{ userInfo.email }}</p>
+      <p><strong>Role:</strong> {{ userInfo.role }}</p>
+    </div>
+  </div>
+</ng-template>
