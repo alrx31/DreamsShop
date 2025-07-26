@@ -1,5 +1,3 @@
-using Domain.Entity;
-
 namespace Application.DTO;
 
 public class DreamResponseDto
@@ -11,7 +9,7 @@ public class DreamResponseDto
     public Guid? ProducerId { get; set; }
     public decimal? Rating { get; set; }
     
-    public ICollection<CategoryResponseDto>? Categories { get; set; }
+    public IEnumerable<CategoryResponseDto>? Categories { get; set; }
     
     public string? ImageBase64 { get; set; }
     public string? ImageContentType { get; set; }

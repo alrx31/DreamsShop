@@ -1,3 +1,4 @@
+using Application.DTO.Order;
 using Application.Exceptions;
 using Domain.IRepositories;
 using Domain.IService;
@@ -7,7 +8,8 @@ namespace Application.UseCases.Order.CreateOrder;
 
 public class OrderCreateCommandHandler(
         IUnitOfWork unitOfWork,
-        IHttpContextService httpContextService
+        IHttpContextService httpContextService,
+        ICacheService<string, IEnumerable<OrderResponseDto>> cacheService
     ) : IRequestHandler<OrderCreateCommand, Guid>
 {
     public async Task<Guid> Handle(OrderCreateCommand request, CancellationToken cancellationToken)
@@ -50,6 +52,7 @@ public class OrderCreateCommandHandler(
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
 
+        await cacheService.RemoveAsync(userId.Value.ToString() + nameof(Order));
         return orderId;
     }
 }

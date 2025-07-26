@@ -30,7 +30,8 @@ public class OrderRepository(ApplicationDbContext context) : IOrderRepository
         return Task.FromResult(
             context.Orders
             .Where(x => x.UserId == userId)
-            .Include(d => d.OrderDreams)
+            .Include(d => d.OrderDreams!)
+                .ThenInclude(od => od.Dream)
             .Skip(skip)
             .Take(take)
             .AsQueryable()
