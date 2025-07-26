@@ -5,5 +5,5 @@ namespace Domain.IRepositories;
 
 public interface IOrderRepository : ICrudRepository<Order>
 {
-    Task<IQueryable<Order>> GetOrdersByUser(Guid userId, CancellationToken cancellationToken); 
+    Task<IQueryable<Order>> GetOrdersByUser(Guid userId, int skip, int take, CancellationToken cancellationToken); 
 }

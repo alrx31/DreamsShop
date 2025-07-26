@@ -1,3 +1,4 @@
+using Application.DTO.Order;
 using Application.Exceptions;
 using Domain.IRepositories;
 using Domain.IService;
@@ -7,7 +8,8 @@ namespace Application.UseCases.Order.CreateOrder;
 
 public class OrderCreateCommandHandler(
         IUnitOfWork unitOfWork,
-        IHttpContextService httpContextService
+        IHttpContextService httpContextService,
+        ICacheService<string, IEnumerable<OrderResponseDto>> cacheService
     ) : IRequestHandler<OrderCreateCommand, Guid>
 {
     public async Task<Guid> Handle(OrderCreateCommand request, CancellationToken cancellationToken)
@@ -45,15 +47,12 @@ public class OrderCreateCommandHandler(
                 DreamId = dream.DreamId
             };
 
-            var orderDreamId = await unitOfWork.OrderDreamRepository.AddAsync(orderDream, cancellationToken);
-            if (orderDreamId == Guid.Empty)
-            {
-                throw new BadRequestException("Failed to add dream to order.");
-            }
+            await unitOfWork.OrderDreamRepository.AddAsync(orderDream, cancellationToken);
         }
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
 
+        await cacheService.RemoveAsync(userId.Value.ToString() + nameof(Order));
         return orderId;
     }
 }

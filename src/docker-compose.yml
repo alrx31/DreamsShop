@@ -7,12 +7,24 @@ services:
     image: nginx:latest
     ports:
       - 80:80
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./Client/dist/Client/browser:/usr/share/nginx/html:ro
     depends_on:
       - business
       - identity
+      - client
     networks:
       - dreams-shop
   
+  client:
+    build:
+      context: ./Client
+      dockerfile: Dockerfile
+    networks:
+      - dreams-shop
+
   identity:
     build:
       context: ./Idenitity
@@ -66,6 +78,13 @@ services:
       - dreams-shop
     volumes:
       - minio_data:/data
+
+  redis:
+    image: redis:latest
+    ports:
+      - 6379:6379
+    networks:
+      - dreams-shop
 
 volumes:
   minio_data:

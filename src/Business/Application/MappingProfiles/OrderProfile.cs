@@ -1,7 +1,9 @@
 using Application.DTO;
+using Application.DTO.Order;
 using Application.UseCases.Order.CreateOrder;
 using Application.UseCases.Order.OrderGetOne;
 using AutoMapper;
+using Domain.Entity;
 
 namespace Application.MappingProfiles;
 
@@ -14,5 +16,11 @@ public class OrderProfile : Profile
 
         CreateMap<Guid, OrderGetOneCommand>()
             .ConstructUsing(src => new OrderGetOneCommand(src));
+
+        CreateMap<OrderDream, OrderDreamDto>()
+            .ForMember(dest => dest.DreamId, opt => opt.MapFrom(src => src.DreamId))
+            .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Dream != null ? src.Dream.Title : null));
+
+        CreateMap<Order, OrderResponseDto>();
     }
 }
