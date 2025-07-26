@@ -47,13 +47,15 @@
 
   .dream-card-delete-button{
     background-color: #f05b5b;
-    width: 300px;
-    height: 50px;
-    border-radius: 16px;
-    cursor: pointer;
-    font-size: 24px;
-    text-transform: uppercase;
-    transition: 0.3s ease;
+    margin-right: 20px;
+  }
+
+  .dream-card-actions{
+    margin: 20px;
+  }
+
+  .dream-card-add-button{
+    background-color: #23a134;
   }
 
   .dream-card-delete-button:hover{
