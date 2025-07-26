@@ -25,3 +25,8 @@
 /src/Business/Infrastructure/bin/Debug/net8.0/Microsoft.Extensions.FileProviders.Abstractions.xml
 /src/Business/Infrastructure/bin/Debug/net8.0/Microsoft.Extensions.Hosting.Abstractions.dll
 /src/Business/Infrastructure/bin/Debug/net8.0/Microsoft.Extensions.Hosting.Abstractions.xml
+src/Business/Application/bin/Debug/net8.0/Shared.dll
+src/Business/Application/bin/Debug/net8.0/Shared.pdb
+**/bin/
+**/obj/
+DreamsShop_Client_Business.session.sql
