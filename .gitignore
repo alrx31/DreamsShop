@@ -406,3 +406,6 @@ src/Business/Infrastructure/bin/Debug/net8.0/Application.pdb
 src/Business/Presentation/bin/Debug/net8.0/Microsoft.Extensions.Caching.StackExchangeRedis.dll
 src/Business/Presentation/bin/Debug/net8.0/Pipelines.Sockets.Unofficial.dll
 src/Business/Presentation/bin/Debug/net8.0/StackExchange.Redis.dll
+
+**/bin/
+**/obj/
