@@ -12,10 +12,12 @@
       <h2 class="dream-title">{{ dream.title }}</h2>
       <p class="dream-description"><b>Description:</b> {{ dream.description }}</p>
       <p class="dream-rating"><b>Rating:</b> {{ dream.rating }}</p>
-      <button class="dream-card-delete-button" (click)="onDeleteButtonSubmit()">Delete</button>
     </div>
-
-
+    
+    <div class="dream-card-actions">
+      <button class="dream-card-delete-button" (click)="onDeleteButtonSubmit()">Delete</button>
+      <button class="dream-card-add-button" (click)="onAddToOrderButtonSubmit()">Add to Order</button>
+    </div>
   </div>
 }
 

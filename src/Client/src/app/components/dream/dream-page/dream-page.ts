@@ -3,6 +3,7 @@ import {Dream, Dreams} from '../../../services/dreams/dreams';
 import {ActivatedRoute, Router} from '@angular/router';
 import {BackButton} from '../../aditional/back-button/back-button';
 import {Loader} from '../../aditional/loader/loader';
+import { OrderService } from '../../../services/order/order';
 
 @Component({
   selector: 'app-dreams-page',
@@ -19,6 +20,7 @@ export class DreamPage {
   loading: boolean = true;
 
   constructor(private dreamsService: Dreams,
+              private order: OrderService,
               private activatedRoute: ActivatedRoute,
               private router:Router) {}
 
@@ -50,5 +52,10 @@ export class DreamPage {
         console.log(err);
       }
     })
+  }
+
+  onAddToOrderButtonSubmit() {
+    this.order.addDreamToOrder(this.dream);
+    alert('Dream added to order');
   }
 }

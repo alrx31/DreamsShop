@@ -1,0 +1,28 @@
+<ng-container *ngIf="!error; else errorTemplate">
+  <ng-container *ngIf="loading; else orderBusketTemplate">
+    <app-loader></app-loader>
+  </ng-container>
+</ng-container>
+
+<ng-template #errorTemplate>
+  <div class="error-message">{{ error }}</div>
+</ng-template>
+
+<ng-template #orderBusketTemplate>
+    <div class="order-busket">
+        <h2>Your Order Basket</h2>
+        <div class="order-items" *ngIf="dreams && dreams.length > 0">
+        <div *ngFor="let dream of dreams" class="order-item">
+            <h3>{{ dream.title }}</h3>
+            <p>{{ dream.description }}</p>
+        </div>
+        </div>
+        <div *ngIf="!dreams || dreams.length === 0" class="no-items">
+        <p>Your order basket is empty.</p>
+        </div>
+    </div>
+    <div class="order-actions">
+        <button (click)="onOrderSubmit()" [disabled]="loading">Submit Order</button>
+        <button (click)="clearOrder()" [disabled]="loading">Clear Order</button>
+    </div>
+</ng-template>
