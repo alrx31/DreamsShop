@@ -18,7 +18,8 @@ public class OrderProfile : Profile
             .ConstructUsing(src => new OrderGetOneCommand(src));
 
         CreateMap<OrderDream, OrderDreamDto>()
-            .ForMember(dest => dest.DreamId, opt => opt.MapFrom(src => src.DreamId));
+            .ForMember(dest => dest.DreamId, opt => opt.MapFrom(src => src.DreamId))
+            .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Dream != null ? src.Dream.Title : null));
 
         CreateMap<Order, OrderResponseDto>();
     }
