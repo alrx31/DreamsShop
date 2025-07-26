@@ -18,4 +18,20 @@
       <p><strong>Role:</strong> {{ userInfo.role }}</p>
     </div>
   </div>
+  <div class="order-busket">
+        <h2>Your Orders</h2>
+        <div class="order-items" *ngIf="userOrders && userOrders.length > 0">
+        <div *ngFor="let order of userOrders" class="order-item">
+          <h3>Order ID: {{ order.orderId }}</h3>
+          <br>
+          <div *ngFor="let dream of order.orderDreams" class="order-item">
+              <h3>{{ dream.title }}</h3>
+              <p>{{ dream.dreamId }}</p>
+          </div>
+        </div>
+        </div>
+        <div *ngIf="!userOrders || userOrders.length === 0" class="no-items">
+        <p>Your order basket is empty.</p>
+        </div>
+    </div>
 </ng-template>
