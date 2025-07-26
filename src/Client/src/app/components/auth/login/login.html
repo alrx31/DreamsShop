@@ -1,0 +1,19 @@
+<div class="form-wrapper">
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <h1>Nice To See You Again</h1>
+    <br>
+
+    <div class="form-input">
+      <label>Email</label>
+      <input formControlName="email" type="email" />
+    </div>
+
+    <div class="form-input">
+      <label>Password</label>
+      <input formControlName="password" type="password" />
+    </div>
+
+    <button type="submit">Sign In</button>
+    <p>Do not have account? <a (click)="routeToRegister()">Sign Up</a></p>
+  </form>
+</div>

@@ -12,7 +12,7 @@ public class PasswordManager: IPasswordManager
     
     public bool Verify(string hash, string password)
     {
-        return hash == this.HashPassword(password);
+        return hash == HashPassword(password);
     }
 
     public string HashPassword(string password)

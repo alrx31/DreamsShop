@@ -9,27 +9,25 @@ public class CookieService
         IHttpContextAccessor contextAccessor
     ): ICookieService
 {
-    public void SetCookie(CookieModel model)
+    private readonly CookieOptions cookieOptions = new()
     {
-        contextAccessor.HttpContext?.Response.Cookies.Append(model.Key, model.Value ?? string.Empty);
+        HttpOnly = true,
+        Secure = true,
+        SameSite = SameSiteMode.Strict,
+        Expires = DateTimeOffset.UtcNow.AddDays(7) // Set cookie to expire in 7 days
+    };
+    public void SetCookie(string key, string value)
+    {
+        contextAccessor.HttpContext?.Response.Cookies.Append(key, value, cookieOptions);
     }
 
-    public CookieModel? GetCookie(string key)
+    public string? GetCookie(string key)
     {
-        return new CookieModel
-        {
-            Key = key,
-            Value = contextAccessor.HttpContext?.Request.Cookies[key]
-        };
+        return contextAccessor.HttpContext?.Request.Cookies[key];
     }
 
     public void DeleteCookie(string key)
     {
         contextAccessor.HttpContext?.Response.Cookies.Delete(key);
-    }
-
-    public void UpdateCookie(CookieModel model)
-    {
-        contextAccessor.HttpContext?.Response.Cookies.Append(model.Key, model.Value ?? string.Empty);
     }
 }

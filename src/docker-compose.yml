@@ -7,18 +7,30 @@ services:
     image: nginx:latest
     ports:
       - 80:80
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./Client/dist/Client/browser:/usr/share/nginx/html:ro
     depends_on:
       - business
       - identity
+      - client
     networks:
       - dreams-shop
   
+  client:
+    build:
+      context: ./Client
+      dockerfile: Dockerfile
+    networks:
+      - dreams-shop
+
   identity:
     build:
       context: ./Idenitity
       dockerfile: Dockerfile
     ports:
-      #- 5001:5001
+      - 5001:5001
       - 8081:8081
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
@@ -32,7 +44,7 @@ services:
       context: ./Business
       dockerfile: Dockerfile
     ports:
-      #- 5002:5002
+      - 5002:5002
       - 8082:8082
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
@@ -40,6 +52,7 @@ services:
       - dreams-shop
     depends_on:
       - postgres
+      - minio
     
   postgres:
     image: postgres:latest

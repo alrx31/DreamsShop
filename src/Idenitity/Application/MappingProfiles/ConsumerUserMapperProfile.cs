@@ -1,4 +1,6 @@
 using Application.DTO;
+using Application.DTO.ConsumerUser;
+using Application.UseCases.ConsumerUser.ConsumerUserDelete;
 using AutoMapper;
 using Domain.Entity;
 using Domain.IServices;
@@ -26,5 +28,8 @@ public class ConsumerUserMapperProfile : Profile
             .ForMember(
                 x => x.Email,
                 opt => opt.MapFrom(x => x.Email));
+
+        CreateMap<Guid, ConsumerUserDeleteCommand>()
+            .ForMember(dest => dest.ConsumerUserId, opt => opt.MapFrom(x => x));
     }
 }
