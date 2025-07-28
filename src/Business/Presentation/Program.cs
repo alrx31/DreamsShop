@@ -1,30 +1,47 @@
 using Application.DI;
 using Infrastructure.DI;
+using Microsoft.OpenApi.Models;
+using Presentation.DI;
+using Presentation.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.WebHost.ConfigureKestrel((context, options) =>
+{
+    options.Configure(context.Configuration.GetSection("Kestrel"));
+});
+
 // Add services
-builder.Services.AddInfrastructureDependencies(builder.Configuration);
+builder.Services
+    .AddApplicationDependencies(builder.Configuration)
+    .AddInfrastructureDependencies(builder.Configuration)
+    .AddPresentationDependencies(builder.Configuration);
+
+builder.Services.AddTransient<ExceptionHandlerMiddleware>();
 
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-builder.Services.AddInfrastructureDependencies(builder.Configuration);
-builder.Services.AddApplicationDependencies(builder.Configuration);
-    
 builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularLocalhost",
+        corsPolicyBuilder => corsPolicyBuilder
+            .WithOrigins("http://localhost:4200", "https://localhost:4200")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials()
+        );
+});
 
 var app = builder.Build();
 
-// TODO: Remove true for production
-if (app.Environment.IsDevelopment() || true)
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseCors("AllowAngularLocalhost");
+
+app.ApplyDatabaseMigration();
 
 app.UseHttpsRedirection();
+
+app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 app.UseRouting();
 app.UseAuthentication();

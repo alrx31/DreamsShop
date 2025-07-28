@@ -4,17 +4,25 @@ using Application.Exceptions;
 
 namespace Presentation.Middleware;
 
-public class ExceptionHandlerMiddleware(RequestDelegate next) : IMiddleware
+public class ExceptionHandlerMiddleware : IMiddleware
 {
-    public async Task InvokeAsync(HttpContext context, RequestDelegate next1)
+    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         try
         {
             await next(context);
         }
+        catch (UnauthorizedException ex)
+        {
+            await HandleExceptionAsync(context, HttpStatusCode.Unauthorized, ex.Message);
+        }
         catch (NotFoundException ex)
         {
             await HandleExceptionAsync(context, HttpStatusCode.NotFound, ex.Message);
+        }
+        catch (ForbiddenException ex)
+        {
+            await HandleExceptionAsync(context, HttpStatusCode.Forbidden, ex.Message);
         }
         catch (Exception ex)
         {

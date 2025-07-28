@@ -6,29 +6,28 @@ namespace Infrastructure.Persistence.Repositories;
 
 public class DreamRepository(ApplicationDbContext context) : IDreamRepository
 {
-    public async Task<List<Dream>> GetAllAsync(int page, int pageSize, CancellationToken cancellationToken = default)
-    {
-        return await context.Dream.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync(cancellationToken);
-    }
-
     public async Task<int> GetCountAsync(CancellationToken cancellationToken = default)
     {
         return await context.Dream.CountAsync(cancellationToken);
     }
 
-    public async Task<List<Dream>> GetRangeAsync(int skip, int take, CancellationToken cancellationToken = default)
+    public Task<IQueryable<Dream>> GetRangeAsync(int skip, int take, CancellationToken cancellationToken = default)
     {
-        return await context.Dream.Skip(skip).Take(take).ToListAsync(cancellationToken);
+        return Task.FromResult(context.Dream
+            .Include(x=>x.DreamCategories)
+            .Skip(skip)
+            .Take(take));
     }
 
-    public async Task AddAsync(Dream entity, CancellationToken cancellationToken = default)
+    public async Task<Guid> AddAsync(Dream entity, CancellationToken cancellationToken = default)
     {
-        await context.Dream.AddAsync(entity, cancellationToken);
+        return (await context.Dream.AddAsync(entity, cancellationToken))
+            .Entity.DreamId;
     }
 
-    public async Task<Dream?> GetAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<Dream?> GetAsync(Guid[] ids,CancellationToken cancellationToken = default)
     {
-        return await context.Dream.FindAsync([id], cancellationToken);
+        return await context.Dream.FindAsync([ids[0]], cancellationToken);
     }
 
     public Task UpdateAsync(Dream entity, CancellationToken cancellationToken = default)
@@ -43,5 +42,12 @@ public class DreamRepository(ApplicationDbContext context) : IDreamRepository
         context.Dream.Remove(entity);
         
         return Task.CompletedTask;
+    }
+
+    public Task<IQueryable<Dream>> GetRangeAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken = default)
+    {
+        return Task.FromResult(context.Dream
+            .Where(x => ids.Contains(x.DreamId))
+            .AsQueryable());
     }
 }

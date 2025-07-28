@@ -1,24 +1,14 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Domain.Entity
+namespace Domain.Entity;
+
+public class Order
 {
-    public class Order
-    {
-        [Key]
-        public required Guid Id { get; set; }
+    [Key]
+    public Guid OrderId { get; set; }
+    public Guid UserId { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        public required decimal Cost { get; set; }
 
-        public required Guid Consumer_Id { get; set; }
-
-        public required Guid Transaction_Id { get; set; }
-        
-        
-
-        public ConsumerUser ConsumerUser { get; set; }
-
-        public ICollection<DreamInOrder> DreamInOrders { get; set; }
-
-        public OrderTransaction OrderTransactions { get; set; }
-    }
+    public IEnumerable<OrderDream>? OrderDreams { get; set; }
 }

@@ -1,0 +1,22 @@
+meta {
+  name: ConsumerUserRefreshToken
+  type: http
+  seq: 3
+}
+
+patch {
+  url: {{host_identity}}ConsumerAuth
+  body: none
+  auth: bearer
+}
+
+script:pre-request {
+  const axios = require("axios");
+   
+  const response = await axios.post("http://localhost:5001/api/ConsumerAuth", {
+    "email":"usov.lesha2017@gmail.com",
+    "password":"DotNetOnLinuxWorks!"
+  });
+  
+  req.setHeader("Authorization", `Bearer ${response.data.accessToken}`)
+}

@@ -1,0 +1,16 @@
+meta {
+  name: GetAllDreams
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{host_business}}Dream?skip=0&take=5
+  body: none
+  auth: none
+}
+
+params:query {
+  skip: 0
+  take: 5
+}

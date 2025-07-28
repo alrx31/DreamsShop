@@ -1,0 +1,65 @@
+.dream-card{
+
+  .dream-card-image{
+    width: 100%;
+    height: 300px;
+
+    img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .dream-card-text{
+    padding: 16px 0 0 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    h2{
+      background-color: #c5c5c5;
+      padding: 8px 24px;
+      border-radius: 20px;
+      font-family: 'Roboto', sans-serif;
+      font-size: 24px;
+      font-weight: bold;
+      width: fit-content;
+    }
+
+    h6{
+      background-color: #eaeaea;
+      padding: 8px 24px;
+      border-radius: 20px;
+      font-family: 'Roboto', sans-serif;
+      font-size: 16px;
+      width: fit-content;
+    }
+
+    p{
+      background-color: #eaeaea;
+      padding: 8px 24px;
+      border-radius: 20px;
+      font-family: 'Roboto', sans-serif;
+      font-size: 24px;
+      width: fit-content;
+    }
+  }
+
+  .dream-card-delete-button{
+    background-color: #f05b5b;
+    margin-right: 20px;
+  }
+
+  .dream-card-actions{
+    margin: 20px;
+  }
+
+  .dream-card-add-button{
+    background-color: #23a134;
+  }
+
+  .dream-card-delete-button:hover{
+    background-color: #ff2424;
+    color: white;
+  }
+}

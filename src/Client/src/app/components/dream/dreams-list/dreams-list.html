@@ -1,0 +1,31 @@
+@if (loading) {
+  <app-loader></app-loader>
+} @else if (error) {
+  <div class="error">Error loading dreams.5</div>
+} @else {
+  <div class="dreams-container">
+    @for (dream of dreams; track dream.id) {
+      <a [routerLink]="['/dreams', dream.id]" class="dream-card">
+        <div class="dream-image">
+          <img [src]="'data:' + dream.imageContentType + ';base64,' + dream.imageBase64" [alt]="dream.title" />
+        </div>
+
+        <div class="dream-info">
+          <h3 class="dream-title">{{ dream.title }}</h3>
+          <p class="dream-description">{{ dream.description }}</p>
+          <div class="dream-rating">
+            ⭐ {{ dream.rating }}
+          </div>
+        </div>
+      </a>
+    }
+    <mat-paginator
+      [pageIndex]="page"
+      [pageSize]="size"
+      [hidePageSize]="true"
+      [length]="count"
+      (page)="onPageChange($event)"
+    >
+    </mat-paginator>
+  </div>
+}

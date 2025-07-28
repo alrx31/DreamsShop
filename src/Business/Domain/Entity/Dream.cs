@@ -5,28 +5,17 @@ namespace Domain.Entity
     public class Dream
     {
         [Key]
-        public required Guid Id { get; set; }
+        public required Guid DreamId { get; init; }
 
-        [StringLength(50)]
+        [StringLength(100)]
         public required string Title { get; set; }
-
-        [StringLength(1000)]
-        public required string Desctiption { get; set; }
-
-        public required Guid ImageMediaId { get; set; }
-
-        public required Guid PreviewMediaId { get; set; }
-
-        public required Guid ProducerId { get; set; }
-
+        [StringLength(2000)]
+        public required string Description { get; set; }
+        public Guid? ProducerId { get; set; }
         public decimal? Rating { get; set; }
-        
+        public required string ImageFileName { get; set; }
 
-        public Media ImageMedia { get; set; }
-        public Media PreviewMedia { get; set; }
-        public Producer Producer { get; set; }
-        public ICollection<DreamInCategory> DreamInCategories { get; set; }
-        public ICollection<DreamInOrder> DreamInOrders { get; set; }
-        public ICollection<RatingsDreams> Raitings_Dreamses { get; set; }
+        public IEnumerable<DreamCategory>? DreamCategories { get; set; }
+        public IEnumerable<OrderDream>? OrderDreams { get; set; }
     }
 }

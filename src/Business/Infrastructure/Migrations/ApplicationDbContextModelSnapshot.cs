@@ -24,367 +24,113 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entity.Category", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("CategoryId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<string>("Description")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
-                    b.HasKey("Id");
+                    b.HasKey("CategoryId");
 
                     b.ToTable("Category");
                 });
 
-            modelBuilder.Entity("Domain.Entity.ConsumerUser", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<int>("Role")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ConsumerUser");
-                });
-
             modelBuilder.Entity("Domain.Entity.Dream", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Desctiption")
-                        .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)");
-
-                    b.Property<Guid>("Image_Media_Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("Preview_Media_Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("Producer_Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<decimal?>("Raiting")
-                        .HasColumnType("numeric");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Image_Media_Id")
-                        .IsUnique();
-
-                    b.HasIndex("Preview_Media_Id")
-                        .IsUnique();
-
-                    b.HasIndex("Producer_Id");
-
-                    b.ToTable("Dream");
-                });
-
-            modelBuilder.Entity("Domain.Entity.DreamInCategory", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("Category_Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("Dream_Id")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Category_Id");
-
-                    b.HasIndex("Dream_Id");
-
-                    b.ToTable("DreamInCategory");
-                });
-
-            modelBuilder.Entity("Domain.Entity.DreamInOrder", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("AddDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("Dream_Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("Order_Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<float?>("Raiting")
-                        .HasColumnType("real");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Dream_Id");
-
-                    b.HasIndex("Order_Id");
-
-                    b.ToTable("DreamInOrder");
-                });
-
-            modelBuilder.Entity("Domain.Entity.Media", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<byte[]>("File")
-                        .IsRequired()
-                        .HasColumnType("bytea");
-
-                    b.Property<string>("File_Extension")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("character varying(10)");
-
-                    b.Property<string>("File_Name")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
-
-                    b.Property<string>("File_Path")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
-
-                    b.Property<string>("File_Size")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Media");
-                });
-
-            modelBuilder.Entity("Domain.Entity.Order", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("Consumer_Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<decimal>("Cost")
-                        .HasColumnType("numeric");
-
-                    b.Property<Guid>("Transaction_Id")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Consumer_Id");
-
-                    b.HasIndex("Transaction_Id");
-
-                    b.ToTable("Order");
-                });
-
-            modelBuilder.Entity("Domain.Entity.OrderTransaction", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("Order_Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("OrderTransaction");
-                });
-
-            modelBuilder.Entity("Domain.Entity.Producer", b =>
-                {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("DreamId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("ImageFileName")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasColumnType("text");
 
-                    b.Property<decimal?>("Raiting")
+                    b.Property<Guid?>("ProducerId")
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal?>("Rating")
                         .HasColumnType("numeric");
 
-                    b.HasKey("Id");
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
-                    b.ToTable("Producer");
+                    b.HasKey("DreamId");
+
+                    b.ToTable("Dream");
                 });
 
-            modelBuilder.Entity("Domain.Entity.ProducerUser", b =>
+            modelBuilder.Entity("Domain.Entity.DreamCategory", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid>("DreamId")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<Guid>("Producer_Id")
+                    b.Property<Guid>("CategoryId")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("Role")
-                        .HasColumnType("integer");
+                    b.HasKey("DreamId", "CategoryId");
 
-                    b.HasKey("Id");
+                    b.HasIndex("CategoryId");
 
-                    b.HasIndex("Producer_Id");
-
-                    b.ToTable("ProducerUser");
+                    b.ToTable("DreamCategory");
                 });
 
-            modelBuilder.Entity("Domain.Entity.RatingsDreams", b =>
+            modelBuilder.Entity("Domain.Entity.Order", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("OrderId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("Consumer_Id")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("Dream_Id")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("Value")
-                        .HasColumnType("integer");
+                    b.HasKey("OrderId");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("Consumer_Id");
-
-                    b.HasIndex("Dream_Id");
-
-                    b.ToTable("RaitingsDreams");
+                    b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("Domain.Entity.RatingsProducer", b =>
+            modelBuilder.Entity("Domain.Entity.OrderDream", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid>("OrderId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("Consumer_Id")
+                    b.Property<Guid>("DreamId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                    b.HasKey("OrderId", "DreamId");
 
-                    b.Property<Guid>("Producer_Id")
-                        .HasColumnType("uuid");
+                    b.HasIndex("DreamId");
 
-                    b.Property<int>("Value")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Consumer_Id");
-
-                    b.HasIndex("Producer_Id");
-
-                    b.ToTable("RaitingsProducer");
+                    b.ToTable("OrderDreams");
                 });
 
-            modelBuilder.Entity("Domain.Entity.Dream", b =>
-                {
-                    b.HasOne("Domain.Entity.Media", "Image_Media")
-                        .WithOne("DreamAsImage")
-                        .HasForeignKey("Domain.Entity.Dream", "Image_Media_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entity.Media", "Preview_Media")
-                        .WithOne("DreamAsPreview")
-                        .HasForeignKey("Domain.Entity.Dream", "Preview_Media_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entity.Producer", "Producer")
-                        .WithMany("Dreams")
-                        .HasForeignKey("Producer_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Image_Media");
-
-                    b.Navigation("Preview_Media");
-
-                    b.Navigation("Producer");
-                });
-
-            modelBuilder.Entity("Domain.Entity.DreamInCategory", b =>
+            modelBuilder.Entity("Domain.Entity.DreamCategory", b =>
                 {
                     b.HasOne("Domain.Entity.Category", "Category")
-                        .WithMany("DreamInCategories")
-                        .HasForeignKey("Category_Id")
+                        .WithMany("DreamCategories")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Entity.Dream", "Dream")
-                        .WithMany("DreamInCategories")
-                        .HasForeignKey("Dream_Id")
+                        .WithMany("DreamCategories")
+                        .HasForeignKey("DreamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -393,17 +139,17 @@ namespace Infrastructure.Migrations
                     b.Navigation("Dream");
                 });
 
-            modelBuilder.Entity("Domain.Entity.DreamInOrder", b =>
+            modelBuilder.Entity("Domain.Entity.OrderDream", b =>
                 {
                     b.HasOne("Domain.Entity.Dream", "Dream")
-                        .WithMany("DreamInOrders")
-                        .HasForeignKey("Dream_Id")
+                        .WithMany("OrderDreams")
+                        .HasForeignKey("DreamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Entity.Order", "Order")
-                        .WithMany("DreamInOrders")
-                        .HasForeignKey("Order_Id")
+                        .WithMany("OrderDreams")
+                        .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -412,123 +158,21 @@ namespace Infrastructure.Migrations
                     b.Navigation("Order");
                 });
 
-            modelBuilder.Entity("Domain.Entity.Order", b =>
-                {
-                    b.HasOne("Domain.Entity.ConsumerUser", "ConsumerUser")
-                        .WithMany("Orders")
-                        .HasForeignKey("Consumer_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entity.OrderTransaction", "OrderTransactions")
-                        .WithMany("Orders")
-                        .HasForeignKey("Transaction_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ConsumerUser");
-
-                    b.Navigation("OrderTransactions");
-                });
-
-            modelBuilder.Entity("Domain.Entity.ProducerUser", b =>
-                {
-                    b.HasOne("Domain.Entity.Producer", "Producer")
-                        .WithMany("ProducerUsers")
-                        .HasForeignKey("Producer_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Producer");
-                });
-
-            modelBuilder.Entity("Domain.Entity.RatingsDreams", b =>
-                {
-                    b.HasOne("Domain.Entity.ConsumerUser", "ConsumerUser")
-                        .WithMany("Raitings_Dreamses")
-                        .HasForeignKey("Consumer_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entity.Dream", "Dream")
-                        .WithMany("Raitings_Dreamses")
-                        .HasForeignKey("Dream_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ConsumerUser");
-
-                    b.Navigation("Dream");
-                });
-
-            modelBuilder.Entity("Domain.Entity.RatingsProducer", b =>
-                {
-                    b.HasOne("Domain.Entity.ConsumerUser", "ConsumerUser")
-                        .WithMany("Raitings_Producers")
-                        .HasForeignKey("Consumer_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entity.Producer", "Producer")
-                        .WithMany("Raitings_Producers")
-                        .HasForeignKey("Producer_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ConsumerUser");
-
-                    b.Navigation("Producer");
-                });
-
             modelBuilder.Entity("Domain.Entity.Category", b =>
                 {
-                    b.Navigation("DreamInCategories");
-                });
-
-            modelBuilder.Entity("Domain.Entity.ConsumerUser", b =>
-                {
-                    b.Navigation("Orders");
-
-                    b.Navigation("Raitings_Dreamses");
-
-                    b.Navigation("Raitings_Producers");
+                    b.Navigation("DreamCategories");
                 });
 
             modelBuilder.Entity("Domain.Entity.Dream", b =>
                 {
-                    b.Navigation("DreamInCategories");
+                    b.Navigation("DreamCategories");
 
-                    b.Navigation("DreamInOrders");
-
-                    b.Navigation("Raitings_Dreamses");
-                });
-
-            modelBuilder.Entity("Domain.Entity.Media", b =>
-                {
-                    b.Navigation("DreamAsImage")
-                        .IsRequired();
-
-                    b.Navigation("DreamAsPreview")
-                        .IsRequired();
+                    b.Navigation("OrderDreams");
                 });
 
             modelBuilder.Entity("Domain.Entity.Order", b =>
                 {
-                    b.Navigation("DreamInOrders");
-                });
-
-            modelBuilder.Entity("Domain.Entity.OrderTransaction", b =>
-                {
-                    b.Navigation("Orders");
-                });
-
-            modelBuilder.Entity("Domain.Entity.Producer", b =>
-                {
-                    b.Navigation("Dreams");
-
-                    b.Navigation("ProducerUsers");
-
-                    b.Navigation("Raitings_Producers");
+                    b.Navigation("OrderDreams");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,0 +1,16 @@
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <label>
+    Title:
+    <input formControlName="title">
+  </label>
+  <label>
+    Description:
+    <textarea formControlName="description"></textarea>
+  </label>
+  <label>
+    Image:
+    <input type="file" (change)="onFileSelected($event)" accept="image/*">
+  </label>
+  <button type="submit" [disabled]="form.invalid">Create</button>
+  <button type="button" (click)="dialogRef.close()">Cancel</button>
+</form>
