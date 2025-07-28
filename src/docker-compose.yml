@@ -2,6 +2,10 @@ networks:
   dreams-shop: 
     driver: bridge
   
+volumes:
+  shared-data: 
+  minio_data:
+  
 services:
   nginx:
     image: nginx:latest
@@ -10,7 +14,7 @@ services:
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./Client/dist/Client/browser:/usr/share/nginx/html:ro
+      - shared-data:/usr/share/nginx/html:ro
     depends_on:
       - business
       - identity
@@ -22,6 +26,8 @@ services:
     build:
       context: ./Client
       dockerfile: Dockerfile
+    volumes:
+      - shared-data:/output
     networks:
       - dreams-shop
 
@@ -85,6 +91,3 @@ services:
       - 6379:6379
     networks:
       - dreams-shop
-
-volumes:
-  minio_data:
