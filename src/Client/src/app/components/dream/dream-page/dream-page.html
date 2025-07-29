@@ -15,7 +15,9 @@
     </div>
     
     <div class="dream-card-actions">
-      <button class="dream-card-delete-button" (click)="onDeleteButtonSubmit()">Delete</button>
+      @if (role === UserRoles.Admin || role === UserRoles.Producer){
+        <button class="dream-card-delete-button" (click)="onDeleteButtonSubmit()">Delete</button>
+      }
       <button class="dream-card-add-button" (click)="onAddToOrderButtonSubmit()">Add to Order</button>
     </div>
   </div>

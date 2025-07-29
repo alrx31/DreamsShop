@@ -4,6 +4,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {BackButton} from '../../aditional/back-button/back-button';
 import {Loader} from '../../aditional/loader/loader';
 import { OrderService } from '../../../services/order/order';
+import { UserRoles } from '../../../environment/UserRoles';
 
 @Component({
   selector: 'app-dreams-page',
@@ -18,11 +19,18 @@ export class DreamPage {
   dream: Dream = {} as Dream;
   error: string = '';
   loading: boolean = true;
+  role: UserRoles | null = null;
 
   constructor(private dreamsService: Dreams,
               private order: OrderService,
               private activatedRoute: ActivatedRoute,
-              private router:Router) {}
+              private router:Router) {
+
+    const userInfo = localStorage.getItem('UserInfo');
+    if(userInfo){
+      this.role = +JSON.parse(userInfo).role as UserRoles;
+    }
+  }
 
   ngOnInit(): void{
     this.loading = true;
