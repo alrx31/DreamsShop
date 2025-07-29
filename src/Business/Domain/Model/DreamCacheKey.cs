@@ -6,9 +6,9 @@ namespace Domain.Model;
 public class DreamCacheKey
 {
     [JsonIgnore]
-    public int DafaultStartIndex { get; set; } = 0;
+    public static int DefaultStartIndex = 0;
     [JsonIgnore]
-    public int DefaultCount { get; set; } = 5;
+    public static int DefaultCount = 5;
 
     public string ModelName
     { get; set; } = nameof(Dream);
