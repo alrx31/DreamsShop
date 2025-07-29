@@ -1,7 +1,7 @@
-import {Component, inject} from '@angular/core';
+import {Component, Inject, inject} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Dream, Dreams} from '../../../services/dreams/dreams';
-import {MatDialogRef} from '@angular/material/dialog';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-create-dreams-pop-up',
@@ -17,11 +17,13 @@ export class CreateDreamPopUp {
   dialogRef = inject(MatDialogRef<CreateDreamPopUp>);
   private selectedFile: File | null = null;
 
-  constructor(private dreamsService: Dreams) {
+  constructor(private dreamsService: Dreams,
+    @Inject(MAT_DIALOG_DATA) public data: { dream: Dream, isUpdate: boolean },
+  ) {
     const fb = inject(FormBuilder);
     this.form = fb.group({
-      title: ['', Validators.required],
-      description: ['', Validators.required],
+      title: [this.data.dream.title, Validators.required],
+      description: [this.data.dream.description, Validators.required],
     });
   }
 
@@ -47,8 +49,14 @@ export class CreateDreamPopUp {
       formData.append('Image', this.selectedFile, this.selectedFile.name);
     }
 
-    this.dreamsService.addDream(formData).subscribe(() => {
-      this.dialogRef.close(true);
-    });
+    if(this.data.isUpdate) {
+      this.dreamsService.updateDream(this.data.dream.id, formData).subscribe(() => {
+        this.dialogRef.close(true);
+      });
+    } else {
+      this.dreamsService.addDream(formData).subscribe(() => {
+        this.dialogRef.close(true);
+      });
+    }
   }
 }

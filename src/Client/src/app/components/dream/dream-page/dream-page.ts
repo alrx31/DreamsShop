@@ -5,6 +5,8 @@ import {BackButton} from '../../aditional/back-button/back-button';
 import {Loader} from '../../aditional/loader/loader';
 import { OrderService } from '../../../services/order/order';
 import { UserRoles } from '../../../environment/UserRoles';
+import { CreateDreamPopUp } from '../create-dream-pop-up/create-dream-pop-up';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-dreams-page',
@@ -24,7 +26,8 @@ export class DreamPage {
   constructor(private dreamsService: Dreams,
               private order: OrderService,
               private activatedRoute: ActivatedRoute,
-              private router:Router) {
+              private router:Router,
+              private dialog: MatDialog) {
 
     const userInfo = localStorage.getItem('UserInfo');
     if(userInfo){
@@ -66,4 +69,21 @@ export class DreamPage {
     this.order.addDreamToOrder(this.dream);
     alert('Dream added to order');
   }
+
+  onUpdateDreamClick(){
+    const dialogRef = this.dialog.open(CreateDreamPopUp, {
+      data: {
+        dream: this.dream,
+        isUpdate: true
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.ngOnInit();
+      }
+    });
+  }
+
+  protected readonly UserRoles = UserRoles;
 }

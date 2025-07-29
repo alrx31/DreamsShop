@@ -17,6 +17,7 @@
     <div class="dream-card-actions">
       @if (role === UserRoles.Admin || role === UserRoles.Producer){
         <button class="dream-card-delete-button" (click)="onDeleteButtonSubmit()">Delete</button>
+        <button class="dream-card-update-button" (click)="onUpdateDreamClick()">Update</button>
       }
       <button class="dream-card-add-button" (click)="onAddToOrderButtonSubmit()">Add to Order</button>
     </div>
