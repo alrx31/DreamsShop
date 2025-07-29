@@ -1,13 +1,18 @@
+using Application.DTO;
 using Application.Exceptions;
+using Domain.Entity;
 using Domain.IRepositories;
 using Domain.IService;
+using Domain.Model;
 using MediatR;
 
 namespace Application.UseCases.Dreams.DreamUpdate;
 
 public class DreamUpdateCommandHandler(
     IUnitOfWork unitOfWork,
-    IHttpContextService httpContextService
+    IHttpContextService httpContextService,
+    ICacheService<string, DreamResponseDto> cacheService,
+    ICacheService<DreamCacheKey, List<DreamResponseDto>> allDreamCacheService
     ) : IRequestHandler<DreamUpdateCommand>
 {
     public async Task Handle(DreamUpdateCommand request, CancellationToken cancellationToken)
@@ -28,6 +33,15 @@ public class DreamUpdateCommandHandler(
         {
             dream.Description = request.Dto.Description;
         }
+
+        var allDreamCacheKey = new DreamCacheKey
+        {
+            StartIndex = DreamCacheKey.DefaultStartIndex,
+            Count = DreamCacheKey.DefaultCount
+        };
+
+        await allDreamCacheService.RemoveAsync(allDreamCacheKey);
+        await cacheService.RemoveAsync(request.DreamId.ToString() + nameof(Dream));
         
         await unitOfWork.DreamRepository.UpdateAsync(dream, cancellationToken);
         await unitOfWork.SaveChangesAsync(cancellationToken);

@@ -21,7 +21,7 @@ public class DreamGetAllCommandHandler(
             Count = request.Count
         };
 
-        if (request.StartIndex == cacheKey.DafaultStartIndex && request.Count == cacheKey.DefaultCount)
+        if (request.StartIndex == DreamCacheKey.DefaultStartIndex && request.Count == DreamCacheKey.DefaultCount)
         {
             useCache = true;
 

@@ -80,7 +80,7 @@ public class DreamController(
     public async Task<IActionResult> UpdateDream(Guid dreamId, [FromForm] DreamUpdateDto model)
     {
         await mediator.Send(
-            mapper.Map<DreamUpdateCommand>( (dreamId,model) )
+            mapper.Map<DreamUpdateCommand>((dreamId, model))
             );
         return Ok();
     }

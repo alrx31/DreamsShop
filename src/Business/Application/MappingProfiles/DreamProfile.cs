@@ -48,7 +48,6 @@ public class DreamProfile : Profile
             .ForMember(dest=>dest.DreamId, opt=>opt.MapFrom(src=>src));
 
         CreateMap<(Guid, DreamUpdateDto), DreamUpdateCommand>()
-            .ForMember(dest => dest.DreamId, opt => opt.MapFrom(src => src.Item1))
-            .ForMember(dest => dest.Dto, opt => opt.MapFrom(src => src.Item2));
+            .ConstructUsing(src => new DreamUpdateCommand(src.Item1, src.Item2));
     }
 }
