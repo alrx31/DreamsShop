@@ -11,6 +11,7 @@ namespace Application.UseCases.Dreams.DreamUpdate;
 public class DreamUpdateCommandHandler(
     IUnitOfWork unitOfWork,
     IHttpContextService httpContextService,
+    IFileStorageService fileStorageService,
     ICacheService<string, DreamResponseDto> cacheService,
     ICacheService<DreamCacheKey, List<DreamResponseDto>> allDreamCacheService
     ) : IRequestHandler<DreamUpdateCommand>
@@ -34,13 +35,15 @@ public class DreamUpdateCommandHandler(
             dream.Description = request.Dto.Description;
         }
 
-        var allDreamCacheKey = new DreamCacheKey
+        var image = request.Dto.Image;
+        if (image is not null && image.Content is not null)
         {
-            StartIndex = DreamCacheKey.DefaultStartIndex,
-            Count = DreamCacheKey.DefaultCount
-        };
+            var objectName = await fileStorageService.UploadFileAsync(image, cancellationToken);
+            
+            dream.ImageFileName = objectName;
+        }
 
-        await allDreamCacheService.RemoveAsync(allDreamCacheKey);
+        await allDreamCacheService.RemoveAsync(new DreamCacheKey());
         await cacheService.RemoveAsync(request.DreamId.ToString() + nameof(Dream));
         
         await unitOfWork.DreamRepository.UpdateAsync(dream, cancellationToken);

@@ -12,6 +12,6 @@ public class DreamCacheKey
 
     public string ModelName
     { get; set; } = nameof(Dream);
-    public int StartIndex { get; set; } = 0;
-    public int Count { get; set; } = 5;
+    public int StartIndex { get; set; } = DefaultStartIndex;
+    public int Count { get; set; } = DefaultCount;
 }

@@ -77,11 +77,24 @@ public class DreamController(
 
     [HttpPut("{dreamId:required:guid}")]
     [Authorize(Policy = nameof(Policies.DreamOperationsPolicy))]
-    public async Task<IActionResult> UpdateDream(Guid dreamId, [FromForm] DreamUpdateDto model)
+    public async Task<IActionResult> UpdateDream(Guid dreamId, [FromForm] DreamUpdateRequest model)
     {
+        var dto = new DreamUpdateDto
+        {
+            Title = model.Title,
+            Description = model.Description,
+            Image = new FileModel
+            {
+                FileName = model?.Image?.FileName,
+                ContentType = model?.Image?.ContentType,
+                Content = model?.Image?.OpenReadStream()
+            }
+        };
+
         await mediator.Send(
-            mapper.Map<DreamUpdateCommand>((dreamId, model))
+            mapper.Map<DreamUpdateCommand>((dreamId, dto))
             );
+
         return Ok();
     }
 }

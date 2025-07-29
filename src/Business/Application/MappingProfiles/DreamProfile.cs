@@ -15,13 +15,13 @@ public class DreamProfile : Profile
     public DreamProfile()
     {
         CreateMap<DreamCreateDto, DreamCreateCommand>()
-            .ConvertUsing((src,_,_) => new DreamCreateCommand(
+            .ConvertUsing((src, _, _) => new DreamCreateCommand(
                 Title: src.Title,
                 Description: src.Description,
                 ProducerId: src.ProducerId,
                 Rating: src.Rating,
-                Image: src.Image == null 
-                    ? null 
+                Image: src.Image == null
+                    ? null
                     : new FileModel
                     {
                         FileName = src.Image.FileName,
@@ -41,11 +41,11 @@ public class DreamProfile : Profile
             .ForMember(dest => dest.DreamId, opt => opt.MapFrom(src => src));
 
         CreateMap<(int, int), DreamGetAllCommand>()
-            .ForMember(dest=>dest.StartIndex, opt=>opt.MapFrom(src=>src.Item1))
-            .ForMember(dest=>dest.Count, opt=>opt.MapFrom(src=>src.Item2));
-        
+            .ForMember(dest => dest.StartIndex, opt => opt.MapFrom(src => src.Item1))
+            .ForMember(dest => dest.Count, opt => opt.MapFrom(src => src.Item2));
+
         CreateMap<Guid, DreamDeleteCommand>()
-            .ForMember(dest=>dest.DreamId, opt=>opt.MapFrom(src=>src));
+            .ForMember(dest => dest.DreamId, opt => opt.MapFrom(src => src));
 
         CreateMap<(Guid, DreamUpdateDto), DreamUpdateCommand>()
             .ConstructUsing(src => new DreamUpdateCommand(src.Item1, src.Item2));

@@ -28,14 +28,8 @@ public class DreamDeleteCommandHandler (
         if (currentUserId != dream.ProducerId) 
             throw new UnauthorizedException("You are not authorized to delete this dream.");
 
-        var allCacheKey = new DreamCacheKey
-        {
-            StartIndex = DreamCacheKey.DefaultStartIndex,
-            Count = DreamCacheKey.DefaultCount
-        };
-
         await cacheService.RemoveAsync(request.DreamId.ToString() + nameof(Dream));
-        await allDreamCacheService.RemoveAsync(allCacheKey);
+        await allDreamCacheService.RemoveAsync(new DreamCacheKey());
 
         await unitOfWork.DreamRepository.DeleteAsync(dream, cancellationToken);
         await unitOfWork.SaveChangesAsync(cancellationToken);
