@@ -3,17 +3,23 @@ import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {Auth} from '../../../services/auth/auth';
 import {Router} from '@angular/router';
 import {environment} from '../../../environment/environment';
+import { Loader } from "../../aditional/loader/loader";
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',
   imports: [
-    ReactiveFormsModule
-  ],
+    ReactiveFormsModule,
+    CommonModule,
+    Loader
+],
   templateUrl: './login.html',
   styleUrl: './login.scss'
 })
 export class Login {
   loginForm: FormGroup;
+  errorMessage: string = '';
+  isLoading: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -28,6 +34,11 @@ export class Login {
 
 
   onSubmit() {
+    if (this.loginForm.invalid) {
+      this.errorMessage = "Please fill in all fields correctly.";
+      return;
+    }
+    this.isLoading = true;
     const { email, password } = this.loginForm.value;
 
     this.authService.login(email || '', password || '').subscribe({
@@ -41,10 +52,12 @@ export class Login {
         this.router.navigate(['/']);
       },
       error: (err) => {
-        alert(err.message);
+        this.errorMessage = "Invalid email or password";
+        this.loginForm.reset();
         console.error(err);
       }
     });
+    this.isLoading = false;
   }
 
   routeToRegister(){
