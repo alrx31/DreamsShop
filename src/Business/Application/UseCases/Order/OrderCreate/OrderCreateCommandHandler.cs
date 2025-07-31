@@ -32,22 +32,15 @@ public class OrderCreateCommandHandler(
         }
 
         order.UserId = userId.Value;
+        order.OrderDreams = dreams.Select(dream => new Domain.Entity.OrderDream
+        {
+            DreamId = dream.DreamId
+        });
 
         var orderId = await unitOfWork.OrderRepository.AddAsync(order, cancellationToken);
         if (orderId == Guid.Empty)
         {
             throw new BadRequestException("Failed to create order.");
-        }
-
-        foreach (var dream in dreams)
-        {
-            var orderDream = new Domain.Entity.OrderDream
-            {
-                OrderId = orderId,
-                DreamId = dream.DreamId
-            };
-
-            await unitOfWork.OrderDreamRepository.AddAsync(orderDream, cancellationToken);
         }
 
         await unitOfWork.SaveChangesAsync(cancellationToken);

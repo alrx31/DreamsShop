@@ -30,7 +30,7 @@ public class DreamCreateCommandHandler(
         var dreamModel = mapper.Map<Dream>(request);
         
         var image = request.Image;
-        if (image is not null)
+        if (image is not null && image.Content is not null)
         {
             var objectName = await fileStorageService.UploadFileAsync(image, cancellationToken);
             
