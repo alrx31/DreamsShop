@@ -1,11 +1,21 @@
-<ng-container *ngIf="!error; else errorTemplate">
+<ng-container *ngIf="!errorUserInfo; else errorTemplate">
   <ng-container *ngIf="loading; else profileTemplate">
     <app-loader></app-loader>
   </ng-container>
 </ng-container>
 
+<ng-container *ngIf="!errorOrders; else errorTemplateOrders">
+  <ng-container *ngIf="loading; else ordersTemplate">
+    <app-loader></app-loader>
+  </ng-container>
+</ng-container>
+
 <ng-template #errorTemplate>
-  <div class="error-message">{{ error }}</div>
+  <div class="error-message">{{ errorUserInfo }}</div>
+</ng-template>
+
+<ng-template #errorTemplateOrders>
+  <div class="error-message">{{ errorOrders }}</div>
 </ng-template>
 
 <ng-template #profileTemplate>
@@ -18,6 +28,10 @@
       <p><strong>Role:</strong> {{ userInfo.role }}</p>
     </div>
   </div>
+</ng-template>
+
+
+<ng-template #ordersTemplate>
   <div class="order-busket">
         <h2>Your Orders</h2>
         <div class="order-items" *ngIf="userOrders && userOrders.length > 0">
