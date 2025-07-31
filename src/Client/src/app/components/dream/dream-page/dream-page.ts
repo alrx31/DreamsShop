@@ -4,6 +4,9 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {BackButton} from '../../aditional/back-button/back-button';
 import {Loader} from '../../aditional/loader/loader';
 import { OrderService } from '../../../services/order/order';
+import { UserRoles } from '../../../environment/UserRoles';
+import { CreateDreamPopUp } from '../create-dream-pop-up/create-dream-pop-up';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-dreams-page',
@@ -18,11 +21,19 @@ export class DreamPage {
   dream: Dream = {} as Dream;
   error: string = '';
   loading: boolean = true;
+  role: UserRoles | null = null;
 
   constructor(private dreamsService: Dreams,
               private order: OrderService,
               private activatedRoute: ActivatedRoute,
-              private router:Router) {}
+              private router:Router,
+              private dialog: MatDialog) {
+
+    const userInfo = localStorage.getItem('UserInfo');
+    if(userInfo){
+      this.role = +JSON.parse(userInfo).role as UserRoles;
+    }
+  }
 
   ngOnInit(): void{
     this.loading = true;
@@ -58,4 +69,21 @@ export class DreamPage {
     this.order.addDreamToOrder(this.dream);
     alert('Dream added to order');
   }
+
+  onUpdateDreamClick(){
+    const dialogRef = this.dialog.open(CreateDreamPopUp, {
+      data: {
+        dream: this.dream,
+        isUpdate: true
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.ngOnInit();
+      }
+    });
+  }
+
+  protected readonly UserRoles = UserRoles;
 }

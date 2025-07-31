@@ -5,13 +5,15 @@ import { Loader } from '../aditional/loader/loader';
 import { CommonModule } from '@angular/common';
 import { environment } from '../../environment/environment';
 import { Order, OrderService } from '../../services/order/order';
+import { MatMenuContent } from "@angular/material/menu";
 
 @Component({
   selector: 'app-profile',
   imports: [
     Loader,
-    CommonModule
-  ],
+    CommonModule,
+    MatMenuContent
+],
   templateUrl: './profile.html',
   styleUrl: './profile.scss'
 })
@@ -19,7 +21,9 @@ import { Order, OrderService } from '../../services/order/order';
 export class Profile {
   userInfo: UserAfterLoginInfo = {} as UserAfterLoginInfo;
   userOrders: Order[] = [];
-  error: string = '';
+  errorUserInfo: string = '';
+  errorOrders: string = '';
+  
   loading: boolean = true;
 
   constructor(private activatedRoute: ActivatedRoute,
@@ -34,13 +38,13 @@ export class Profile {
     if (data) {
       this.userInfo = data;
       if (!this.userInfo.id || !this.userInfo.email || !this.userInfo.name || this.userInfo.role === undefined) {
-        this.error = 'Invalid user information';
-        console.log(this.error);
+        this.errorUserInfo = 'Invalid user information';
+        console.log(this.errorUserInfo);
         this.router.navigate(['/login']);
       }
     } else {
-      this.error = 'User information not found';
-      console.log(this.error);
+      this.errorUserInfo = 'User information not found';
+      console.log(this.errorUserInfo);
       this.router.navigate(['/login']);
     }
     this.onLoadOrders();
@@ -60,7 +64,7 @@ export class Profile {
         this.userOrders = orders;
       },
       error: (err) => {
-        this.error = 'Failed to load orders';
+        this.errorOrders = 'Failed to load orders';
         console.log(err);
       }
     });

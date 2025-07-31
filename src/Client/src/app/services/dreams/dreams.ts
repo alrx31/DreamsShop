@@ -7,7 +7,7 @@ export interface Dream {
   id : string;
   title: string;
   description: string;
-  producerId: string;
+  producerId: string | null;
   rating: number;
   imageBase64: string;
   imageContentType: string;
@@ -31,7 +31,7 @@ export class Dreams {
     return this.http.get<Dream[]>(`${environment.apiUrl}${this.urlSuffix}?skip=${page*size}&size=${size}`);
   }
 
-  getDreamsCount(): Observable<number>{
+  getDreamsCount(): Observable<number> {
     return this.http.get<number>(`${environment.apiUrl}${this.urlSuffix}/count`)
   }
 
@@ -43,7 +43,11 @@ export class Dreams {
     return this.http.delete(`${environment.apiUrl}${this.urlSuffix}/${dreamId}`);
   }
 
-  addDream(dream: Dream) : Observable<Object> {
+  addDream(dream: FormData): Observable<Object> {
     return this.http.post(`${environment.apiUrl}${this.urlSuffix}`, dream);
+  }
+
+  updateDream(dreamId: string, dream: FormData): Observable<Object> {
+    return this.http.put(`${environment.apiUrl}${this.urlSuffix}/${dreamId}`, dream);
   }
 }

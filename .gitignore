@@ -339,5 +339,11 @@ DreamsShop_Client_Business.session.sql
 /src/Server/.idea/.idea.Server/.idea/workspace.xml
 /src/Business/Business.sln.DotSettings
 /src/Business/Business.sln.DotSettings.user
+src/Business/Infrastructure/bin/Debug/net8.0/Application.pdb
+src/Business/Presentation/bin/Debug/net8.0/Microsoft.Extensions.Caching.StackExchangeRedis.dll
+src/Business/Presentation/bin/Debug/net8.0/Pipelines.Sockets.Unofficial.dll
+src/Business/Presentation/bin/Debug/net8.0/StackExchange.Redis.dll
+src/Client/.vscode/launch.json
 /src/Business/Server.sln.DotSettings
 /src/Business/Server.sln.DotSettings.user
+
