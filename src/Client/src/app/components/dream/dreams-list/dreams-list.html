@@ -4,6 +4,10 @@
   <div class="error">Error loading dreams.5</div>
 } @else {
   <div class="dreams-container">
+    @if(role === UserRoles.Producer) {
+      <button class="create-dream-button" (click)="onCreateDreamClick()">Create Dream</button>
+    }
+
     @for (dream of dreams; track dream.id) {
       <a [routerLink]="['/dreams', dream.id]" class="dream-card">
         <div class="dream-image">

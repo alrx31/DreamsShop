@@ -1,7 +1,7 @@
-import {Component, inject} from '@angular/core';
+import {Component, Inject, inject} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Dream, Dreams} from '../../../services/dreams/dreams';
-import {MatDialogRef} from '@angular/material/dialog';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-create-dreams-pop-up',
@@ -15,51 +15,48 @@ import {MatDialogRef} from '@angular/material/dialog';
 export class CreateDreamPopUp {
   form: FormGroup;
   dialogRef = inject(MatDialogRef<CreateDreamPopUp>);
+  private selectedFile: File | null = null;
 
-  constructor(private dreamsService: Dreams) {
+  constructor(private dreamsService: Dreams,
+    @Inject(MAT_DIALOG_DATA) public data: { dream: Dream, isUpdate: boolean },
+  ) {
     const fb = inject(FormBuilder);
     this.form = fb.group({
-      title: ['', Validators.required],
-      description: ['', Validators.required],
-      imageBase64: ['']
+      title: [this.data.dream.title, Validators.required],
+      description: [this.data.dream.description, Validators.required],
     });
   }
 
-  submit() {
-    if (this.form.valid) {
-      const dream: Partial<Dream> = {
-        title: this.form.value.title,
-        description: this.form.value.description,
-        imageBase64: this.form.value.imageBase64,
-        producerId: '',
-        rating: 0,
-        categories: [],
-        imageContentType: this.form.value.imageContentType
-      };
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) {
+      this.selectedFile = null;
+      return;
+    }
+    this.selectedFile = input.files[0];
+  }
 
-      this.dreamsService.addDream(dream as Dream).subscribe(() => {
+  submit() {
+    if (this.form.invalid) return;
+
+    const formData = new FormData();
+    formData.append('Title', this.form.value.title);
+    formData.append('Description', this.form.value.description);
+    formData.append('ProducerId', '');
+    formData.append('Rating', '0');
+
+    if (this.selectedFile) {
+      formData.append('Image', this.selectedFile, this.selectedFile.name);
+    }
+
+    if(this.data.isUpdate) {
+      this.dreamsService.updateDream(this.data.dream.id, formData).subscribe(() => {
+        this.dialogRef.close(true);
+      });
+    } else {
+      this.dreamsService.addDream(formData).subscribe(() => {
         this.dialogRef.close(true);
       });
     }
   }
-  onFileSelected(event: Event) {
-    const input = event.target as HTMLInputElement;
-    if (!input.files || input.files.length === 0) return;
-
-    const file = input.files[0];
-    const reader = new FileReader();
-
-    reader.onload = () => {
-      const base64 = (reader.result as string).split(',')[1]; // Чистый base64 без `data:image/...`
-      const contentType = file.type;
-
-      this.form.patchValue({
-        imageBase64: base64
-      });
-      this.form.patchValue({ imageContentType: contentType });
-    };
-
-    reader.readAsDataURL(file);
-  }
-
 }

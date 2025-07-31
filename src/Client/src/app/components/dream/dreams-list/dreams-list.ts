@@ -80,5 +80,6 @@ export class DreamsList {
       }
     });
   }
+  
   protected readonly UserRoles = UserRoles;
 }

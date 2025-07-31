@@ -34,3 +34,25 @@ a{
     cursor: pointer;
   }
 }
+
+button {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  min-width: 140px;
+  
+  button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.error-message{
+  color: red;
+  font-size: 18px;
+  margin: 8px;
+}
