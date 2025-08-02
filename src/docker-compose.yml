@@ -30,6 +30,8 @@ services:
       - shared-data:/output
     networks:
       - dreams-shop
+    command: sh -c "cp -r /app/dist/Client/browser/* /output/ && chmod -R a+r /output"
+    restart: "no"
 
   identity:
     build:
