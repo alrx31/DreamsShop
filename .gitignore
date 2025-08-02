@@ -15,13 +15,6 @@
 /src/Idenitity/Infrastructure/Migrations/20250524075649_AddRefreshToken.cs
 /src/Idenitity/Infrastructure/Migrations/20250524075649_AddRefreshToken.Designer.cs
 /src/Business/https/dev-certificate.pfx
-/src/Business/Application/obj/Debug/net8.0/Application.csproj.CopyComplete
-/src/Business/Infrastructure/obj/Debug/net8.0/Infrastructure.csproj.CopyComplete
-/src/Business/Presentation/obj/Debug/net8.0/Presentation.csproj.CopyComplete
 /src/Business/Presentation/appsettings.Development.json
-/src/Business/Infrastructure/bin/Debug/net8.0/Microsoft.Extensions.Diagnostics.Abstractions.dll
-/src/Business/Infrastructure/bin/Debug/net8.0/Microsoft.Extensions.Diagnostics.Abstractions.xml
-/src/Business/Infrastructure/bin/Debug/net8.0/Microsoft.Extensions.FileProviders.Abstractions.dll
-/src/Business/Infrastructure/bin/Debug/net8.0/Microsoft.Extensions.FileProviders.Abstractions.xml
-/src/Business/Infrastructure/bin/Debug/net8.0/Microsoft.Extensions.Hosting.Abstractions.dll
-/src/Business/Infrastructure/bin/Debug/net8.0/Microsoft.Extensions.Hosting.Abstractions.xml
+**/bin/
+**/obj/
