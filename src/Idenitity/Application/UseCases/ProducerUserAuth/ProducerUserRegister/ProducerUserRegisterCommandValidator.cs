@@ -1,4 +1,3 @@
-using Application.UseCases.ConsumerUserAuth.ConsumerUserRegister;
 using FluentValidation;
 
 namespace Application.UseCases.ProducerUserAuth.ProducerUserRegister;

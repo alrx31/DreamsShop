@@ -27,8 +27,7 @@ public class ProducerUserRegisterCommandHandler(
         {
             opts.Items["PasswordHasher"] = passwordManager;
         });
-        user.Role = Roles.Provider;
-        
+        user.Role = Roles.Producer;
         await unitOfWork.ProducerUserRepository.AddAsync(user, cancellationToken);
         await unitOfWork.SaveChangesAsync(cancellationToken);
     }

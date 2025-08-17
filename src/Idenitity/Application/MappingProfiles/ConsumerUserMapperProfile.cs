@@ -1,4 +1,3 @@
-using Application.DTO;
 using Application.DTO.ConsumerUser;
 using Application.UseCases.ConsumerUser.ConsumerUserDelete;
 using AutoMapper;

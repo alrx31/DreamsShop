@@ -18,6 +18,7 @@ public class ProducerAuthController(
     ) : ControllerBase
 {
     [HttpPut]
+    //[Authorize(Roles = nameof(Roles.ProducerAdmin))]
     public async Task<IActionResult> RegisterProducerUser([FromBody] ProducerUserRegisterDto model, CancellationToken cancellationToken)
     {
         await mediator.Send(mapper.Map<ProducerUserRegisterCommand>(model), cancellationToken);
@@ -31,7 +32,7 @@ public class ProducerAuthController(
     }
 
     [HttpPatch]
-    [Authorize(Roles = nameof(Roles.Provider))]
+    [Authorize(Roles = nameof(Roles.Producer))]
     public async Task<IActionResult> RefreshAccessToken(CancellationToken cancellationToken)
     {
         return Ok(await mediator.Send(new ProducerUserRefreshAccessTokenCommand(), cancellationToken));
