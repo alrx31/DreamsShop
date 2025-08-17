@@ -4,7 +4,6 @@ using Domain.IRepositories;
 using Domain.IServices;
 using FluentValidation;
 using MediatR;
-using Microsoft.Extensions.Configuration;
 
 namespace Application.UseCases.ConsumerUserAuth.ConsumerUserRegister;
 

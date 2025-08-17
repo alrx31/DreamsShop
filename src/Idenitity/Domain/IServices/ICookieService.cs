@@ -1,5 +1,3 @@
-using Domain.Model;
-
 namespace Domain.IServices;
 
 public interface ICookieService

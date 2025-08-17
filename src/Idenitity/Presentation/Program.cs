@@ -1,7 +1,5 @@
 using Application.DI;
 using Infrastructure.DI;
-using Microsoft.AspNetCore.Cors.Infrastructure;
-using Microsoft.OpenApi.Models;
 using Presentation.DI;
 using Presentation.Middleware;
 

@@ -1,7 +1,6 @@
 using System.Net;
 using System.Text.Json;
 using Application.Exceptions;
-using Microsoft.AspNetCore.Diagnostics;
 
 namespace Presentation.Middleware;
 

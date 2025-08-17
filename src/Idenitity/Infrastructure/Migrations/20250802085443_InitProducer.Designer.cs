@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250522192018_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250802085443_InitProducer")]
+    partial class InitProducer
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,6 +54,29 @@ namespace Infrastructure.Migrations
                     b.ToTable("ConsumerUser");
                 });
 
+            modelBuilder.Entity("Domain.Entity.Producer", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<decimal?>("Rating")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Producer");
+                });
+
             modelBuilder.Entity("Domain.Entity.ProducerUser", b =>
                 {
                     b.Property<Guid>("Id")
@@ -83,7 +106,20 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ProducerId");
+
                     b.ToTable("ProducerUser");
+                });
+
+            modelBuilder.Entity("Domain.Entity.ProducerUser", b =>
+                {
+                    b.HasOne("Domain.Entity.Producer", "Producer")
+                        .WithMany()
+                        .HasForeignKey("ProducerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Producer");
                 });
 #pragma warning restore 612, 618
         }

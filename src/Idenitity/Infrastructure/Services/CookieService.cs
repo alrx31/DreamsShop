@@ -1,5 +1,4 @@
 using Domain.IServices;
-using Domain.Model;
 using Microsoft.AspNetCore.Http;
 
 namespace Infrastructure.Services;

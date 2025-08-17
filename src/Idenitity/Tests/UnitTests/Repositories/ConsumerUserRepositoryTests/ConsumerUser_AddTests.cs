@@ -2,7 +2,6 @@ using Bogus;
 using Domain.Entity;
 using FluentAssertions;
 using Infrastructure.Persistence.Repositories;
-using Microsoft.EntityFrameworkCore;
 
 namespace Tests.UnitTests.Repositories.ConsumerUserRepositoryTests;
 
