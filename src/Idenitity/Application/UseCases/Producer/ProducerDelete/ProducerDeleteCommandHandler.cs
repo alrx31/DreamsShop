@@ -20,7 +20,8 @@ public class ProducerDeleteCommandHandler(
         if (user is null) throw new UnauthorizedException("User not found");
         
 
-        if (user.ProducerId != producer.Id && user.Role != Domain.Entity.Roles.ProducerAdmin)
+
+        if (user.ProducerId != producer.Id || user.Role != Domain.Entity.Roles.ProducerAdmin)
             throw new ForbiddenException("You do not have permission to delete this producer");
 
 

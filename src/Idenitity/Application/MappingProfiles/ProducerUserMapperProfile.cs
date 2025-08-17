@@ -14,6 +14,8 @@ public class ProducerUserMapperProfile : Profile
         CreateMap<ProducerUserRegisterDto, ProducerUserRegisterCommand>()
             .ConstructUsing(ctor => new ProducerUserRegisterCommand(ctor));
 
+        CreateMap<ProducerUserRegisterDto, ProducerUser>();
+
         CreateMap<ProducerUserRegisterCommand, ProducerUser>()
             .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest =>dest.Name, opt=>opt.MapFrom(x=>x.Dto.Name))

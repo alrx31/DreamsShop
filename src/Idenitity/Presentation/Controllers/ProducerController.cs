@@ -31,7 +31,7 @@ public class ProducerController(
     }
 
     [HttpPut("{id:guid:required}")]
-    //[Authorize(Roles = nameof(Roles.ProducerAdmin))]
+    [Authorize(Roles = nameof(Roles.ProducerAdmin))]
     public async Task<IActionResult> UpdateProducer(Guid id, [FromBody] ProducerCreateDTO dto, CancellationToken cancellationToken)
     {
         await mediator.Send(mapper.Map<ProducerUpdateCommand>((dto, id)), cancellationToken);

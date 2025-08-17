@@ -1,8 +1,10 @@
 using Application.DTO.Producer;
+using Application.DTO.ProducerUser;
 using Application.UseCases.Producer.ProducerCreate;
 using Application.UseCases.Producer.ProducerDelete;
 using Application.UseCases.Producer.ProducerGet;
 using Application.UseCases.Producer.ProducerUpdate;
+using Application.UseCases.ProducerUserAuth.ProducerUserRegister;
 using AutoMapper;
 using Domain.Entity;
 
@@ -16,7 +18,9 @@ public class ProducerMapperProfile : Profile
             .ConstructUsing(dest => new ProducerGetCommand(dest));
 
         CreateMap<ProducerCreateDTO, ProducerCreateCommand>()
-            .ConstructUsing(dest => new ProducerCreateCommand(dest));
+            .ConstructUsing(src => new ProducerCreateCommand(
+                src,
+                new ProducerUserRegisterCommand(src.ProducerUser)));
 
         CreateMap<ProducerCreateDTO, Producer>();
 
