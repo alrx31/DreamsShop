@@ -12,7 +12,4 @@ public class UserData
     [StringLength(50)]
     public required string Name { get; set; }
     public required Roles Role { get; set; }
-    
-    [StringLength(50)]
-    public required string Password { get; set; }
 }
