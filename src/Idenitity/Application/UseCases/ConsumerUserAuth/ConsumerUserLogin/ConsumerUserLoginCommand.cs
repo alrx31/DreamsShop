@@ -1,4 +1,3 @@
-using Application.DTO;
 using Application.DTO.ConsumerUser;
 using MediatR;
 

@@ -1,5 +1,6 @@
 using Application.MappingProfiles;
 using Application.UseCases.ConsumerUserAuth.ConsumerUserRegister;
+using Application.UseCases.Producer.ProducerCreate;
 using Application.UseCases.ProducerUserAuth.ProducerUserRegister;
 using FluentValidation;
 using Microsoft.Extensions.Configuration;
@@ -22,6 +23,7 @@ public static class ApplicationDependencies
         
         services.AddScoped<IValidator<ConsumerUserRegisterCommand>, ConsumerUserRegisterCommandValidator>();
         services.AddScoped<IValidator<ProducerUserRegisterCommand>, ProducerUserRegisterCommandValidator>();
+        services.AddScoped<IValidator<ProducerCreateCommand>, ProducerCreateCommandValidator>();
         
         return services;
     }

@@ -1,4 +1,3 @@
-using Application.UseCases.ConsumerUser;
 using Application.UseCases.ConsumerUser.ConsumerUserDelete;
 using AutoMapper;
 using Domain.Entity;
