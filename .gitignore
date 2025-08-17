@@ -104,3 +104,4 @@ src/Business/Presentation/bin/Debug/net8.0/Microsoft.Extensions.Caching.StackExc
 src/Business/Presentation/bin/Debug/net8.0/Pipelines.Sockets.Unofficial.dll
 src/Business/Presentation/bin/Debug/net8.0/StackExchange.Redis.dll
 **/.idea/
+src/Client/package-lock.json
