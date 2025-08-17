@@ -1,0 +1,19 @@
+meta {
+  name: ProducerGet
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{host_identity}}Producer/{{producerId}}
+  body: none
+  auth: inherit
+}
+
+vars:pre-request {
+  producerId: eac87a2d-f764-4a6b-81a9-4c4fd354c373
+}
+
+settings {
+  encodeUrl: true
+}

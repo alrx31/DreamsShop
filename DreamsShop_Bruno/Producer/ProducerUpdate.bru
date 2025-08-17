@@ -1,0 +1,30 @@
+meta {
+  name: ProducerUpdate
+  type: http
+  seq: 3
+}
+
+put {
+  url: {{host_identity}}Producer/{{producerId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI3OTE4ZjlkYS04ZTU5LTRkZGEtODcxYS0wY2NiNmFjNGM3YmYiLCJyb2wiOiJQcm9kdWNlckFkbWluIiwiZXhwIjoxNzU1NDM2MDg2fQ.gFXGTcqetXWEnWru44ptWX5_dWu_HlD4Yj42C0m5ids
+}
+
+body:json {
+  {
+    "title": "test1",
+    "description": "test1"
+  }
+}
+
+vars:pre-request {
+  producerId: 7a0a74b2-093c-4e33-827f-e7ad2c99c6f9
+}
+
+settings {
+  encodeUrl: true
+}

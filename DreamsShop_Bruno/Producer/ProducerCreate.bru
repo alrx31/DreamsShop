@@ -1,0 +1,28 @@
+meta {
+  name: ProducerCreate
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{host_identity}}Producer
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "title": "test2",
+    "description" : "test2",
+    "producerUser":{
+      "email": "usov.llesha@gmail.com",
+      "name": "Alex ИП",
+      "password": "ProducerBestWorld",
+      "passwordRepeat": "ProducerBestWorld"
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+}
