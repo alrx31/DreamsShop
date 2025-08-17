@@ -1,0 +1,51 @@
+<ng-container *ngIf="!errorUserInfo; else errorTemplate">
+  <ng-container *ngIf="loading; else profileTemplate">
+    <app-loader></app-loader>
+  </ng-container>
+</ng-container>
+
+<ng-container *ngIf="!errorOrders; else errorTemplateOrders">
+  <ng-container *ngIf="loading; else ordersTemplate">
+    <app-loader></app-loader>
+  </ng-container>
+</ng-container>
+
+<ng-template #errorTemplate>
+  <div class="error-message">{{ errorUserInfo }}</div>
+</ng-template>
+
+<ng-template #errorTemplateOrders>
+  <div class="error-message">{{ errorOrders }}</div>
+</ng-template>
+
+<ng-template #profileTemplate>
+  <div class="profile-card">
+    <h2>User Profile</h2>
+    <div class="profile-info">
+      <p><strong>ID:</strong> {{ userInfo.id }}</p>
+      <p><strong>Name:</strong> {{ userInfo.name }}</p>
+      <p><strong>Email:</strong> {{ userInfo.email }}</p>
+      <p><strong>Role:</strong> {{ userInfo.role }}</p>
+    </div>
+  </div>
+</ng-template>
+
+
+<ng-template #ordersTemplate>
+  <div class="order-busket">
+        <h2>Your Orders</h2>
+        <div class="order-items" *ngIf="userOrders && userOrders.length > 0">
+        <div *ngFor="let order of userOrders" class="order-item">
+          <h3>Order ID: {{ order.orderId }}</h3>
+          <br>
+          <div *ngFor="let dream of order.orderDreams" class="order-item">
+              <h3>{{ dream.title }}</h3>
+              <p>{{ dream.dreamId }}</p>
+          </div>
+        </div>
+        </div>
+        <div *ngIf="!userOrders || userOrders.length === 0" class="no-items">
+        <p>Your order basket is empty.</p>
+        </div>
+    </div>
+</ng-template>

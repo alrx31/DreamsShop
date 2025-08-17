@@ -9,6 +9,6 @@ public class CategoryGetAllCommandHandler(
 {
     public async Task<List<Domain.Entity.Category>> Handle(CategoryGetAllCommand request, CancellationToken cancellationToken)
     {
-        return await unitOfWork.CategoryRepository.GetAllAsync(cancellationToken);
+        return (await unitOfWork.CategoryRepository.GetAllAsync(cancellationToken)).ToList();
     }
 }

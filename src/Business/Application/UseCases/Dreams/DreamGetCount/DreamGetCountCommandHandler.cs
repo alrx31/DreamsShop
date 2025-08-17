@@ -9,6 +9,6 @@ public class DreamGetCountCommandHandler (
 {
     public async Task<int?> Handle(DreamGetCountCommand request, CancellationToken cancellationToken)
     {
-        return await  unitOfWork.DreamRepository.GetCountAsync(cancellationToken);
+        return await unitOfWork.DreamRepository.GetCountAsync(cancellationToken);
     }
 }

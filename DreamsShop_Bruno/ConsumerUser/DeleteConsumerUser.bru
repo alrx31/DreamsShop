@@ -1,0 +1,26 @@
+meta {
+  name: DeleteConsumerUser
+  type: http
+  seq: 3
+}
+
+delete {
+  url: {{host_identity}}ConsumerUser/{{userId}}
+  body: none
+  auth: inherit
+}
+
+vars:pre-request {
+  userId: 71c4eadd-6649-444d-9298-79ef27d95045
+}
+
+script:pre-request {
+  const axios = require("axios");
+   
+  const response = await axios.post("http://localhost:5001/api/ConsumerAuth", {
+    "email":"usov.lesha2017@gmail.com",
+    "password":"DotNetOnLinuxWorks!"
+  });
+  
+  req.setHeader("Authorization", `Bearer ${response.data.accessToken}`)
+}
