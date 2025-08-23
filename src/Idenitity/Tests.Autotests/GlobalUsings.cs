@@ -1,0 +1,9 @@
+global using Xunit;
+global using OpenQA.Selenium;
+global using OpenQA.Selenium.Firefox;
+global using OpenQA.Selenium.Chrome;
+global using OpenQA.Selenium.Support.UI;
+global using OpenQA.Selenium.Support.Extensions;
+global using FluentAssertions;
+global using System.Text.Json;
+global using Tests.Autotests.Models;
