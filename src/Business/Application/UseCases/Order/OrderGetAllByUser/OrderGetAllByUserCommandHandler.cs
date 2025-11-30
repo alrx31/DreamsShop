@@ -22,7 +22,7 @@ public class OrderGetAllByUserCommandHandler(
         var cachedOrders = await cacheService.GetAsync(userId.Value.ToString() + nameof(Order));
         if (cachedOrders is not null) return cachedOrders;
 
-        var filter = new IdsSpecification<Domain.Entity.Order, Guid>(o => o.UserId, [userId.Value]);
+        var filter = new ValueSpecification<Domain.Entity.Order, Guid>(o => o.UserId, [userId.Value]);
 
         var orders = await UnitOfWork.OrderRepository
             .GetAsync<Domain.Entity.Order>(

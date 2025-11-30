@@ -14,7 +14,7 @@ public class OrderCreateCommandHandler(
 {
     public override async Task<Guid> Handle(OrderCreateCommand request, CancellationToken cancellationToken)
     {
-        var filter = new IdsSpecification<Dream, Guid>(d=>d.DreamId, request.DTO.DreamIds?.ToArray() ?? Array.Empty<Guid>());
+        var filter = new ValueSpecification<Dream, Guid>(d=>d.DreamId, request.DTO.DreamIds?.ToArray() ?? Array.Empty<Guid>());
 
         var dreams = await UnitOfWork.DreamRepository.GetAsync<Dream>(
             filter: filter.ToExpression(),

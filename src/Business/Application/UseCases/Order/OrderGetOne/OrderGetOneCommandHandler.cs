@@ -12,7 +12,7 @@ public class OrderGetOneCommandHandler(
 {
     public override async Task<OrderResponseDto> Handle(OrderGetOneCommand request, CancellationToken cancellationToken)
     {
-        var filter = new IdsSpecification<Domain.Entity.Order, Guid>(o=>o.OrderId,  [request.Id]);
+        var filter = new ValueSpecification<Domain.Entity.Order, Guid>(o=>o.OrderId,  [request.Id]);
 
         var order = (await UnitOfWork.OrderRepository
             .GetAsync<Domain.Entity.Order>(

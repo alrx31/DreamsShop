@@ -17,7 +17,7 @@ public class DreamGetOneCommandHandler(
         var cachedDream = await cacheService.GetAsync(request.DreamId.ToString() + nameof(Dream));
         if (cachedDream is not null) return cachedDream;
 
-        var filter = new IdsSpecification<Dream, Guid>(d => d.DreamId, [request.DreamId]);
+        var filter = new ValueSpecification<Dream, Guid>(d => d.DreamId, [request.DreamId]);
         
         var dream = (await UnitOfWork.DreamRepository
             .GetAsync<Dream>(

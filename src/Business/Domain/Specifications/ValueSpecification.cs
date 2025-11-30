@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace Domain.Specifications;
 
-public class IdsSpecification<T,K>(Expression<Func<T, K>> keySelector, K[] values) : Spetification<T>
+public class ValueSpecification<T,K>(Expression<Func<T, K>> keySelector, K[] values) : Specification<T>
 {
     private static MethodInfo ContainsMethodInfo => typeof(List<K>).GetMethod(nameof(List<K>.Contains))!;
 
