@@ -11,3 +11,4 @@
 /src/Business/Presentation/appsettings.Development.json
 **/bin/
 **/obj/
+src/docker-compose.override.yml

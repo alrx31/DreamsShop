@@ -3,7 +3,4 @@ using Domain.IRepositories.Base;
 
 namespace Domain.IRepositories;
 
-public interface IOrderDreamRepository : ICrudRepository<OrderDream>
-{
-
-}
+public interface IOrderDreamRepository : IBaseRepository<OrderDream>;

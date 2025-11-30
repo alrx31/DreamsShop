@@ -1,20 +1,19 @@
 using Application.Exceptions;
-using AutoMapper;
-using Domain.IRepositories;
-using MediatR;
+using Application.UseCases.Base;
+using Domain.Specifications;
 
 namespace Application.UseCases.DreamCategory.DreamCategoryDelete;
 
-public class DreamCategoryDeleteCommandHandler (
-    IUnitOfWork unitOfWork
-    ) : IRequestHandler<DreamCategoryDeleteCommand>
+public class DreamCategoryDeleteCommandHandler : BaseRequestHandler<DreamCategoryDeleteCommand, MediatR.Unit>
 {
-    public async Task Handle(DreamCategoryDeleteCommand request, CancellationToken cancellationToken)
+    public override async Task<MediatR.Unit> Handle(DreamCategoryDeleteCommand request, CancellationToken cancellationToken)
     {
-        var dreamCategory = await unitOfWork.DreamCategoryRepository.GetAsync([request.DreamId,request.CategoryId], cancellationToken);
+        var dreamCategory = await UnitOfWork.DreamCategoryRepository.GetAsync([request.DreamId,request.CategoryId], cancellationToken);
         if(dreamCategory is null) throw new NotFoundException("Dream category not found.");
         
-        await unitOfWork.DreamCategoryRepository.DeleteAsync(dreamCategory, cancellationToken);
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await UnitOfWork.DreamCategoryRepository.DeleteAsync(dreamCategory, cancellationToken);
+        await UnitOfWork.SaveChangesAsync(cancellationToken);
+
+        return MediatR.Unit.Value;
     }
 }

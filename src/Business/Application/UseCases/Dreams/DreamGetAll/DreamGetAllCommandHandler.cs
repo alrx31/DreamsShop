@@ -1,19 +1,18 @@
 using Application.DTO;
-using Domain.IRepositories;
+using Application.UseCases.Base;
+using Domain.Entity;
 using Domain.IService;
 using Domain.Model;
-using MediatR;
 
 namespace Application.UseCases.Dreams.DreamGetAll;
 
 public class DreamGetAllCommandHandler(
-    IUnitOfWork unitOfWork,
     IFileStorageService fileStorageService,
     ICacheService<DreamCacheKey, List<DreamResponseDto>> cacheService
-    ) : IRequestHandler<DreamGetAllCommand, List<DreamResponseDto>>
+    ) : BaseRequestHandler<DreamGetAllCommand,List<DreamResponseDto>>
 {
     private bool useCache = false;
-    public async Task<List<DreamResponseDto>> Handle(DreamGetAllCommand request, CancellationToken cancellationToken)
+    public override async Task<List<DreamResponseDto>> Handle(DreamGetAllCommand request, CancellationToken cancellationToken)
     {
         var cacheKey = new DreamCacheKey
         {
@@ -29,8 +28,11 @@ public class DreamGetAllCommandHandler(
             if (cachedDreams is not null) return cachedDreams;
         }
 
-        var dreams = await unitOfWork.DreamRepository
-                .GetRangeAsync(request.StartIndex, request.Count, cancellationToken);
+        var dreams = await UnitOfWork.DreamRepository
+                .GetAsync<Dream>(
+                    skip: request.StartIndex,
+                    take: request.Count,
+                    cancellationToken: cancellationToken);
 
         if (!dreams.Any()) return [];
 
@@ -52,10 +54,10 @@ public class DreamGetAllCommandHandler(
         var dreamCategoryMap = new Dictionary<Guid, List<CategoryResponseDto>>();
         foreach (var dreamId in dreamIds)
         {
-            var dreamCategories = await unitOfWork.DreamCategoryRepository.GetCategoriesByDreamIdAsync(dreamId, cancellationToken);
+            var dreamCategories = await UnitOfWork.DreamCategoryRepository.GetCategoriesByDreamIdAsync(dreamId, cancellationToken);
             var categoryIds = dreamCategories.Select(dc => dc.CategoryId).ToList();
-
-            var categories = await unitOfWork.CategoryRepository.GetAllAsync(cancellationToken);
+    
+            var categories = await UnitOfWork.CategoryRepository.GetAsync<Domain.Entity.Category>(cancellationToken:cancellationToken);
             var matchedCategories = categories
                 .Where(c => categoryIds.Contains(c.CategoryId))
                 .Select(c => new CategoryResponseDto

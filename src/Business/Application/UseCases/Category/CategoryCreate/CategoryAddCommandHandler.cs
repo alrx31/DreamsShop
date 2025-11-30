@@ -1,20 +1,15 @@
-using AutoMapper;
-using Domain.IRepositories;
-using MediatR;
+using Application.UseCases.Base;
 
 namespace Application.UseCases.Category.CategoryCreate;
 
-public class CategoryAddCommandHandler(
-    IUnitOfWork unitOfWork,
-    IMapper mapper
-    ) : IRequestHandler<CategoryAddCommand, Guid>
+public class CategoryAddCommandHandler : BaseRequestHandler<CategoryAddCommand, Guid>
 {
-    public async Task<Guid> Handle(CategoryAddCommand request, CancellationToken cancellationToken)
+    public override async Task<Guid> Handle(CategoryAddCommand request, CancellationToken cancellationToken)
     {
-        var id = await unitOfWork.CategoryRepository.AddAsync(
-            mapper.Map<Domain.Entity.Category>(request),
-            cancellationToken);
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        var id = (await UnitOfWork.CategoryRepository.AddAsync(
+            Mapper.Map<Domain.Entity.Category>(request),
+            cancellationToken)).CategoryId;
+        await UnitOfWork.SaveChangesAsync(cancellationToken);
         
         return id;
     }

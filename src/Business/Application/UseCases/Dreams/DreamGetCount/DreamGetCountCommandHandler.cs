@@ -1,14 +1,11 @@
-using Domain.IRepositories;
-using MediatR;
+using Application.UseCases.Base;
 
 namespace Application.UseCases.Dreams.DreamGetCount;
 
-public class DreamGetCountCommandHandler (
-    IUnitOfWork unitOfWork
-    ): IRequestHandler<DreamGetCountCommand, int?>
+public class DreamGetCountCommandHandler : BaseRequestHandler<DreamGetCountCommand, int?>
 {
-    public async Task<int?> Handle(DreamGetCountCommand request, CancellationToken cancellationToken)
+    public override async Task<int?> Handle(DreamGetCountCommand request, CancellationToken cancellationToken)
     {
-        return await unitOfWork.DreamRepository.GetCountAsync(cancellationToken);
+        return await UnitOfWork.DreamRepository.GetCountAsync(cancellationToken);
     }
 }

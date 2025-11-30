@@ -1,16 +1,13 @@
 using Application.Exceptions;
-using Domain.IRepositories;
-using MediatR;
+using Application.UseCases.Base;
 
 namespace Application.UseCases.Category.CategoryUpdate;
 
-public class CategoryUpdateCommandHandler(
-    IUnitOfWork unitOfWork
-    ) : IRequestHandler<CategoryUpdateCommand>
+public class CategoryUpdateCommandHandler : BaseRequestHandler<CategoryUpdateCommand, MediatR.Unit>
 {
-    public async Task Handle(CategoryUpdateCommand request, CancellationToken cancellationToken)
+    public override async Task<MediatR.Unit> Handle(CategoryUpdateCommand request, CancellationToken cancellationToken)
     {
-        var category = await unitOfWork.CategoryRepository.GetAsync([request.CategoryId], cancellationToken);
+        var category = await UnitOfWork.CategoryRepository.GetAsync([request.CategoryId], cancellationToken);
         if (category is null) throw new NotFoundException("Category not found.");
 
         if (!string.IsNullOrWhiteSpace(request.Dto.Description))
@@ -23,7 +20,9 @@ public class CategoryUpdateCommandHandler(
             category.Title = request.Dto.Title;
         }
         
-        await unitOfWork.CategoryRepository.UpdateAsync(category, cancellationToken);
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await UnitOfWork.CategoryRepository.UpdateAsync(category, cancellationToken);
+        await UnitOfWork.SaveChangesAsync(cancellationToken);
+
+        return MediatR.Unit.Value;
     }
 }
