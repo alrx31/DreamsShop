@@ -35,6 +35,9 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+// Initialize ServiceLocator for BaseCommandHandler
+ServiceLocator.ServiceProvider = app.Services;
+
 app.UseCors("AllowAngularLocalhost");
 
 app.ApplyDatabaseMigration();

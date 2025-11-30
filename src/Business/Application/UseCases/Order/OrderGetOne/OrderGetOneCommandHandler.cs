@@ -1,21 +1,25 @@
 using Application.DTO.Order;
 using Application.Exceptions;
-using AutoMapper;
-using Domain.IRepositories;
+using Application.UseCases.Base;
 using Domain.IService;
-using MediatR;
+using Domain.Specifications;
 
 namespace Application.UseCases.Order.OrderGetOne;
 
 public class OrderGetOneCommandHandler(
-    IUnitOfWork unitOfWork,
-    IMapper mapper,
     IHttpContextService httpContextService
-) : IRequestHandler<OrderGetOneCommand, OrderResponseDto>
+) : BaseRequestHandler<OrderGetOneCommand, OrderResponseDto>
 {
-    public async Task<OrderResponseDto> Handle(OrderGetOneCommand request, CancellationToken cancellationToken)
+    public override async Task<OrderResponseDto> Handle(OrderGetOneCommand request, CancellationToken cancellationToken)
     {
-        var order = await unitOfWork.OrderRepository.GetAsync([request.Id], cancellationToken);
+        var filter = new ValueSpecification<Domain.Entity.Order, Guid>(o=>o.OrderId,  [request.Id]);
+
+        var order = (await UnitOfWork.OrderRepository
+            .GetAsync<Domain.Entity.Order>(
+                filter: filter.ToExpression(),
+                cancellationToken: cancellationToken))
+            .SingleOrDefault();
+
         var userId = httpContextService.GetCurrentUserId();
 
         if (order is null)
@@ -28,6 +32,6 @@ public class OrderGetOneCommandHandler(
             throw new ForbiddenException("You do not have permission to access this order.");
         }
 
-        return mapper.Map<OrderResponseDto>(order);
+        return Mapper.Map<OrderResponseDto>(order);
     }
 }

@@ -1,24 +1,30 @@
 using Application.DTO;
 using Application.Exceptions;
+using Application.UseCases.Base;
 using Domain.Entity;
-using Domain.IRepositories;
 using Domain.IService;
-using MediatR;
+using Domain.Specifications;
 
 namespace Application.UseCases.Dreams.DreamsGetOne;
 
 public class DreamGetOneCommandHandler(
-        IUnitOfWork unitOfWork,
         IFileStorageService fileStorageService,
         ICacheService<string, DreamResponseDto> cacheService
-    ) : IRequestHandler<DreamGetOneCommand, DreamResponseDto?>
+    ) : BaseRequestHandler<DreamGetOneCommand, DreamResponseDto?>
 {
-    public async Task<DreamResponseDto?> Handle(DreamGetOneCommand request, CancellationToken cancellationToken)
+    public override async Task<DreamResponseDto?> Handle(DreamGetOneCommand request, CancellationToken cancellationToken)
     {
         var cachedDream = await cacheService.GetAsync(request.DreamId.ToString() + nameof(Dream));
         if (cachedDream is not null) return cachedDream;
 
-        var dream = await unitOfWork.DreamRepository.GetAsync([request.DreamId], cancellationToken);
+        var filter = new ValueSpecification<Dream, Guid>(d => d.DreamId, [request.DreamId]);
+        
+        var dream = (await UnitOfWork.DreamRepository
+            .GetAsync<Dream>(
+                filter: filter.ToExpression(),
+                cancellationToken: cancellationToken))
+            .SingleOrDefault();
+
         if (dream is null) throw new NotFoundException("Dream not found.");
         
         var dreamImg = await fileStorageService.DownloadFileAsync(dream.ImageFileName, cancellationToken);
@@ -26,8 +32,8 @@ public class DreamGetOneCommandHandler(
         await dreamImg.Content!.CopyToAsync(stream, cancellationToken);
         var imageBytes = stream.ToArray();
         
-        var dreamCategories = await unitOfWork.DreamCategoryRepository.GetCategoriesByDreamIdAsync(dream.DreamId, cancellationToken);
-        var categories = await unitOfWork.CategoryRepository.GetAllAsync(cancellationToken);
+        var dreamCategories = await UnitOfWork.DreamCategoryRepository.GetCategoriesByDreamIdAsync(dream.DreamId, cancellationToken);
+        var categories = await UnitOfWork.CategoryRepository.GetAsync<Domain.Entity.Category>(cancellationToken: cancellationToken);
 
         var res = dreamCategories.Join(
             categories,

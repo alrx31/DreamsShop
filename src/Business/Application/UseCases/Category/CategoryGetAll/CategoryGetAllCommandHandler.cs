@@ -1,14 +1,11 @@
-using Domain.IRepositories;
-using MediatR;
+using Application.UseCases.Base;
 
 namespace Application.UseCases.Category.CategoryGetAll;
 
-public class CategoryGetAllCommandHandler(
-    IUnitOfWork unitOfWork
-    ) : IRequestHandler<CategoryGetAllCommand, List<Domain.Entity.Category>>
+public class CategoryGetAllCommandHandler : BaseRequestHandler<CategoryGetAllCommand, List<Domain.Entity.Category>>
 {
-    public async Task<List<Domain.Entity.Category>> Handle(CategoryGetAllCommand request, CancellationToken cancellationToken)
+    public override async Task<List<Domain.Entity.Category>> Handle(CategoryGetAllCommand request, CancellationToken cancellationToken)
     {
-        return (await unitOfWork.CategoryRepository.GetAllAsync(cancellationToken)).ToList();
+        return await UnitOfWork.CategoryRepository.GetAsync<Domain.Entity.Category>(cancellationToken:cancellationToken);
     }
 }

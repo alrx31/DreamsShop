@@ -1,7 +1,7 @@
 using Application.DTO;
 using Application.Exceptions;
+using Application.UseCases.Base;
 using Domain.Entity;
-using Domain.IRepositories;
 using Domain.IService;
 using Domain.Model;
 using MediatR;
@@ -9,16 +9,15 @@ using MediatR;
 namespace Application.UseCases.Dreams.DreamUpdate;
 
 public class DreamUpdateCommandHandler(
-    IUnitOfWork unitOfWork,
     IHttpContextService httpContextService,
     IFileStorageService fileStorageService,
     ICacheService<string, DreamResponseDto> cacheService,
     ICacheService<DreamCacheKey, List<DreamResponseDto>> allDreamCacheService
-    ) : IRequestHandler<DreamUpdateCommand>
+    ) : BaseRequestHandler<DreamUpdateCommand, Unit> 
 {
-    public async Task Handle(DreamUpdateCommand request, CancellationToken cancellationToken)
+    public override async Task<Unit> Handle(DreamUpdateCommand request, CancellationToken cancellationToken)
     {
-        var dream = await unitOfWork.DreamRepository.GetAsync([request.DreamId], cancellationToken);
+        var dream = await UnitOfWork.DreamRepository.GetAsync([request.DreamId], cancellationToken);
         if (dream is null) throw new NotFoundException("Dream not found.");
 
         var currentUser = httpContextService.GetCurrentUserId();
@@ -46,7 +45,9 @@ public class DreamUpdateCommandHandler(
         await allDreamCacheService.RemoveAsync(new DreamCacheKey());
         await cacheService.RemoveAsync(request.DreamId.ToString() + nameof(Dream));
         
-        await unitOfWork.DreamRepository.UpdateAsync(dream, cancellationToken);
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await UnitOfWork.DreamRepository.UpdateAsync(dream, cancellationToken);
+        await UnitOfWork.SaveChangesAsync(cancellationToken);
+
+        return Unit.Value;
     }
 }

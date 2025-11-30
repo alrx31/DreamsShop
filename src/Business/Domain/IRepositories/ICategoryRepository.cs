@@ -3,6 +3,4 @@ using Domain.IRepositories.Base;
 
 namespace Domain.IRepositories;
 
-public interface ICategoryRepository : ICrudRepository<Category>, IGetAllRepository<Category>
-{
-}
+public interface ICategoryRepository : IBaseRepository<Category>;

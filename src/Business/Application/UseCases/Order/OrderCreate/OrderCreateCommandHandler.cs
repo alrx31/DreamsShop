@@ -1,21 +1,27 @@
 using Application.DTO.Order;
 using Application.Exceptions;
-using Domain.IRepositories;
+using Application.UseCases.Base;
+using Domain.Entity;
 using Domain.IService;
-using MediatR;
+using Domain.Specifications;
 
 namespace Application.UseCases.Order.CreateOrder;
 
 public class OrderCreateCommandHandler(
-        IUnitOfWork unitOfWork,
         IHttpContextService httpContextService,
         ICacheService<string, IEnumerable<OrderResponseDto>> cacheService
-    ) : IRequestHandler<OrderCreateCommand, Guid>
+    ) : BaseRequestHandler<OrderCreateCommand, Guid>
 {
-    public async Task<Guid> Handle(OrderCreateCommand request, CancellationToken cancellationToken)
+    public override async Task<Guid> Handle(OrderCreateCommand request, CancellationToken cancellationToken)
     {
-        var dreams = await unitOfWork.DreamRepository.GetRangeAsync(request.DTO.DreamIds ?? [], cancellationToken);
-        if (dreams.Count() != (request.DTO.DreamIds?.Count ?? 0) || dreams is null)
+        var filter = new ValueSpecification<Dream, Guid>(d=>d.DreamId, request.DTO.DreamIds?.ToArray() ?? Array.Empty<Guid>());
+
+        var dreams = await UnitOfWork.DreamRepository.GetAsync<Dream>(
+            filter: filter.ToExpression(),
+            cancellationToken: cancellationToken
+            );
+        
+        if (dreams is null || dreams.Count != (request.DTO.DreamIds?.Count ?? 0))
         {
             throw new NotFoundException("Some dreams not found for order.");
         }
@@ -37,13 +43,13 @@ public class OrderCreateCommandHandler(
             DreamId = dream.DreamId
         });
 
-        var orderId = await unitOfWork.OrderRepository.AddAsync(order, cancellationToken);
+        var orderId = (await UnitOfWork.OrderRepository.AddAsync(order, cancellationToken)).OrderId;
         if (orderId == Guid.Empty)
         {
             throw new BadRequestException("Failed to create order.");
         }
 
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await UnitOfWork.SaveChangesAsync(cancellationToken);
 
         await cacheService.RemoveAsync(userId.Value.ToString() + nameof(Order));
         return orderId;
