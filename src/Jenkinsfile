@@ -1,0 +1,59 @@
+pipeline {
+    agent any
+
+    environment {
+        DOTNET_CLI_TELEMETRY_OPTOUT = "1"
+        DOTNET_SKIP_FIRST_TIME_EXPERIENCE = "1"
+        SOLUTION = "src/Business/Business.sln"
+        TEST_PROJECT = "src/Business/Tests/Tests.csproj"
+    }
+
+    options {
+        timestamps()
+        ansiColor('xterm')
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Restore') {
+            steps {
+                sh 'dotnet restore ${SOLUTION}'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh 'dotnet build ${SOLUTION} -c Release --no-restore'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh 'dotnet test ${TEST_PROJECT} -c Release --no-build --logger "trx;LogFileName=test-results.trx"'
+            }
+            post {
+                always {
+                    junit allowEmptyResults: true, testResults: '**/TestResults/*.xml'
+                    // If trx needs converting, you can use dotnet tools or custom scripts.
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            archiveArtifacts artifacts: '**/TestResults/**/*', allowEmptyArchive: true
+        }
+        failure {
+            mail to: '',
+                 subject: "Jenkins build failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                 body: "See details at ${env.BUILD_URL}"
+        }
+    }
+}
+
