@@ -1,6 +1,3 @@
-./src/Server/.idea/.idea.Server/.idea/.gitignore
-/src/Server/.idea/.idea.Server/.idea/indexLayout.xml
-/src/Server/.idea/.idea.Server/.idea/vcs.xml
 **/bin/
 **/obj/
 /src/Identity/.idea
@@ -12,3 +9,6 @@
 **/bin/
 **/obj/
 src/docker-compose.override.yml
+.env
+**/.vscode/
+
