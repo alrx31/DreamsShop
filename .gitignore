@@ -10,5 +10,6 @@
 **/https/dev-certificate.pfx
 
 **/appsettings.Development.json
+**/appsettings.Release.json
 
 DreamsShop_Client_Business.session.sql
