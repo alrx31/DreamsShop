@@ -1,14 +1,7 @@
-./src/Server/.idea/.idea.Server/.idea/.gitignore
-/src/Server/.idea/.idea.Server/.idea/indexLayout.xml
-/src/Server/.idea/.idea.Server/.idea/vcs.xml
+**/.idea/
 **/bin/
 **/obj/
-/src/Identity/.idea
 /src/Idenitity/https/dev-certificate.pfx
-/src/Idenitity/Infrastructure/Migrations/20250524075649_AddRefreshToken.cs
-/src/Idenitity/Infrastructure/Migrations/20250524075649_AddRefreshToken.Designer.cs
 /src/Business/https/dev-certificate.pfx
 /src/Business/Presentation/appsettings.Development.json
-**/bin/
-**/obj/
-src/docker-compose.override.yml
+/.vscode
