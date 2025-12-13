@@ -5,15 +5,17 @@ using Bogus;
 using Domain.IRepositories;
 using FluentAssertions;
 using Moq;
+using Tests.TestHelpers;
 
 namespace Tests.UnitTests.UseCases.Category;
 
-public class CategoryAddCommandHandlerTests
+public class CategoryAddCommandHandlerTests : IDisposable
 {
     private readonly Mock<IUnitOfWork> _unitOfWorkMock;
     private readonly Mock<ICategoryRepository> _categoryRepositoryMock;
     private readonly Mock<IMapper> _mapperMock;
     private readonly CategoryAddCommandHandler _handler;
+    private readonly ServiceLocatorTestHelper.ServiceLocatorTestScope _serviceScope;
 
     public CategoryAddCommandHandlerTests()
     {
@@ -22,8 +24,12 @@ public class CategoryAddCommandHandlerTests
         _mapperMock = new Mock<IMapper>();
         
         _unitOfWorkMock.Setup(u => u.CategoryRepository).Returns(_categoryRepositoryMock.Object);
+
+        _serviceScope = ServiceLocatorTestHelper.UseServiceLocator(
+            (typeof(IUnitOfWork), _unitOfWorkMock.Object),
+            (typeof(IMapper), _mapperMock.Object));
         
-        _handler = new CategoryAddCommandHandler(_unitOfWorkMock.Object, _mapperMock.Object);
+        _handler = new CategoryAddCommandHandler();
     }
 
     [Fact]
@@ -47,7 +53,7 @@ public class CategoryAddCommandHandlerTests
         };
 
         _mapperMock.Setup(m => m.Map<Domain.Entity.Category>(command)).Returns(category);
-        _categoryRepositoryMock.Setup(r => r.AddAsync(category, CancellationToken.None)).ReturnsAsync(category.CategoryId);
+        _categoryRepositoryMock.Setup(r => r.AddAsync(category, CancellationToken.None)).ReturnsAsync(category);
         _unitOfWorkMock.Setup(u => u.SaveChangesAsync(CancellationToken.None)).Returns(Task.FromResult(1));
 
         // Act
@@ -59,4 +65,6 @@ public class CategoryAddCommandHandlerTests
         _categoryRepositoryMock.Verify(r => r.AddAsync(category, CancellationToken.None), Times.Once);
         _unitOfWorkMock.Verify(u => u.SaveChangesAsync(CancellationToken.None), Times.Once);
     }
+
+    public void Dispose() => _serviceScope.Dispose();
 }

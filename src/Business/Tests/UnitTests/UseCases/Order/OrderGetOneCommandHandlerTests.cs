@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 using Application.UseCases.Order.OrderGetOne;
 using Application.DTO.Order;
 using Application.Exceptions;
@@ -8,19 +11,20 @@ using Domain.IRepositories;
 using Domain.IService;
 using FluentAssertions;
 using Moq;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Tests.TestHelpers;
 
 namespace Tests.UnitTests.UseCases.Order;
 
-public class OrderGetOneCommandHandlerTests
+public class OrderGetOneCommandHandlerTests : IDisposable
 {
     private readonly Mock<IUnitOfWork> _unitOfWorkMock;
     private readonly Mock<IOrderRepository> _orderRepositoryMock;
     private readonly Mock<IMapper> _mapperMock;
     private readonly Mock<IHttpContextService> _httpContextServiceMock;
     private readonly OrderGetOneCommandHandler _handler;
+    private readonly ServiceLocatorTestHelper.ServiceLocatorTestScope _serviceScope;
 
     public OrderGetOneCommandHandlerTests()
     {
@@ -30,10 +34,12 @@ public class OrderGetOneCommandHandlerTests
         _httpContextServiceMock = new Mock<IHttpContextService>();
         
         _unitOfWorkMock.Setup(u => u.OrderRepository).Returns(_orderRepositoryMock.Object);
+
+        _serviceScope = ServiceLocatorTestHelper.UseServiceLocator(
+            (typeof(IUnitOfWork), _unitOfWorkMock.Object),
+            (typeof(IMapper), _mapperMock.Object));
         
         _handler = new OrderGetOneCommandHandler(
-            _unitOfWorkMock.Object,
-            _mapperMock.Object,
             _httpContextServiceMock.Object
         );
     }
@@ -56,7 +62,13 @@ public class OrderGetOneCommandHandlerTests
             OrderId = orderId
         };
 
-        _orderRepositoryMock.Setup(r => r.GetAsync(new [] {orderId}, CancellationToken.None)).ReturnsAsync(order);
+        _orderRepositoryMock.Setup(r => r.GetAsync<Domain.Entity.Order>(
+                It.IsAny<Expression<Func<Domain.Entity.Order, bool>>?>(),
+                It.IsAny<Expression<Func<Domain.Entity.Order, Domain.Entity.Order>>?>(),
+                It.IsAny<int?>(),
+                It.IsAny<int?>(),
+                CancellationToken.None))
+            .ReturnsAsync(new List<Domain.Entity.Order> { order });
         _httpContextServiceMock.Setup(s => s.GetCurrentUserId()).Returns(userId);
         _mapperMock.Setup(m => m.Map<OrderResponseDto>(order)).Returns(mappedOrder);
 
@@ -74,7 +86,13 @@ public class OrderGetOneCommandHandlerTests
         var orderId = Guid.NewGuid();
         var command = new OrderGetOneCommand(orderId);
 
-        _orderRepositoryMock.Setup(r => r.GetAsync(new [] {orderId}, CancellationToken.None)).ReturnsAsync((Domain.Entity.Order)null);
+        _orderRepositoryMock.Setup(r => r.GetAsync<Domain.Entity.Order>(
+                It.IsAny<Expression<Func<Domain.Entity.Order, bool>>?>(),
+                It.IsAny<Expression<Func<Domain.Entity.Order, Domain.Entity.Order>>?>(),
+                It.IsAny<int?>(),
+                It.IsAny<int?>(),
+                CancellationToken.None))
+            .ReturnsAsync(new List<Domain.Entity.Order>());
 
         // Act
         Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
@@ -98,7 +116,13 @@ public class OrderGetOneCommandHandlerTests
             UserId = userId
         };
 
-        _orderRepositoryMock.Setup(r => r.GetAsync(new [] {orderId}, CancellationToken.None)).ReturnsAsync(order);
+        _orderRepositoryMock.Setup(r => r.GetAsync<Domain.Entity.Order>(
+                It.IsAny<Expression<Func<Domain.Entity.Order, bool>>?>(),
+                It.IsAny<Expression<Func<Domain.Entity.Order, Domain.Entity.Order>>?>(),
+                It.IsAny<int?>(),
+                It.IsAny<int?>(),
+                CancellationToken.None))
+            .ReturnsAsync(new List<Domain.Entity.Order> { order });
         _httpContextServiceMock.Setup(s => s.GetCurrentUserId()).Returns(otherUserId);
 
         // Act
@@ -106,5 +130,10 @@ public class OrderGetOneCommandHandlerTests
 
         // Assert
         await act.Should().ThrowAsync<ForbiddenException>();
+    }
+
+    public void Dispose()
+    {
+        _serviceScope.Dispose();
     }
 }

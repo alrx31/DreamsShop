@@ -13,6 +13,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
+using ConsumerUserEntity = Domain.Entity.ConsumerUser;
 
 namespace Tests.UnitTests.UseCases.ConsumerUserAuth;
 
@@ -58,7 +59,7 @@ public class ConsumerUserRegisterCommandHandlerTests
         };
         var command = new ConsumerUserRegisterCommand(registerDto);
         var validationResult = new FluentValidation.Results.ValidationResult();
-        var user = new ConsumerUser
+        var user = new ConsumerUserEntity
         {
             Id = faker.Random.Guid(),
             Email = registerDto.Email,
@@ -69,9 +70,9 @@ public class ConsumerUserRegisterCommandHandlerTests
 
         _validatorMock.Setup(v => v.ValidateAsync(command, CancellationToken.None)).ReturnsAsync(validationResult);
         _consumerUserRepositoryMock.Setup(r => r.GetByEmailAsync(registerDto.Email, CancellationToken.None))
-            .ReturnsAsync((ConsumerUser?)null);
+            .ReturnsAsync((ConsumerUserEntity?)null);
         _passwordManagerMock.Setup(p => p.CheckPassword(registerDto.Password)).Returns(255);
-        _mapperMock.Setup(m => m.Map<ConsumerUser>(registerDto, It.IsAny<Action<IMappingOperationOptions<object, ConsumerUser>>>())).Returns(user);
+        _mapperMock.Setup(m => m.Map<ConsumerUserEntity>(registerDto, It.IsAny<Action<IMappingOperationOptions<object, ConsumerUserEntity>>>())).Returns(user);
 
         // Act
         await _handler.Handle(command, CancellationToken.None);
@@ -121,7 +122,7 @@ public class ConsumerUserRegisterCommandHandlerTests
         };
         var command = new ConsumerUserRegisterCommand(registerDto);
         var validationResult = new FluentValidation.Results.ValidationResult();
-        var user = new ConsumerUser
+        var user = new ConsumerUserEntity
         {
             Id = faker.Random.Guid(),
             Email = registerDto.Email,
@@ -158,7 +159,7 @@ public class ConsumerUserRegisterCommandHandlerTests
 
         _validatorMock.Setup(v => v.ValidateAsync(command, CancellationToken.None)).ReturnsAsync(validationResult);
         _consumerUserRepositoryMock.Setup(r => r.GetByEmailAsync(registerDto.Email, CancellationToken.None))
-            .ReturnsAsync((ConsumerUser?)null);
+            .ReturnsAsync((ConsumerUserEntity?)null);
         _passwordManagerMock.Setup(p => p.CheckPassword(registerDto.Password)).Returns(10);
 
         // Act

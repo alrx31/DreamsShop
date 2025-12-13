@@ -5,15 +5,17 @@ using Domain.IRepositories;
 using Domain.IService;
 using FluentAssertions;
 using Moq;
+using Tests.TestHelpers;
 
 namespace Tests.UnitTests.UseCases.Category;
 
-public class CategoryGetCommandHandlerTests
+public class CategoryGetCommandHandlerTests : IDisposable
 {
     private readonly Mock<IUnitOfWork> _unitOfWorkMock;
     private readonly Mock<ICategoryRepository> _categoryRepositoryMock;
     private readonly Mock<ICacheService<Guid, Domain.Entity.Category>> _cacheServiceMock;
     private readonly CategoryGetCommandHandler _handler;
+    private readonly ServiceLocatorTestHelper.ServiceLocatorTestScope _serviceScope;
 
     public CategoryGetCommandHandlerTests()
     {
@@ -22,8 +24,11 @@ public class CategoryGetCommandHandlerTests
         _cacheServiceMock = new Mock<ICacheService<Guid, Domain.Entity.Category>>();
         
         _unitOfWorkMock.Setup(u => u.CategoryRepository).Returns(_categoryRepositoryMock.Object);
+
+        _serviceScope = ServiceLocatorTestHelper.UseServiceLocator(
+            (typeof(IUnitOfWork), _unitOfWorkMock.Object));
         
-        _handler = new CategoryGetCommandHandler(_unitOfWorkMock.Object, _cacheServiceMock.Object);
+        _handler = new CategoryGetCommandHandler(_cacheServiceMock.Object);
     }
 
     [Fact]
@@ -68,7 +73,7 @@ public class CategoryGetCommandHandlerTests
             Description = faker.Lorem.Sentence()
         };
 
-        _cacheServiceMock.Setup(c => c.GetAsync(categoryId)).ReturnsAsync((Domain.Entity.Category)null);
+        _cacheServiceMock.Setup(c => c.GetAsync(categoryId)).ReturnsAsync((Domain.Entity.Category)null!);
         _categoryRepositoryMock.Setup(r => r.GetAsync(new [] {categoryId}, CancellationToken.None)).ReturnsAsync(category);
         _cacheServiceMock.Setup(c => c.SetAsync(categoryId, category)).Returns(Task.CompletedTask);
 
@@ -89,8 +94,8 @@ public class CategoryGetCommandHandlerTests
         var categoryId = Guid.NewGuid();
         var command = new CategoryGetCommand(categoryId);
 
-        _cacheServiceMock.Setup(c => c.GetAsync(categoryId)).ReturnsAsync((Domain.Entity.Category)null);
-        _categoryRepositoryMock.Setup(r => r.GetAsync(new [] {categoryId}, CancellationToken.None)).ReturnsAsync((Domain.Entity.Category)null);
+        _cacheServiceMock.Setup(c => c.GetAsync(categoryId)).ReturnsAsync((Domain.Entity.Category)null!);
+        _categoryRepositoryMock.Setup(r => r.GetAsync(new [] {categoryId}, CancellationToken.None)).ReturnsAsync((Domain.Entity.Category)null!);
 
         // Act
         Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
@@ -100,5 +105,11 @@ public class CategoryGetCommandHandlerTests
         _cacheServiceMock.Verify(c => c.GetAsync(categoryId), Times.Once);
         _categoryRepositoryMock.Verify(r => r.GetAsync(new [] {categoryId}, CancellationToken.None), Times.Once);
         _cacheServiceMock.Verify(c => c.SetAsync(It.IsAny<Guid>(), It.IsAny<Domain.Entity.Category>()), Times.Never);
+    }
+
+    public void Dispose()
+    {
+        _serviceScope.Dispose();
+        GC.SuppressFinalize(this);
     }
 }

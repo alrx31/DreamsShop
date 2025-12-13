@@ -1,3 +1,4 @@
+using System;
 using Application.UseCases.Category.CategoryRemove;
 using Application.Exceptions;
 using Bogus;
@@ -5,15 +6,17 @@ using Domain.IRepositories;
 using Domain.IService;
 using FluentAssertions;
 using Moq;
+using Tests.TestHelpers;
 
 namespace Tests.UnitTests.UseCases.Category;
 
-public class CategoryRemoveCommandHandlerTests
+public class CategoryRemoveCommandHandlerTests : IDisposable
 {
     private readonly Mock<IUnitOfWork> _unitOfWorkMock;
     private readonly Mock<ICategoryRepository> _categoryRepositoryMock;
     private readonly Mock<ICacheService<Guid, Domain.Entity.Category>> _cacheServiceMock;
     private readonly CategoryRemoveCommandHandler _handler;
+    private readonly ServiceLocatorTestHelper.ServiceLocatorTestScope _serviceScope;
 
     public CategoryRemoveCommandHandlerTests()
     {
@@ -22,8 +25,11 @@ public class CategoryRemoveCommandHandlerTests
         _cacheServiceMock = new Mock<ICacheService<Guid, Domain.Entity.Category>>();
         
         _unitOfWorkMock.Setup(u => u.CategoryRepository).Returns(_categoryRepositoryMock.Object);
+
+        _serviceScope = ServiceLocatorTestHelper.UseServiceLocator(
+            (typeof(IUnitOfWork), _unitOfWorkMock.Object));
         
-        _handler = new CategoryRemoveCommandHandler(_unitOfWorkMock.Object, _cacheServiceMock.Object);
+        _handler = new CategoryRemoveCommandHandler(_cacheServiceMock.Object);
     }
 
     [Fact]
@@ -63,7 +69,7 @@ public class CategoryRemoveCommandHandlerTests
         var categoryId = Guid.NewGuid();
         var command = new CategoryRemoveCommand(categoryId);
 
-        _categoryRepositoryMock.Setup(r => r.GetAsync(new [] {categoryId}, CancellationToken.None)).ReturnsAsync((Domain.Entity.Category)null);
+        _categoryRepositoryMock.Setup(r => r.GetAsync(new [] {categoryId}, CancellationToken.None)).ReturnsAsync((Domain.Entity.Category)null!);
 
         // Act
         Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
@@ -74,5 +80,11 @@ public class CategoryRemoveCommandHandlerTests
         _cacheServiceMock.Verify(c => c.RemoveAsync(It.IsAny<Guid>()), Times.Never);
         _categoryRepositoryMock.Verify(r => r.DeleteAsync(It.IsAny<Domain.Entity.Category>(), CancellationToken.None), Times.Never);
         _unitOfWorkMock.Verify(u => u.SaveChangesAsync(CancellationToken.None), Times.Never);
+    }
+
+    public void Dispose()
+    {
+        _serviceScope.Dispose();
+        GC.SuppressFinalize(this);
     }
 }

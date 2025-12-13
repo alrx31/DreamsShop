@@ -15,8 +15,8 @@ namespace Tests.IntegrationTests.Services;
 public class FileStorageServiceTests : IAsyncLifetime
 {
     private readonly IContainer _minioContainer;
-    private FileStorageService _fileStorageService;
-    private MinioConfiguration _minioConfiguration;
+    private FileStorageService _fileStorageService = null!;
+    private MinioConfiguration _minioConfiguration = null!;
 
     public FileStorageServiceTests()
     {
@@ -28,8 +28,6 @@ public class FileStorageServiceTests : IAsyncLifetime
             .WithEnvironment("MINIO_ROOT_USER", "minioadmin")
             .WithEnvironment("MINIO_ROOT_PASSWORD", "minioadmin")
             .Build();
-
-        
     }
 
     public async Task InitializeAsync()

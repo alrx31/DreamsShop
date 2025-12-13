@@ -5,14 +5,16 @@ using Bogus;
 using Domain.IRepositories;
 using FluentAssertions;
 using Moq;
+using Tests.TestHelpers;
 
 namespace Tests.UnitTests.UseCases.Category;
 
-public class CategoryUpdateCommandHandlerTests
+public class CategoryUpdateCommandHandlerTests : IDisposable
 {
     private readonly Mock<IUnitOfWork> _unitOfWorkMock;
     private readonly Mock<ICategoryRepository> _categoryRepositoryMock;
     private readonly CategoryUpdateCommandHandler _handler;
+    private readonly ServiceLocatorTestHelper.ServiceLocatorTestScope _serviceScope;
 
     public CategoryUpdateCommandHandlerTests()
     {
@@ -20,8 +22,11 @@ public class CategoryUpdateCommandHandlerTests
         _categoryRepositoryMock = new Mock<ICategoryRepository>();
         
         _unitOfWorkMock.Setup(u => u.CategoryRepository).Returns(_categoryRepositoryMock.Object);
+
+        _serviceScope = ServiceLocatorTestHelper.UseServiceLocator(
+            (typeof(IUnitOfWork), _unitOfWorkMock.Object));
         
-        _handler = new CategoryUpdateCommandHandler(_unitOfWorkMock.Object);
+        _handler = new CategoryUpdateCommandHandler();
     }
 
     [Fact]
@@ -71,7 +76,7 @@ public class CategoryUpdateCommandHandlerTests
         };
         var command = new CategoryUpdateCommand(updateDto, categoryId);
 
-        _categoryRepositoryMock.Setup(r => r.GetAsync(new [] {categoryId}, CancellationToken.None)).ReturnsAsync((Domain.Entity.Category)null);
+        _categoryRepositoryMock.Setup(r => r.GetAsync(new [] {categoryId}, CancellationToken.None)).ReturnsAsync((Domain.Entity.Category)null!);
 
         // Act
         Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
@@ -81,5 +86,10 @@ public class CategoryUpdateCommandHandlerTests
         _categoryRepositoryMock.Verify(r => r.GetAsync(new [] {categoryId}, CancellationToken.None), Times.Once);
         _categoryRepositoryMock.Verify(r => r.UpdateAsync(It.IsAny<Domain.Entity.Category>(), CancellationToken.None), Times.Never);
         _unitOfWorkMock.Verify(u => u.SaveChangesAsync(CancellationToken.None), Times.Never);
+    }
+
+    public void Dispose()
+    {
+        _serviceScope.Dispose();
     }
 }

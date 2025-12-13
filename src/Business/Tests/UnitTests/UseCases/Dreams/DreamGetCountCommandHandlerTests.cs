@@ -1,3 +1,4 @@
+using System;
 using Application.UseCases.Dreams.DreamGetCount;
 using Bogus;
 using Domain.IRepositories;
@@ -5,14 +6,16 @@ using FluentAssertions;
 using Moq;
 using System.Threading;
 using System.Threading.Tasks;
+using Tests.TestHelpers;
 
 namespace Tests.UnitTests.UseCases.Dreams;
 
-public class DreamGetCountCommandHandlerTests
+public class DreamGetCountCommandHandlerTests : IDisposable
 {
     private readonly Mock<IUnitOfWork> _unitOfWorkMock;
     private readonly Mock<IDreamRepository> _dreamRepositoryMock;
     private readonly DreamGetCountCommandHandler _handler;
+    private readonly ServiceLocatorTestHelper.ServiceLocatorTestScope _serviceScope;
 
     public DreamGetCountCommandHandlerTests()
     {
@@ -21,7 +24,10 @@ public class DreamGetCountCommandHandlerTests
         
         _unitOfWorkMock.Setup(u => u.DreamRepository).Returns(_dreamRepositoryMock.Object);
         
-        _handler = new DreamGetCountCommandHandler(_unitOfWorkMock.Object);
+        _serviceScope = ServiceLocatorTestHelper.UseServiceLocator(
+            (typeof(IUnitOfWork), _unitOfWorkMock.Object));
+        
+        _handler = new DreamGetCountCommandHandler();
     }
 
     [Fact]
@@ -40,5 +46,10 @@ public class DreamGetCountCommandHandlerTests
         // Assert
         result.Should().Be(count);
         _dreamRepositoryMock.Verify(r => r.GetCountAsync(CancellationToken.None), Times.Once);
+    }
+
+    public void Dispose()
+    {
+        _serviceScope.Dispose();
     }
 }

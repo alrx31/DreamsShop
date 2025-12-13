@@ -1,16 +1,20 @@
+using System;
+using System.Linq.Expressions;
 using Application.UseCases.Category.CategoryGetAll;
 using Bogus;
 using Domain.IRepositories;
 using FluentAssertions;
 using Moq;
+using Tests.TestHelpers;
 
 namespace Tests.UnitTests.UseCases.Category;
 
-public class CategoryGetAllCommandHandlerTests
+public class CategoryGetAllCommandHandlerTests : IDisposable
 {
     private readonly Mock<IUnitOfWork> _unitOfWorkMock;
     private readonly Mock<ICategoryRepository> _categoryRepositoryMock;
     private readonly CategoryGetAllCommandHandler _handler;
+    private readonly ServiceLocatorTestHelper.ServiceLocatorTestScope _serviceScope;
 
     public CategoryGetAllCommandHandlerTests()
     {
@@ -18,8 +22,11 @@ public class CategoryGetAllCommandHandlerTests
         _categoryRepositoryMock = new Mock<ICategoryRepository>();
         
         _unitOfWorkMock.Setup(u => u.CategoryRepository).Returns(_categoryRepositoryMock.Object);
+
+        _serviceScope = ServiceLocatorTestHelper.UseServiceLocator(
+            (typeof(IUnitOfWork), _unitOfWorkMock.Object));
         
-        _handler = new CategoryGetAllCommandHandler(_unitOfWorkMock.Object);
+        _handler = new CategoryGetAllCommandHandler();
     }
 
     [Fact]
@@ -36,13 +43,29 @@ public class CategoryGetAllCommandHandlerTests
         
         var command = new CategoryGetAllCommand();
 
-        _categoryRepositoryMock.Setup(r => r.GetAllAsync(CancellationToken.None)).ReturnsAsync(categories.AsQueryable());
+        _categoryRepositoryMock.Setup(r => r.GetAsync<Domain.Entity.Category>(
+                It.IsAny<Expression<Func<Domain.Entity.Category, bool>>?>(),
+                It.IsAny<Expression<Func<Domain.Entity.Category, Domain.Entity.Category>>?>(),
+                It.IsAny<int?>(),
+                It.IsAny<int?>(),
+                CancellationToken.None))
+            .ReturnsAsync(categories);
 
         // Act
         var result = await _handler.Handle(command, CancellationToken.None);
 
         // Assert
         result.Should().BeEquivalentTo(categories);
-        _categoryRepositoryMock.Verify(r => r.GetAllAsync(CancellationToken.None), Times.Once);
+        _categoryRepositoryMock.Verify(r => r.GetAsync<Domain.Entity.Category>(
+            It.IsAny<Expression<Func<Domain.Entity.Category, bool>>?>(),
+            It.IsAny<Expression<Func<Domain.Entity.Category, Domain.Entity.Category>>?>(),
+            It.IsAny<int?>(),
+            It.IsAny<int?>(),
+            CancellationToken.None), Times.Once);
+    }
+
+    public void Dispose()
+    {
+        _serviceScope.Dispose();
     }
 }

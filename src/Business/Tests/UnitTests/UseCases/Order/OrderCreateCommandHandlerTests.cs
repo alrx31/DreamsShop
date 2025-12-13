@@ -1,3 +1,5 @@
+using System;
+using System.Linq.Expressions;
 using Application.UseCases.Order.CreateOrder;
 using Application.DTO;
 using Application.DTO.Order;
@@ -8,15 +10,15 @@ using Domain.IRepositories;
 using Domain.IService;
 using FluentAssertions;
 using Moq;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Tests.TestHelpers;
 
 namespace Tests.UnitTests.UseCases.Order;
 
-public class OrderCreateCommandHandlerTests
+public class OrderCreateCommandHandlerTests : IDisposable
 {
     private readonly Mock<IUnitOfWork> _unitOfWorkMock;
     private readonly Mock<IDreamRepository> _dreamRepositoryMock;
@@ -24,6 +26,7 @@ public class OrderCreateCommandHandlerTests
     private readonly Mock<IHttpContextService> _httpContextServiceMock;
     private readonly Mock<ICacheService<string, IEnumerable<OrderResponseDto>>> _cacheServiceMock;
     private readonly OrderCreateCommandHandler _handler;
+    private readonly ServiceLocatorTestHelper.ServiceLocatorTestScope _serviceScope;
 
     public OrderCreateCommandHandlerTests()
     {
@@ -36,8 +39,10 @@ public class OrderCreateCommandHandlerTests
         _unitOfWorkMock.Setup(u => u.DreamRepository).Returns(_dreamRepositoryMock.Object);
         _unitOfWorkMock.Setup(u => u.OrderRepository).Returns(_orderRepositoryMock.Object);
 
+        _serviceScope = ServiceLocatorTestHelper.UseServiceLocator(
+            (typeof(IUnitOfWork), _unitOfWorkMock.Object));
+        
         _handler = new OrderCreateCommandHandler(
-            _unitOfWorkMock.Object,
             _httpContextServiceMock.Object,
             _cacheServiceMock.Object
         );
@@ -56,8 +61,15 @@ public class OrderCreateCommandHandlerTests
         var orderId = faker.Random.Guid();
 
         _httpContextServiceMock.Setup(s => s.GetCurrentUserId()).Returns(userId);
-        _dreamRepositoryMock.Setup(r => r.GetRangeAsync(dreamIds, CancellationToken.None)).Returns(Task.FromResult(dreams.AsQueryable()));
-        _orderRepositoryMock.Setup(r => r.AddAsync(It.IsAny<Domain.Entity.Order>(), CancellationToken.None)).ReturnsAsync(orderId);
+        _dreamRepositoryMock.Setup(r => r.GetAsync<Dream>(
+                It.IsAny<Expression<Func<Dream, bool>>?>(),
+                It.IsAny<Expression<Func<Dream, Dream>>?>(),
+                It.IsAny<int?>(),
+                It.IsAny<int?>(),
+                CancellationToken.None))
+            .ReturnsAsync(dreams);
+        _orderRepositoryMock.Setup(r => r.AddAsync(It.IsAny<Domain.Entity.Order>(), CancellationToken.None))
+            .ReturnsAsync(new Domain.Entity.Order { OrderId = orderId });
         _unitOfWorkMock.Setup(u => u.SaveChangesAsync(CancellationToken.None)).Returns(Task.FromResult(1));
         _cacheServiceMock.Setup(c => c.RemoveAsync(userId.ToString() + nameof(Domain.Entity.Order))).Returns(Task.CompletedTask);
 
@@ -66,7 +78,7 @@ public class OrderCreateCommandHandlerTests
 
         // Assert
         result.Should().Be(orderId);
-        _orderRepositoryMock.Verify(r => r.AddAsync(It.Is<Domain.Entity.Order>(o => o.UserId == userId && o.OrderDreams.Count() == 2), CancellationToken.None), Times.Once);
+        _orderRepositoryMock.Verify(r => r.AddAsync(It.Is<Domain.Entity.Order>(o => o.UserId == userId && o.OrderDreams!.Count() == 2), CancellationToken.None), Times.Once);
         _unitOfWorkMock.Verify(u => u.SaveChangesAsync(CancellationToken.None), Times.Once);
         _cacheServiceMock.Verify(c => c.RemoveAsync(userId.ToString() + nameof(Domain.Entity.Order)), Times.Once);
     }
@@ -82,7 +94,13 @@ public class OrderCreateCommandHandlerTests
         var command = new OrderCreateCommand(createDto);
 
         _httpContextServiceMock.Setup(s => s.GetCurrentUserId()).Returns(userId);
-        _dreamRepositoryMock.Setup(r => r.GetRangeAsync(dreamIds, CancellationToken.None)).Returns(Task.FromResult(new List<Dream>().AsQueryable()));
+        _dreamRepositoryMock.Setup(r => r.GetAsync<Dream>(
+                It.IsAny<Expression<Func<Dream, bool>>?>(),
+                It.IsAny<Expression<Func<Dream, Dream>>?>(),
+                It.IsAny<int?>(),
+                It.IsAny<int?>(),
+                CancellationToken.None))
+            .ReturnsAsync([]);
 
         // Act
         Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
@@ -102,12 +120,24 @@ public class OrderCreateCommandHandlerTests
         var dreams = dreamIds.Select(id => new Dream { DreamId = id, Title = faker.Lorem.Sentence(), Description = faker.Lorem.Paragraph(), ImageFileName = "test.jpg" }).ToList();
 
         _httpContextServiceMock.Setup(s => s.GetCurrentUserId()).Returns((Guid?)null);
-        _dreamRepositoryMock.Setup(r => r.GetRangeAsync(dreamIds, CancellationToken.None)).Returns(Task.FromResult(dreams.AsQueryable()));
+        _dreamRepositoryMock.Setup(r => r.GetAsync<Dream>(
+                It.IsAny<Expression<Func<Dream, bool>>?>(),
+                It.IsAny<Expression<Func<Dream, Dream>>?>(),
+                It.IsAny<int?>(),
+                It.IsAny<int?>(),
+                CancellationToken.None))
+            .ReturnsAsync(dreams);
 
         // Act
         Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
 
         // Assert
         await act.Should().ThrowAsync<UnauthorizedAccessException>();
+    }
+
+    public void Dispose()
+    {
+        _serviceScope.Dispose();
+        GC.SuppressFinalize(this);
     }
 }

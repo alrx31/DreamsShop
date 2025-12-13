@@ -1,3 +1,4 @@
+using System;
 using Application.UseCases.Dreams.DreamDelete;
 using Application.DTO;
 using Application.Exceptions;
@@ -8,10 +9,11 @@ using Domain.IService;
 using Domain.Model;
 using FluentAssertions;
 using Moq;
+using Tests.TestHelpers;
 
 namespace Tests.UnitTests.UseCases.Dreams;
 
-public class DreamDeleteCommandHandlerTests
+public class DreamDeleteCommandHandlerTests : IDisposable
 {
     private readonly Mock<IUnitOfWork> _unitOfWorkMock;
     private readonly Mock<IDreamRepository> _dreamRepositoryMock;
@@ -19,6 +21,7 @@ public class DreamDeleteCommandHandlerTests
     private readonly Mock<ICacheService<DreamCacheKey, List<DreamResponseDto>>> _allDreamCacheServiceMock;
     private readonly Mock<IHttpContextService> _httpContextServiceMock;
     private readonly DreamDeleteCommandHandler _handler;
+    private readonly ServiceLocatorTestHelper.ServiceLocatorTestScope _serviceScope;
 
     public DreamDeleteCommandHandlerTests()
     {
@@ -29,9 +32,11 @@ public class DreamDeleteCommandHandlerTests
         _httpContextServiceMock = new Mock<IHttpContextService>();
         
         _unitOfWorkMock.Setup(u => u.DreamRepository).Returns(_dreamRepositoryMock.Object);
+
+        _serviceScope = ServiceLocatorTestHelper.UseServiceLocator(
+            (typeof(IUnitOfWork), _unitOfWorkMock.Object));
         
         _handler = new DreamDeleteCommandHandler(
-            _unitOfWorkMock.Object,
             _cacheServiceMock.Object,
             _allDreamCacheServiceMock.Object,
             _httpContextServiceMock.Object
@@ -45,7 +50,7 @@ public class DreamDeleteCommandHandlerTests
         var faker = new Faker();
         var dreamId = faker.Random.Guid();
         var userId = faker.Random.Guid();
-        var command = new DreamDeleteCommand { DreamId = dreamId };
+        var command = new DreamDeleteCommand(dreamId);
         var dream = new Dream
         {
             DreamId = dreamId,
@@ -79,9 +84,9 @@ public class DreamDeleteCommandHandlerTests
     {
         // Arrange
         var dreamId = Guid.NewGuid();
-        var command = new DreamDeleteCommand { DreamId = dreamId };
+        var command = new DreamDeleteCommand(dreamId);
 
-        _dreamRepositoryMock.Setup(r => r.GetAsync(new [] {dreamId}, CancellationToken.None)).ReturnsAsync((Dream)null);
+        _dreamRepositoryMock.Setup(r => r.GetAsync(new [] {dreamId}, CancellationToken.None)).ReturnsAsync((Dream)null!);
 
         // Act
         Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
@@ -98,7 +103,7 @@ public class DreamDeleteCommandHandlerTests
         var dreamId = faker.Random.Guid();
         var userId = faker.Random.Guid();
         var otherUserId = faker.Random.Guid();
-        var command = new DreamDeleteCommand { DreamId = dreamId };
+        var command = new DreamDeleteCommand(dreamId);
         var dream = new Dream
         {
             DreamId = dreamId,
@@ -116,5 +121,10 @@ public class DreamDeleteCommandHandlerTests
 
         // Assert
         await act.Should().ThrowAsync<UnauthorizedException>();
+    }
+
+    public void Dispose()
+    {
+        _serviceScope.Dispose();
     }
 }

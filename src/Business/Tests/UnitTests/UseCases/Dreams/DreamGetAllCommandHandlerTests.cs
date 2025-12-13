@@ -1,3 +1,5 @@
+using System;
+using System.Linq.Expressions;
 using Application.UseCases.Dreams.DreamGetAll;
 using Application.DTO;
 using Bogus;
@@ -12,10 +14,11 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Tests.TestHelpers;
 
 namespace Tests.UnitTests.UseCases.Dreams;
 
-public class DreamGetAllCommandHandlerTests
+public class DreamGetAllCommandHandlerTests : IDisposable
 {
     private readonly Mock<IUnitOfWork> _unitOfWorkMock;
     private readonly Mock<IDreamRepository> _dreamRepositoryMock;
@@ -24,6 +27,7 @@ public class DreamGetAllCommandHandlerTests
     private readonly Mock<IFileStorageService> _fileStorageServiceMock;
     private readonly Mock<ICacheService<DreamCacheKey, List<DreamResponseDto>>> _cacheServiceMock;
     private readonly DreamGetAllCommandHandler _handler;
+    private readonly ServiceLocatorTestHelper.ServiceLocatorTestScope _serviceScope;
 
     public DreamGetAllCommandHandlerTests()
     {
@@ -37,9 +41,11 @@ public class DreamGetAllCommandHandlerTests
         _unitOfWorkMock.Setup(u => u.DreamRepository).Returns(_dreamRepositoryMock.Object);
         _unitOfWorkMock.Setup(u => u.DreamCategoryRepository).Returns(_dreamCategoryRepositoryMock.Object);
         _unitOfWorkMock.Setup(u => u.CategoryRepository).Returns(_categoryRepositoryMock.Object);
+
+        _serviceScope = ServiceLocatorTestHelper.UseServiceLocator(
+            (typeof(IUnitOfWork), _unitOfWorkMock.Object));
         
         _handler = new DreamGetAllCommandHandler(
-            _unitOfWorkMock.Object,
             _fileStorageServiceMock.Object,
             _cacheServiceMock.Object
         );
@@ -87,12 +93,24 @@ public class DreamGetAllCommandHandlerTests
         var imageContent1 = new MemoryStream(Encoding.UTF8.GetBytes("test image 1"));
         var imageContent2 = new MemoryStream(Encoding.UTF8.GetBytes("test image 2"));
 
-        _cacheServiceMock.Setup(c => c.GetAsync(It.IsAny<DreamCacheKey>())).ReturnsAsync((List<DreamResponseDto>)null);
-        _dreamRepositoryMock.Setup(r => r.GetRangeAsync(command.StartIndex, command.Count, CancellationToken.None)).Returns(Task.FromResult(dreams.AsQueryable()));
+        _cacheServiceMock.Setup(c => c.GetAsync(It.IsAny<DreamCacheKey>())).ReturnsAsync((List<DreamResponseDto>)null!);
+        _dreamRepositoryMock.Setup(r => r.GetAsync<Dream>(
+                It.IsAny<Expression<Func<Dream, bool>>?>(),
+                It.IsAny<Expression<Func<Dream, Dream>>?>(),
+                It.Is<int?>(skip => skip == command.StartIndex),
+                It.Is<int?>(take => take == command.Count),
+                CancellationToken.None))
+            .ReturnsAsync(dreams);
         _fileStorageServiceMock.Setup(s => s.DownloadFileAsync("test1.jpg", CancellationToken.None)).ReturnsAsync(new FileModel { Content = imageContent1, ContentType = "image/jpeg" });
         _fileStorageServiceMock.Setup(s => s.DownloadFileAsync("test2.jpg", CancellationToken.None)).ReturnsAsync(new FileModel { Content = imageContent2, ContentType = "image/jpeg" });
         _dreamCategoryRepositoryMock.Setup(r => r.GetCategoriesByDreamIdAsync(It.IsAny<Guid>(), CancellationToken.None)).Returns(Task.FromResult(new List<DreamCategory>().AsQueryable()));
-        _categoryRepositoryMock.Setup(r => r.GetAllAsync(CancellationToken.None)).ReturnsAsync(new List<Domain.Entity.Category>().AsQueryable());
+        _categoryRepositoryMock.Setup(r => r.GetAsync<Domain.Entity.Category>(
+                It.IsAny<Expression<Func<Domain.Entity.Category, bool>>?>(),
+                It.IsAny<Expression<Func<Domain.Entity.Category, Domain.Entity.Category>>?>(),
+                It.IsAny<int?>(),
+                It.IsAny<int?>(),
+                CancellationToken.None))
+            .ReturnsAsync([]);
         _cacheServiceMock.Setup(c => c.SetAsync(It.IsAny<DreamCacheKey>(), It.IsAny<List<DreamResponseDto>>())).Returns(Task.CompletedTask);
 
         // Act
@@ -101,5 +119,11 @@ public class DreamGetAllCommandHandlerTests
         // Assert
         result.Should().HaveCount(2);
         _cacheServiceMock.Verify(c => c.SetAsync(It.IsAny<DreamCacheKey>(), It.IsAny<List<DreamResponseDto>>()), Times.Once);
+    }
+
+    public void Dispose()
+    {
+        _serviceScope.Dispose();
+        GC.SuppressFinalize(this);
     }
 }

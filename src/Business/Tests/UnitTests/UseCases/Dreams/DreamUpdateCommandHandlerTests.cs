@@ -1,3 +1,4 @@
+using System;
 using Application.UseCases.Dreams.DreamUpdate;
 using Application.DTO;
 using Application.Exceptions;
@@ -11,10 +12,11 @@ using Moq;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Tests.TestHelpers;
 
 namespace Tests.UnitTests.UseCases.Dreams;
 
-public class DreamUpdateCommandHandlerTests
+public class DreamUpdateCommandHandlerTests : IDisposable
 {
     private readonly Mock<IUnitOfWork> _unitOfWorkMock;
     private readonly Mock<IDreamRepository> _dreamRepositoryMock;
@@ -23,6 +25,7 @@ public class DreamUpdateCommandHandlerTests
     private readonly Mock<ICacheService<string, DreamResponseDto>> _cacheServiceMock;
     private readonly Mock<ICacheService<DreamCacheKey, List<DreamResponseDto>>> _allDreamCacheServiceMock;
     private readonly DreamUpdateCommandHandler _handler;
+    private readonly ServiceLocatorTestHelper.ServiceLocatorTestScope _serviceScope;
 
     public DreamUpdateCommandHandlerTests()
     {
@@ -34,9 +37,11 @@ public class DreamUpdateCommandHandlerTests
         _allDreamCacheServiceMock = new Mock<ICacheService<DreamCacheKey, List<DreamResponseDto>>>();
         
         _unitOfWorkMock.Setup(u => u.DreamRepository).Returns(_dreamRepositoryMock.Object);
+
+        _serviceScope = ServiceLocatorTestHelper.UseServiceLocator(
+            (typeof(IUnitOfWork), _unitOfWorkMock.Object));
         
         _handler = new DreamUpdateCommandHandler(
-            _unitOfWorkMock.Object,
             _httpContextServiceMock.Object,
             _fileStorageServiceMock.Object,
             _cacheServiceMock.Object,
@@ -105,7 +110,7 @@ public class DreamUpdateCommandHandlerTests
         var updateDto = new DreamUpdateDto();
         var command = new DreamUpdateCommand(dreamId, updateDto);
 
-        _dreamRepositoryMock.Setup(r => r.GetAsync(new [] {dreamId}, CancellationToken.None)).ReturnsAsync((Dream)null);
+        _dreamRepositoryMock.Setup(r => r.GetAsync(new [] {dreamId}, CancellationToken.None)).ReturnsAsync((Dream)null!);
 
         // Act
         Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
@@ -141,5 +146,11 @@ public class DreamUpdateCommandHandlerTests
 
         // Assert
         await act.Should().ThrowAsync<ForbiddenException>();
+    }
+
+    public void Dispose()
+    {
+        _serviceScope.Dispose();
+        GC.SuppressFinalize(this);
     }
 }

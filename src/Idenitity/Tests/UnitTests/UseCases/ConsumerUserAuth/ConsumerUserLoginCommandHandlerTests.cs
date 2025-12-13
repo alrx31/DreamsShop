@@ -12,6 +12,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
+using ConsumerUserEntity = Domain.Entity.ConsumerUser;
 
 namespace Tests.UnitTests.UseCases.ConsumerUserAuth;
 
@@ -51,7 +52,7 @@ public class ConsumerUserLoginCommandHandlerTests
         // Arrange
         var loginDto = new ConsumerUserLoginDto { Email = "test@test.com", Password = "password" };
         var command = new ConsumerUserLoginCommand(loginDto);
-        var user = new ConsumerUser
+        var user = new ConsumerUserEntity
         {
             Id = Guid.NewGuid(),
             Email = loginDto.Email,
@@ -90,7 +91,7 @@ public class ConsumerUserLoginCommandHandlerTests
         var command = new ConsumerUserLoginCommand(loginDto);
 
         _consumerUserRepositoryMock.Setup(r => r.GetByEmailAsync(loginDto.Email, CancellationToken.None))
-            .ReturnsAsync((ConsumerUser?)null);
+            .ReturnsAsync((ConsumerUserEntity?)null);
 
         // Act
         Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
@@ -105,7 +106,7 @@ public class ConsumerUserLoginCommandHandlerTests
         // Arrange
         var loginDto = new ConsumerUserLoginDto { Email = "test@test.com", Password = "password" };
         var command = new ConsumerUserLoginCommand(loginDto);
-        var user = new ConsumerUser
+        var user = new ConsumerUserEntity
         {
             Id = Guid.NewGuid(),
             Email = loginDto.Email,

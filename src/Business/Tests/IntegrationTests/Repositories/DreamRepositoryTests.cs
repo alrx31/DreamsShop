@@ -1,3 +1,4 @@
+using System.Linq;
 using Bogus;
 using Domain.Entity;
 using FluentAssertions;
@@ -35,7 +36,7 @@ public class DreamRepositoryTests : BaseRepositoryTest
     }
 
     [Fact]
-    public async Task GetRangeAsync_ShouldReturnCorrectRange()
+    public async Task GetAsync_WithSkipAndTake_ShouldReturnCorrectRange()
     {
         // Arrange
         var faker = new Faker();
@@ -49,7 +50,7 @@ public class DreamRepositoryTests : BaseRepositoryTest
         await Context.SaveChangesAsync();
 
         // Act
-        var result = await _repository.GetRangeAsync(1, 2);
+        var result = await _repository.GetAsync<Dream>(skip: 1, take: 2);
 
         // Assert
         result.Should().HaveCount(2);
@@ -154,7 +155,7 @@ public class DreamRepositoryTests : BaseRepositoryTest
     }
     
     [Fact]
-    public async Task GetRangeAsync_WithIds_ShouldReturnCorrectRange()
+    public async Task GetAsync_WithFilter_ShouldReturnCorrectRange()
     {
         // Arrange
         var faker = new Faker();
@@ -169,7 +170,7 @@ public class DreamRepositoryTests : BaseRepositoryTest
         var ids = dreams.Take(2).Select(d => d.DreamId).ToList();
 
         // Act
-        var result = await _repository.GetRangeAsync(ids);
+        var result = await _repository.GetAsync<Dream>(filter: d => ids.Contains(d.DreamId));
 
         // Assert
         result.Should().HaveCount(2);

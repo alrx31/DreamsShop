@@ -57,7 +57,7 @@ public class ConsumerUserDeleteCommandHandlerTests
         // Arrange
         var command = new ConsumerUserDeleteCommand(Guid.NewGuid());
 
-        _repositoryMock.Setup(r => r.GetAsync(command.ConsumerUserId, CancellationToken.None)).ReturnsAsync((Domain.Entity.ConsumerUser)null);
+        _repositoryMock.Setup(r => r.GetAsync(command.ConsumerUserId, CancellationToken.None)).ReturnsAsync((Domain.Entity.ConsumerUser)null!);
 
         // Act
         Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);

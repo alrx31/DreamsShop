@@ -112,7 +112,7 @@ public class CategoryRepositoryTests : BaseRepositoryTest
     }
 
     [Fact]
-    public async Task GetAllAsync_ShouldReturnAllCategories()
+    public async Task GetAsync_ShouldReturnAllCategories()
     {
         // Arrange
         var faker = new Faker();
@@ -126,7 +126,7 @@ public class CategoryRepositoryTests : BaseRepositoryTest
         await Context.SaveChangesAsync();
 
         // Act
-        var result = await _repository.GetAllAsync(CancellationToken.None);
+        var result = await _repository.GetAsync<Category>();
 
         // Assert
         result.Should().BeEquivalentTo(categories.AsQueryable());

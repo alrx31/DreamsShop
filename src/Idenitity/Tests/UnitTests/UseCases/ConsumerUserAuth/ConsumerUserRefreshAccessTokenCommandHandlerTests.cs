@@ -12,6 +12,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
+using ConsumerUserEntity = Domain.Entity.ConsumerUser;
 
 namespace Tests.UnitTests.UseCases.ConsumerUserAuth;
 
@@ -49,7 +50,7 @@ public class ConsumerUserRefreshAccessTokenCommandHandlerTests
         var faker = new Faker();
         var userId = faker.Random.Guid();
         var command = new ConsumerUserRefreshAccessTokenCommand();
-        var user = new ConsumerUser
+        var user = new ConsumerUserEntity
         {
             Id = userId,
             Email = faker.Internet.Email(),
@@ -105,7 +106,7 @@ public class ConsumerUserRefreshAccessTokenCommandHandlerTests
 
         _httpContextServiceMock.Setup(s => s.GetCurrentUserId()).Returns(userId);
         _consumerUserRepositoryMock.Setup(r => r.GetAsync(userId, CancellationToken.None))
-            .ReturnsAsync((ConsumerUser?)null);
+            .ReturnsAsync((ConsumerUserEntity?)null);
 
         // Act
         Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
@@ -121,7 +122,7 @@ public class ConsumerUserRefreshAccessTokenCommandHandlerTests
         var faker = new Faker();
         var userId = faker.Random.Guid();
         var command = new ConsumerUserRefreshAccessTokenCommand();
-        var user = new ConsumerUser
+        var user = new ConsumerUserEntity
         {
             Id = userId,
             Email = faker.Internet.Email(),
@@ -148,7 +149,7 @@ public class ConsumerUserRefreshAccessTokenCommandHandlerTests
         var faker = new Faker();
         var userId = faker.Random.Guid();
         var command = new ConsumerUserRefreshAccessTokenCommand();
-        var user = new ConsumerUser
+        var user = new ConsumerUserEntity
         {
             Id = userId,
             Email = faker.Internet.Email(),

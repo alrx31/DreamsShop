@@ -11,11 +11,11 @@ using FluentAssertions;
 using Microsoft.Extensions.Options;
 using Moq;
 using Shared.Configuration;
-using System.IO;
+using Tests.TestHelpers;
 
 namespace Tests.UnitTests.UseCases.Dreams;
 
-public class DreamCreateCommandHandlerTests
+public class DreamCreateCommandHandlerTests : IDisposable
 {
     private readonly Mock<IUnitOfWork> _unitOfWorkMock;
     private readonly Mock<IDreamRepository> _dreamRepositoryMock;
@@ -25,6 +25,7 @@ public class DreamCreateCommandHandlerTests
     private readonly Mock<ICacheService<DreamCacheKey, List<DreamResponseDto>>> _cacheServiceMock;
     private readonly Mock<IOptions<BaseDreamImageConfiguration>> _baseDreamImageConfigurationMock;
     private readonly DreamCreateCommandHandler _handler;
+    private readonly ServiceLocatorTestHelper.ServiceLocatorTestScope _serviceScope;
 
     public DreamCreateCommandHandlerTests()
     {
@@ -37,10 +38,12 @@ public class DreamCreateCommandHandlerTests
         _baseDreamImageConfigurationMock = new Mock<IOptions<BaseDreamImageConfiguration>>();
         
         _unitOfWorkMock.Setup(u => u.DreamRepository).Returns(_dreamRepositoryMock.Object);
+
+        _serviceScope = ServiceLocatorTestHelper.UseServiceLocator(
+            (typeof(IUnitOfWork), _unitOfWorkMock.Object),
+            (typeof(IMapper), _mapperMock.Object));
         
         _handler = new DreamCreateCommandHandler(
-            _unitOfWorkMock.Object,
-            _mapperMock.Object,
             _httpContextServiceMock.Object,
             _fileStorageServiceMock.Object,
             _cacheServiceMock.Object,
@@ -71,7 +74,7 @@ public class DreamCreateCommandHandlerTests
         {
             DreamId = faker.Random.Guid(),
             Title = command.Title,
-            Description = command.Description,
+            Description = command.Description!,
             ProducerId = userId,
             ImageFileName = ""
         };
@@ -80,7 +83,7 @@ public class DreamCreateCommandHandlerTests
         _httpContextServiceMock.Setup(s => s.GetCurrentUserId()).Returns(userId);
         _mapperMock.Setup(m => m.Map<Dream>(command)).Returns(dream);
         _fileStorageServiceMock.Setup(s => s.UploadFileAsync(image, CancellationToken.None)).ReturnsAsync(objectName);
-        _dreamRepositoryMock.Setup(r => r.AddAsync(dream, CancellationToken.None)).ReturnsAsync(dream.DreamId);
+        _dreamRepositoryMock.Setup(r => r.AddAsync(dream, CancellationToken.None)).ReturnsAsync(dream);
         _unitOfWorkMock.Setup(u => u.SaveChangesAsync(CancellationToken.None)).Returns(Task.FromResult(1));
         _cacheServiceMock.Setup(c => c.RemoveAsync(It.IsAny<DreamCacheKey>())).Returns(Task.CompletedTask);
 
@@ -115,7 +118,7 @@ public class DreamCreateCommandHandlerTests
         {
             DreamId = faker.Random.Guid(),
             Title = command.Title,
-            Description = command.Description,
+            Description = command.Description!,
             ProducerId = userId,
             ImageFileName = ""
         };
@@ -124,7 +127,7 @@ public class DreamCreateCommandHandlerTests
         _httpContextServiceMock.Setup(s => s.GetCurrentUserId()).Returns(userId);
         _mapperMock.Setup(m => m.Map<Dream>(command)).Returns(dream);
         _baseDreamImageConfigurationMock.Setup(c => c.Value).Returns(new BaseDreamImageConfiguration { DefaultDreamImage = defaultImage });
-        _dreamRepositoryMock.Setup(r => r.AddAsync(dream, CancellationToken.None)).ReturnsAsync(dream.DreamId);
+        _dreamRepositoryMock.Setup(r => r.AddAsync(dream, CancellationToken.None)).ReturnsAsync(dream);
         _unitOfWorkMock.Setup(u => u.SaveChangesAsync(CancellationToken.None)).Returns(Task.FromResult(1));
         _cacheServiceMock.Setup(c => c.RemoveAsync(It.IsAny<DreamCacheKey>())).Returns(Task.CompletedTask);
 
@@ -163,4 +166,11 @@ public class DreamCreateCommandHandlerTests
         // Assert
         await act.Should().ThrowAsync<UnauthorizedException>();
     }
+
+    public void Dispose()
+    {
+        _serviceScope.Dispose();
+        GC.SuppressFinalize(this);
+    }
 }
+
