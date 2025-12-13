@@ -16,9 +16,9 @@ public static class ApplicationDependencies
         services.AddAutoMapper(typeof(DreamCategoryProfile));
         
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(DreamCreateCommandHandler).Assembly));
-        
-        services.Configure<BaseDreamImageConfiguration>(configuration.GetSection("Dream"));
-        
+        var dreamSection = configuration.GetSection("Dream");
+        services.Configure<BaseDreamImageConfiguration>(dreamSection);
+
         return services;
     }
 }
