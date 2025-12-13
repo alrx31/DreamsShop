@@ -27,11 +27,11 @@ public class CategoryRepositoryTests : BaseRepositoryTest
         };
 
         // Act
-        var categoryId = await _repository.AddAsync(category);
+        var addedCategory = await _repository.AddAsync(category);
         await Context.SaveChangesAsync();
 
         // Assert
-        var result = await Context.Category.FindAsync(categoryId);
+        var result = await Context.Category.FindAsync(addedCategory.CategoryId);
         result.Should().Be(category);
     }
 

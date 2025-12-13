@@ -22,7 +22,13 @@ public abstract class BaseRepository<T>(ApplicationDbContext context) : IBaseRep
 
     public Task<T?> GetAsync(Guid[] ids, CancellationToken cancellationToken = default)
     {
-        return Context.Set<T>().FindAsync(ids, cancellationToken).AsTask();
+        if (ids is null || ids.Length == 0)
+        {
+            return Task.FromResult<T?>(null);
+        }
+
+        var keyValues = Array.ConvertAll(ids, id => (object)id);
+        return Context.Set<T>().FindAsync(keyValues, cancellationToken).AsTask();
     }
 
     public async Task<List<K>> GetAsync<K>

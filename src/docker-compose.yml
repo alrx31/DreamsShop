@@ -5,20 +5,36 @@ networks:
 volumes:
   shared-data: 
   minio_data:
+  certbot-www:
+  letsencrypt-data:
   
 services:
   nginx:
     image: nginx:latest
     ports:
       - 80:80
+      - 443:443
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - shared-data:/usr/share/nginx/html:ro
+      - certbot-www:/var/www/certbot
+      - letsencrypt-data:/etc/letsencrypt
     depends_on:
+      - cert-init
       - business
       - identity
       - client
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        set -e
+        until [ -f /etc/letsencrypt/live/app/fullchain.pem ]; do
+          echo 'Waiting for TLS certificate (nginx)...'
+          sleep 2
+        done
+        exec /docker-entrypoint.sh nginx -g 'daemon off;'
     networks:
       - dreams-shop
   
@@ -41,11 +57,18 @@ services:
       - 5001:5001
       - 8081:8081
     environment:
-      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_ENVIRONMENT=Release
+      - ASPNETCORE_Kestrel__Endpoints__Http__Url=http://0.0.0.0:5001
+      - ASPNETCORE_Kestrel__Endpoints__Https__Url=https://0.0.0.0:8081
+      - ASPNETCORE_Kestrel__Endpoints__Https__Certificate__Path=/etc/letsencrypt/live/app/aspnet.pfx
+      - ASPNETCORE_Kestrel__Endpoints__Https__Certificate__Password=${LETSENCRYPT_PFX_PASSWORD:-development}
     networks:
       - dreams-shop
     depends_on:
+      - cert-init
       - postgres
+    volumes:
+      - letsencrypt-data:/etc/letsencrypt:ro
   
   business:
     build:
@@ -55,12 +78,19 @@ services:
       - 5002:5002
       - 8082:8082
     environment:
-      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_ENVIRONMENT=Release
+      - ASPNETCORE_Kestrel__Endpoints__Http__Url=http://0.0.0.0:5002
+      - ASPNETCORE_Kestrel__Endpoints__Https__Url=https://0.0.0.0:8082
+      - ASPNETCORE_Kestrel__Endpoints__Https__Certificate__Password=${LETSENCRYPT_PFX_PASSWORD:-development}
+      - Kestrel__Endpoints__Https__Certificate__Password=${LETSENCRYPT_PFX_PASSWORD:-development}
     networks:
       - dreams-shop
     depends_on:
+      - cert-init
       - postgres
       - minio
+    volumes:
+      - letsencrypt-data:/etc/letsencrypt:ro
     
   postgres:
     image: postgres:latest
@@ -93,3 +123,65 @@ services:
       - 6379:6379
     networks:
       - dreams-shop
+
+  cert-init:
+    image: alpine:3.20
+    entrypoint: []
+    command:
+      - /bin/sh
+      - -c
+      - |
+        set -e
+        echo "cert-init bootstrap running"
+        apk add --no-cache openssl >/dev/null
+        DOMAIN=${LETSENCRYPT_DOMAIN:-localhost}
+        PFX_PASSWORD=${LETSENCRYPT_PFX_PASSWORD:-development}
+        TARGET_DIR=/etc/letsencrypt/live/app
+        mkdir -p "$$TARGET_DIR"
+        if [ ! -f "$$TARGET_DIR/fullchain.pem" ] || [ ! -f "$$TARGET_DIR/privkey.pem" ]; then
+          echo "Generating temporary self-signed certificate for $$DOMAIN"
+          printf '%s\n' \
+            '[req]' \
+            'default_bits = 2048' \
+            'prompt = no' \
+            'default_md = sha256' \
+            'req_extensions = req_ext' \
+            'distinguished_name = dn' \
+            '' \
+            '[dn]' \
+            'C = US' \
+            'ST = Dev' \
+            'L = Local' \
+            'O = DreamsShop' \
+            'OU = Dev' \
+            "CN = $$DOMAIN" \
+            '' \
+            '[req_ext]' \
+            'subjectAltName = @alt_names' \
+            '' \
+            '[alt_names]' \
+            "DNS.1 = $$DOMAIN" \
+            >/tmp/selfsigned.cnf
+          openssl req -x509 -nodes -newkey rsa:2048 \
+            -days 30 \
+            -keyout "$$TARGET_DIR/privkey.pem" \
+            -out "$$TARGET_DIR/fullchain.pem" \
+            -config /tmp/selfsigned.cnf \
+            -extensions req_ext >/dev/null 2>&1 || {
+              echo 'Self-signed certificate generation failed'
+              cat /tmp/selfsigned.cnf
+              exit 1
+            }
+        fi
+        if [ ! -f "$$TARGET_DIR/aspnet.pfx" ]; then
+          echo 'Creating PFX bundle for ASP.NET'
+          openssl pkcs12 -export \
+            -out "$$TARGET_DIR/aspnet.pfx" \
+            -inkey "$$TARGET_DIR/privkey.pem" \
+            -in "$$TARGET_DIR/fullchain.pem" \
+            -passout pass:"$$PFX_PASSWORD" >/dev/null 2>&1
+          chmod 600 "$$TARGET_DIR/aspnet.pfx"
+        fi
+    restart: "no"
+    volumes:
+      - letsencrypt-data:/etc/letsencrypt

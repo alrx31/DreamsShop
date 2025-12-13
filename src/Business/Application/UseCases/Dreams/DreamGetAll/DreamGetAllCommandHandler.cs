@@ -32,32 +32,41 @@ public class DreamGetAllCommandHandler(
                 .GetAsync<Dream>(
                     skip: request.StartIndex,
                     take: request.Count,
-                    cancellationToken: cancellationToken);
+                    cancellationToken: cancellationToken) ?? new List<Dream>();
 
-        if (!dreams.Any()) return [];
+        if (dreams.Count == 0) return [];
 
-        var imageFileNames = dreams.Select(d => d.ImageFileName).ToList();
-
-        var imageTasks = imageFileNames.Select(f => fileStorageService.DownloadFileAsync(f, cancellationToken));
+        var imageTasks = dreams
+            .Select(d => fileStorageService.DownloadFileAsync(d.ImageFileName, cancellationToken));
         var imageResults = await Task.WhenAll(imageTasks);
 
-        var imageBytesList = new List<byte[]>();
+        var imageBytesList = new List<byte[]>(dreams.Count);
+        var imageContentTypes = new List<string?>(dreams.Count);
         foreach (var imageResult in imageResults)
         {
-            using var stream = new MemoryStream();
-            await imageResult.Content!.CopyToAsync(stream, cancellationToken);
-            imageBytesList.Add(stream.ToArray());
+            byte[] imageBytes = Array.Empty<byte>();
+            if (imageResult?.Content is not null)
+            {
+                using var stream = new MemoryStream();
+                await imageResult.Content.CopyToAsync(stream, cancellationToken);
+                imageBytes = stream.ToArray();
+            }
+
+            imageBytesList.Add(imageBytes);
+            imageContentTypes.Add(imageResult?.ContentType);
         }
 
         var dreamIds = dreams.Select(d => d.DreamId).ToList();
+        var categories = await UnitOfWork.CategoryRepository.GetAsync<Domain.Entity.Category>(cancellationToken: cancellationToken)
+            ?? new List<Domain.Entity.Category>();
 
         var dreamCategoryMap = new Dictionary<Guid, List<CategoryResponseDto>>();
         foreach (var dreamId in dreamIds)
         {
-            var dreamCategories = await UnitOfWork.DreamCategoryRepository.GetCategoriesByDreamIdAsync(dreamId, cancellationToken);
+            var dreamCategoriesQuery = await UnitOfWork.DreamCategoryRepository.GetCategoriesByDreamIdAsync(dreamId, cancellationToken);
+            var dreamCategories = dreamCategoriesQuery?.ToList() ?? new List<Domain.Entity.DreamCategory>();
             var categoryIds = dreamCategories.Select(dc => dc.CategoryId).ToList();
     
-            var categories = await UnitOfWork.CategoryRepository.GetAsync<Domain.Entity.Category>(cancellationToken:cancellationToken);
             var matchedCategories = categories
                 .Where(c => categoryIds.Contains(c.CategoryId))
                 .Select(c => new CategoryResponseDto
@@ -81,7 +90,7 @@ public class DreamGetAllCommandHandler(
             Categories = dreamCategoryMap[dream.DreamId],
 
             ImageBase64 = Convert.ToBase64String(imageBytesList[index]),
-            ImageContentType = imageResults[index].ContentType
+            ImageContentType = imageContentTypes[index]
         }).ToList();
 
         if (useCache)

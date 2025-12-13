@@ -3,7 +3,6 @@ using Application.Exceptions;
 using Application.UseCases.Base;
 using Domain.Entity;
 using Domain.IService;
-using Domain.Specifications;
 
 namespace Application.UseCases.Dreams.DreamsGetOne;
 
@@ -17,13 +16,7 @@ public class DreamGetOneCommandHandler(
         var cachedDream = await cacheService.GetAsync(request.DreamId.ToString() + nameof(Dream));
         if (cachedDream is not null) return cachedDream;
 
-        var filter = new ValueSpecification<Dream, Guid>(d => d.DreamId, [request.DreamId]);
-        
-        var dream = (await UnitOfWork.DreamRepository
-            .GetAsync<Dream>(
-                filter: filter.ToExpression(),
-                cancellationToken: cancellationToken))
-            .SingleOrDefault();
+        var dream = await UnitOfWork.DreamRepository.GetAsync([request.DreamId], cancellationToken);
 
         if (dream is null) throw new NotFoundException("Dream not found.");
         
@@ -32,8 +25,10 @@ public class DreamGetOneCommandHandler(
         await dreamImg.Content!.CopyToAsync(stream, cancellationToken);
         var imageBytes = stream.ToArray();
         
-        var dreamCategories = await UnitOfWork.DreamCategoryRepository.GetCategoriesByDreamIdAsync(dream.DreamId, cancellationToken);
-        var categories = await UnitOfWork.CategoryRepository.GetAsync<Domain.Entity.Category>(cancellationToken: cancellationToken);
+        var dreamCategoriesQuery = await UnitOfWork.DreamCategoryRepository.GetCategoriesByDreamIdAsync(dream.DreamId, cancellationToken);
+        var dreamCategories = dreamCategoriesQuery?.ToList() ?? new List<Domain.Entity.DreamCategory>();
+        var categories = await UnitOfWork.CategoryRepository.GetAsync<Domain.Entity.Category>(cancellationToken: cancellationToken)
+            ?? new List<Domain.Entity.Category>();
 
         var res = dreamCategories.Join(
             categories,

@@ -71,11 +71,11 @@ public class DreamRepositoryTests : BaseRepositoryTest
         };
 
         // Act
-        var dreamId = await _repository.AddAsync(dream);
+        var addedDream = await _repository.AddAsync(dream);
         await Context.SaveChangesAsync();
 
         // Assert
-        var result = await Context.Dream.FindAsync(dreamId);
+        var result = await Context.Dream.FindAsync(addedDream.DreamId);
         result.Should().Be(dream);
     }
 

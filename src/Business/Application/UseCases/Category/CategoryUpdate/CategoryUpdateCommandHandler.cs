@@ -1,3 +1,4 @@
+using Application.DTO;
 using Application.Exceptions;
 using Application.UseCases.Base;
 
@@ -7,17 +8,19 @@ public class CategoryUpdateCommandHandler : BaseRequestHandler<CategoryUpdateCom
 {
     public override async Task<MediatR.Unit> Handle(CategoryUpdateCommand request, CancellationToken cancellationToken)
     {
+        var dto = request.Dto ?? new CategoryUpdateDto();
+
         var category = await UnitOfWork.CategoryRepository.GetAsync([request.CategoryId], cancellationToken);
         if (category is null) throw new NotFoundException("Category not found.");
 
-        if (!string.IsNullOrWhiteSpace(request.Dto.Description))
+        if (!string.IsNullOrWhiteSpace(dto.Description))
         {
-            category.Description = request.Dto.Description;
+            category.Description = dto.Description;
         }
 
-        if (!string.IsNullOrWhiteSpace(request.Dto.Title))
+        if (!string.IsNullOrWhiteSpace(dto.Title))
         {
-            category.Title = request.Dto.Title;
+            category.Title = dto.Title;
         }
         
         await UnitOfWork.CategoryRepository.UpdateAsync(category, cancellationToken);

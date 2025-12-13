@@ -45,7 +45,6 @@ public static class ServiceLocatorTestHelper
 
         public void Dispose()
         {
-            _serviceProvider.Dispose();
             if (_previousProvider is not null)
             {
                 ServiceLocator.ServiceProvider = _previousProvider;
@@ -54,6 +53,8 @@ public static class ServiceLocatorTestHelper
             {
                 ServiceLocator.ServiceProvider = new ServiceCollection().BuildServiceProvider();
             }
+
+            _serviceProvider.Dispose();
         }
     }
 

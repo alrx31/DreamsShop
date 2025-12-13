@@ -28,11 +28,11 @@ public class OrderRepositoryTests : BaseRepositoryTest
         };
 
         // Act
-        var orderId = await _repository.AddAsync(order);
+        var createdOrder = await _repository.AddAsync(order);
         await Context.SaveChangesAsync();
 
         // Assert
-        var result = await Context.Orders.FindAsync(orderId);
+        var result = await Context.Orders.FindAsync(createdOrder.OrderId);
         result.Should().Be(order);
     }
 

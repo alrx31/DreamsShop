@@ -17,6 +17,8 @@ public class DreamUpdateCommandHandler(
 {
     public override async Task<Unit> Handle(DreamUpdateCommand request, CancellationToken cancellationToken)
     {
+        var dto = request.Dto ?? new DreamUpdateDto();
+
         var dream = await UnitOfWork.DreamRepository.GetAsync([request.DreamId], cancellationToken);
         if (dream is null) throw new NotFoundException("Dream not found.");
 
@@ -24,17 +26,17 @@ public class DreamUpdateCommandHandler(
         
         if(dream.ProducerId != currentUser) throw new ForbiddenException("You do not have permission to update dream.");
         
-        if (!string.IsNullOrWhiteSpace(request.Dto.Title))
+        if (!string.IsNullOrWhiteSpace(dto.Title))
         {
-            dream.Title = request.Dto.Title;
+            dream.Title = dto.Title;
         }
 
-        if (!string.IsNullOrWhiteSpace(request.Dto.Description))
+        if (!string.IsNullOrWhiteSpace(dto.Description))
         {
-            dream.Description = request.Dto.Description;
+            dream.Description = dto.Description;
         }
 
-        var image = request.Dto.Image;
+        var image = dto.Image;
         if (image is not null && image.Content is not null)
         {
             var objectName = await fileStorageService.UploadFileAsync(image, cancellationToken);

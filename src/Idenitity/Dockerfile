@@ -1,4 +1,4 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 
 WORKDIR /app
 EXPOSE 5001
@@ -25,6 +25,7 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
-COPY https/dev-certificate.pfx https/dev-certificate.pfx
+COPY wait-for-cert.sh ./wait-for-cert.sh
+RUN chmod +x ./wait-for-cert.sh
 
-ENTRYPOINT ["dotnet", "Presentation.dll"]
+ENTRYPOINT ["./wait-for-cert.sh"]
