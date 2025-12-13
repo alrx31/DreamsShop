@@ -12,3 +12,15 @@
 
 
 DreamsShop_Client_Business.session.sql
+/src/Identity/.idea
+/src/Idenitity/https/dev-certificate.pfx
+/src/Idenitity/Infrastructure/Migrations/20250524075649_AddRefreshToken.cs
+/src/Idenitity/Infrastructure/Migrations/20250524075649_AddRefreshToken.Designer.cs
+/src/Business/https/dev-certificate.pfx
+/src/Business/Presentation/appsettings.Development.json
+**/bin/
+**/obj/
+src/docker-compose.override.yml
+.env
+**/.vscode/
+

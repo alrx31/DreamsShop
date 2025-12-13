@@ -20,7 +20,7 @@ public class ProducerCreateCommandHandler(
         if (!validationResult.IsValid) throw new DataValidationException(validationResult.ToString());
         
         var existingProducerUser = await unitOfWork.ProducerUserRepository
-            .GetByEmailAsync(request.Dto.ProducerUser?.Email, cancellationToken);
+            .GetByEmailAsync(request.Dto.ProducerUser!.Email, cancellationToken);
         if (existingProducerUser is not null)
         {
             throw new AlreadyExistException("Producer user with this email already exists.");
@@ -36,7 +36,7 @@ public class ProducerCreateCommandHandler(
         var producer = mapper.Map<Domain.Entity.Producer>(request.Dto);
         await unitOfWork.ProducerRepository.AddAsync(producer, cancellationToken);
 
-        var user = mapper.Map<Domain.Entity.ProducerUser>(request.Dto.ProducerUser, opts =>
+        var user = mapper.Map<Domain.Entity.ProducerUser>(request.Dto.ProducerUser!, opts =>
         {
             opts.Items["PasswordHasher"] = passwordManager;
         });

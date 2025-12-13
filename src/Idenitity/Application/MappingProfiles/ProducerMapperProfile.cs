@@ -20,7 +20,7 @@ public class ProducerMapperProfile : Profile
         CreateMap<ProducerCreateDTO, ProducerCreateCommand>()
             .ConstructUsing(src => new ProducerCreateCommand(
                 src,
-                new ProducerUserRegisterCommand(src.ProducerUser)));
+                new ProducerUserRegisterCommand(src.ProducerUser!)));
 
         CreateMap<ProducerCreateDTO, Producer>();
 

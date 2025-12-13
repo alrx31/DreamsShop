@@ -17,17 +17,16 @@ public class ProducerUserRegisterCommandHandler(
 {
     public async Task Handle(ProducerUserRegisterCommand request, CancellationToken cancellationToken)
     {
-        var validationResult = await commandValidator.ValidateAsync(request, cancellationToken);
-        if (!validationResult.IsValid) throw new DataValidationException(validationResult.ToString());
-        
-        var existUser = await unitOfWork.ProducerUserRepository.GetByEmailAsync(request.Dto.Email, cancellationToken);
-        if (existUser is not null) throw new AlreadyExistException("Producer user already exist.");
-
-        var user = mapper.Map<ProducerUser>(request, opts =>
-        {
-            opts.Items["PasswordHasher"] = passwordManager;
-        });
-        user.Role = Roles.Producer;
+                        var validationResult = await commandValidator.ValidateAsync(request, cancellationToken);
+                        if (!validationResult.IsValid) throw new DataValidationException(validationResult.ToString());
+                        
+                        var existUser = await unitOfWork.ProducerUserRepository.GetByEmailAsync(request.Dto.Email, cancellationToken);
+                        if (existUser is not null) throw new AlreadyExistException("Producer user already exist.");
+                
+                        var user = mapper.Map<ProducerUser>(request.Dto, opts =>
+                        {
+                            opts.Items["PasswordHasher"] = passwordManager;
+                        });        user.Role = Roles.Producer;
         await unitOfWork.ProducerUserRepository.AddAsync(user, cancellationToken);
         await unitOfWork.SaveChangesAsync(cancellationToken);
     }
