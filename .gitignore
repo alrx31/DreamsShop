@@ -9,7 +9,9 @@ src/docker-compose.override.yml
 /src/Idenitity/https/dev-certificate.pfx
 /src/Business/https/dev-certificate.pfx
 
-/src/Business/Presentation/appsettings.Development.json
+**/appsettings.Development.json
+**/appsettings.Release.json
+
 DreamsShop_Client_Business.session.sql
 
 /src/Business/Business.sln.DotSettings.user
